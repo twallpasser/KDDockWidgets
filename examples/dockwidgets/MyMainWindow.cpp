@@ -24,6 +24,8 @@
 #include <QRandomGenerator>
 #endif
 
+#include <QQuickWidget>
+
 #include <stdlib.h>
 #include <time.h>
 
@@ -136,9 +138,10 @@ void MyMainWindow::createDockWidgets()
     addDockWidget(m_dockwidgets[0], KDDockWidgets::Location_OnTop);
 
     // Here, for finer granularity we specify right of dockwidgets[0]:
-    addDockWidget(m_dockwidgets[1], KDDockWidgets::Location_OnRight, m_dockwidgets[0]);
 
-    addDockWidget(m_dockwidgets[2], KDDockWidgets::Location_OnLeft);
+    m_dockwidgets[0]->addDockWidgetAsTab(m_dockwidgets[1], KDDockWidgets::AddingOption_StartHidden);
+    m_dockwidgets[0]->addDockWidgetAsTab(m_dockwidgets[2], KDDockWidgets::AddingOption_StartHidden);
+
     addDockWidget(m_dockwidgets[3], KDDockWidgets::Location_OnBottom);
     addDockWidget(m_dockwidgets[4], KDDockWidgets::Location_OnBottom);
 
@@ -174,10 +177,20 @@ KDDockWidgets::DockWidgetBase *MyMainWindow::newDockWidget()
     if (count == 1)
         dock->setIcon(QIcon::fromTheme(QStringLiteral("mail-message")));
 
-    auto myWidget = newMyWidget();
-    if (count == 8 && m_maxSizeForDockWidget8) {
-        // Set a maximum size on dock #8
-        myWidget->setMaximumSize(200, 200);
+    QWidget * myWidget = nullptr;
+    if (count != 1 && count != 2)
+    {
+        myWidget = newMyWidget();
+        if (count == 8 && m_maxSizeForDockWidget8) {
+            // Set a maximum size on dock #8
+            myWidget->setMaximumSize(200, 200);
+        }
+    }
+    else
+    {
+        QQuickWidget * quickWidget = new QQuickWidget(QUrl("qrc:/main.qml"));
+        quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
+        myWidget = quickWidget;
     }
 
     dock->setWidget(myWidget);

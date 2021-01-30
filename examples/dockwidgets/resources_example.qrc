@@ -6,5 +6,6 @@
         <file>assets/KDAB_bubble_white.png</file>
         <file>assets/triangles.png</file>
         <file>assets/tri.png</file>
+        <file>main.qml</file>
     </qresource>
 </RCC>
