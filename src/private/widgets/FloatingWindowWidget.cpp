@@ -19,6 +19,9 @@
 #include <QPainter>
 #include <QVBoxLayout>
 #include <QWindowStateChangeEvent>
+#include <QMainWindow>
+#include <QMenuBar>
+#include <QMenu>
 
 using namespace KDDockWidgets;
 
@@ -66,5 +69,17 @@ void FloatingWindowWidget::init()
     m_vlayout->setSpacing(0);
     m_vlayout->setContentsMargins(4, 4, 4, 4);
     m_vlayout->addWidget(m_titleBar);
-    m_vlayout->addWidget(m_dropArea);
+    auto main = new QMainWindow();
+
+    auto mb = main->menuBar();
+
+    auto file = mb->addMenu(tr("&File"));
+
+    file->addAction(tr("Save"));
+    file->addAction(tr("Open"));
+    file->addAction(tr("Quit"));
+    mb->addMenu(file);
+
+    m_vlayout->addWidget(main);
+    main->setCentralWidget(m_dropArea);
 }
