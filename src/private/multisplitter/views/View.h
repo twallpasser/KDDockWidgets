@@ -11,7 +11,7 @@
 
 #pragma once
 
-namespace KDDockWidgets::Views {
+namespace KDDockWidgets {
 
 class View
 {

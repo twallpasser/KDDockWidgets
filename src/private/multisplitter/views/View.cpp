@@ -11,7 +11,7 @@
 
 #include "View.h"
 
-using namespace KDDockWidgets::Views;
+using namespace KDDockWidgets;
 
 View::~View()
 {

@@ -11,7 +11,7 @@
 
 #include "Controller.h"
 
-using namespace KDDockWidgets::Controllers;
+using namespace KDDockWidgets;
 
 Controller::~Controller()
 {

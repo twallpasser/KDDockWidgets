@@ -11,12 +11,17 @@
 
 #pragma once
 
-namespace KDDockWidgets::Controllers {
+namespace KDDockWidgets {
+
+class View;
 
 class Controller
 {
 public:
     virtual ~Controller();
+
+protected:
+    View *m_view = nullptr;
 };
 
 }
