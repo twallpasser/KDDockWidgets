@@ -114,6 +114,31 @@ set(KDDW_BACKEND_SRCS
   private/multisplitter/Separator_p.h
   private/multisplitter/Widget.cpp
   private/multisplitter/Widget.h
+  private/multisplitter/views/View.cpp
+  private/multisplitter/views/View.h
+  private/multisplitter/views/DockWidget.cpp
+  private/multisplitter/views/DockWidget.h
+  private/multisplitter/views/FloatingWindow.cpp
+  private/multisplitter/views/FloatingWindow.h
+  private/multisplitter/views/Frame.cpp
+  private/multisplitter/views/Frame.h
+  private/multisplitter/views/TabBar.cpp
+  private/multisplitter/views/TabBar.h
+  private/multisplitter/views/TitleBar.cpp
+  private/multisplitter/views/TitleBar.h
+
+  private/multisplitter/controllers/Controller.cpp
+  private/multisplitter/controllers/Controller.h
+  private/multisplitter/controllers/DockWidget.cpp
+  private/multisplitter/controllers/DockWidget.h
+  private/multisplitter/controllers/FloatingWindow.cpp
+  private/multisplitter/controllers/FloatingWindow.h
+  private/multisplitter/controllers/Frame.cpp
+  private/multisplitter/controllers/Frame.h
+  private/multisplitter/controllers/TabBar.cpp
+  private/multisplitter/controllers/TabBar.h
+  private/multisplitter/controllers/TitleBar.cpp
+  private/multisplitter/controllers/TitleBar.h
 )
 
 add_library(kddockwidgets_backend STATIC ${KDDW_BACKEND_SRCS})
