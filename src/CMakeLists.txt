@@ -139,6 +139,9 @@ set(KDDW_BACKEND_SRCS
   private/multisplitter/controllers/TabBar.h
   private/multisplitter/controllers/TitleBar.cpp
   private/multisplitter/controllers/TitleBar.h
+
+  private/multisplitter/widgets/View_qtwidgets.cpp
+  private/multisplitter/widgets/View_qtwidgets.h
 )
 
 add_library(kddockwidgets_backend STATIC ${KDDW_BACKEND_SRCS})
