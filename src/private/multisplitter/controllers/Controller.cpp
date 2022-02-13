@@ -10,9 +10,17 @@
 */
 
 #include "Controller.h"
+#include "../views/View.h"
 
 using namespace KDDockWidgets;
 
 Controller::~Controller()
 {
+    if (m_view)
+        m_view->free();
+}
+
+View *Controller::view() const
+{
+    return m_view;
 }

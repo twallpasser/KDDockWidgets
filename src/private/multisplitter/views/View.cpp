@@ -16,3 +16,8 @@ using namespace KDDockWidgets;
 View::~View()
 {
 }
+
+void View::free()
+{
+    delete this;
+}

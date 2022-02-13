@@ -20,6 +20,9 @@ class Controller
 public:
     virtual ~Controller();
 
+    /// @brief Returns the view associated with this controller, if any.
+    View *view() const;
+
 protected:
     View *m_view = nullptr;
 };

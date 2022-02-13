@@ -17,6 +17,11 @@ class View
 {
 public:
     virtual ~View();
+
+    /// @brief Deletes this view.
+    /// The default impl will just do a normal C++ "delete", but derived classes are free
+    /// to implement other ways, for example QObject::deleteLater(), which is recommended for Qt.
+    virtual void free();
 };
 
 }
