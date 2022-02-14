@@ -10,13 +10,15 @@
 */
 
 #include "MultiSplitterConfig.h"
-#include "Widget.h"
+#include "views/View.h"
 #include "Item_p.h"
 #include "Separator_p.h"
 
 #ifdef KDMULTISPLITTER_QTQUICK
 #include <QQmlEngine>
 #endif
+
+using namespace KDDockWidgets;
 
 namespace Layouting {
 
@@ -25,7 +27,7 @@ Config::Config()
     registerQmlTypes();
 }
 
-Separator *Config::createSeparator(Widget *parent) const
+Separator *Config::createSeparator(View *parent) const
 {
     if (m_separatorFactoryFunc)
         return m_separatorFactoryFunc(parent);

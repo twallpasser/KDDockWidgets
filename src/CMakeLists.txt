@@ -110,38 +110,40 @@ set(KDDW_BACKEND_SRCS
   private/multisplitter/Logging_p.h
   private/multisplitter/MultiSplitterConfig.cpp
   private/multisplitter/MultiSplitterConfig.h
-  private/multisplitter/Separator.cpp
-  private/multisplitter/Separator_p.h
-  private/multisplitter/Widget.cpp
-  private/multisplitter/Widget.h
-  private/multisplitter/views/View.cpp
-  private/multisplitter/views/View.h
-  private/multisplitter/views/DockWidget.cpp
-  private/multisplitter/views/DockWidget.h
-  private/multisplitter/views/FloatingWindow.cpp
-  private/multisplitter/views/FloatingWindow.h
-  private/multisplitter/views/Frame.cpp
-  private/multisplitter/views/Frame.h
-  private/multisplitter/views/TabBar.cpp
-  private/multisplitter/views/TabBar.h
-  private/multisplitter/views/TitleBar.cpp
-  private/multisplitter/views/TitleBar.h
+  private/multisplitter/View.cpp
+  private/multisplitter/View.h
+  private/multisplitter/Controller.cpp
+  private/multisplitter/Controller.h
+  private/multisplitter/views_qtwidgets/DockWidget.cpp
+  private/multisplitter/views_qtwidgets/DockWidget.h
+  private/multisplitter/views_qtwidgets/FloatingWindow.cpp
+  private/multisplitter/views_qtwidgets/FloatingWindow.h
+  private/multisplitter/views_qtwidgets/Frame.cpp
+  private/multisplitter/views_qtwidgets/Frame.h
+  private/multisplitter/views_qtwidgets/Separator.cpp
+  private/multisplitter/views_qtwidgets/Separator.h
+  private/multisplitter/views_qtwidgets/TabBar.cpp
+  private/multisplitter/views_qtwidgets/TabBar.h
+  private/multisplitter/views_qtwidgets/TitleBar.cpp
+  private/multisplitter/views_qtwidgets/TitleBar.h
 
-  private/multisplitter/controllers/Controller.cpp
-  private/multisplitter/controllers/Controller.h
-  private/multisplitter/controllers/DockWidget.cpp
-  private/multisplitter/controllers/DockWidget.h
-  private/multisplitter/controllers/FloatingWindow.cpp
-  private/multisplitter/controllers/FloatingWindow.h
-  private/multisplitter/controllers/Frame.cpp
-  private/multisplitter/controllers/Frame.h
-  private/multisplitter/controllers/TabBar.cpp
-  private/multisplitter/controllers/TabBar.h
-  private/multisplitter/controllers/TitleBar.cpp
-  private/multisplitter/controllers/TitleBar.h
+  # private/multisplitter/controllers/DockWidget.cpp
+  # private/multisplitter/controllers/DockWidget.h
+  # private/multisplitter/controllers/FloatingWindow.cpp
+  # private/multisplitter/controllers/FloatingWindow.h
+  # private/multisplitter/controllers/Frame.cpp
+  # private/multisplitter/controllers/Frame.h
+  private/multisplitter/controllers/Separator.cpp
+  private/multisplitter/controllers/Separator.h
+  # private/multisplitter/controllers/TabBar.cpp
+  # private/multisplitter/controllers/TabBar.h
+  # private/multisplitter/controllers/TitleBar.cpp
+  # private/multisplitter/controllers/TitleBar.h
 
-  private/multisplitter/widgets/View_qtwidgets.cpp
-  private/multisplitter/widgets/View_qtwidgets.h
+  private/multisplitter/views_qtwidgets/View_qtwidgets.cpp
+  private/multisplitter/views_qtwidgets/View_qtwidgets.h
+  private/multisplitter/views_qtwidgets/Separator_qtwidgets.cpp
+  private/multisplitter/views_qtwidgets/Separator_qtwidgets.h
 )
 
 add_library(kddockwidgets_backend STATIC ${KDDW_BACKEND_SRCS})

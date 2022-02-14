@@ -9,16 +9,10 @@
   Contact KDAB at <info@kdab.com> for commercial licensing options.
 */
 
-#pragma once
+#include "Separator.h"
 
-#include "../Controller.h"
+using namespace KDDockWidgets::Views;
 
-namespace KDDockWidgets::Controllers {
-
-class TitleBar : Controller
+Separator::~Separator()
 {
-public:
-    virtual ~TitleBar() override;
-};
-
 }

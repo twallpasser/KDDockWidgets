@@ -80,7 +80,7 @@ TabWidget *DefaultWidgetFactory::createTabWidget(Frame *parent, TabWidgetOptions
     return new TabWidgetWidget(parent, options);
 }
 
-Layouting::Separator *DefaultWidgetFactory::createSeparator(Layouting::Widget *parent) const
+Layouting::Separator *DefaultWidgetFactory::createSeparator(View *parent) const
 {
     return new Layouting::SeparatorWidget(parent);
 }

@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include "../views/View.h"
+#include "../View.h"
 
 #include <QWidget>
 #include <qglobal.h>
@@ -41,6 +41,7 @@ public:
     void show() override;
     void hide() override;
     void update() override;
+    void setParent(View *) override;
 
 private:
     Q_DISABLE_COPY(View_qtwidgets)

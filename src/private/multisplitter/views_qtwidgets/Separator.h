@@ -11,14 +11,14 @@
 
 #pragma once
 
-#include "../Controller.h"
+#include "View.h"
 
-namespace KDDockWidgets::Controllers {
+namespace KDDockWidgets::Views {
 
-class TitleBar : Controller
+class Separator : View
 {
 public:
-    virtual ~TitleBar() override;
+    virtual ~Separator() override;
 };
 
 }

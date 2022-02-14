@@ -1,5 +1,7 @@
 #include "View_qtwidgets.h"
 
+#include <QDebug>
+
 using namespace KDDockWidgets;
 using namespace KDDockWidgets::Views;
 
@@ -37,7 +39,8 @@ static QSize widgetMaxSize(const T *w)
 }
 
 View_qtwidgets::View_qtwidgets(QWidget *widget)
-    : m_widget(widget)
+    : View(widget)
+    , m_widget(widget)
 {
 }
 
@@ -124,4 +127,19 @@ void View_qtwidgets::hide()
 void View_qtwidgets::update()
 {
     m_widget->update();
+}
+
+void View_qtwidgets::setParent(View *parent)
+{
+    if (!parent) {
+        m_widget->setParent(nullptr);
+        return;
+    }
+
+    if (auto qwidget = qobject_cast<QWidget *>(parent->asQObject())) {
+        m_widget->setParent(qwidget);
+    } else {
+        qWarning() << Q_FUNC_INFO << "parent is not a widget, you have a bug" << parent->asQObject();
+        Q_ASSERT(false);
+    }
 }

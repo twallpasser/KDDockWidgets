@@ -14,8 +14,33 @@
 
 using namespace KDDockWidgets;
 
+namespace KDDockWidgets {
+static qint64 s_nextId = 1;
+}
+
+View::View(QObject *thisObj)
+    : m_thisObj(thisObj)
+    , m_id(QString::number(KDDockWidgets::s_nextId++))
+{
+}
+
 View::~View()
 {
+}
+
+QString View::id() const
+{
+    return m_id;
+}
+
+QObject *View::asQObject() const
+{
+    return m_thisObj;
+}
+
+QObject *View::parent() const
+{
+    return m_thisObj->parent();
 }
 
 void View::free()

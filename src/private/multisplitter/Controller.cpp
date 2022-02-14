@@ -10,7 +10,7 @@
 */
 
 #include "Controller.h"
-#include "../views/View.h"
+#include "View.h"
 
 using namespace KDDockWidgets;
 

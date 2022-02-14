@@ -15,6 +15,7 @@
 #include "docks_export.h"
 #include "KDDockWidgets.h"
 #include "QWidgetAdapter.h"
+#include "private/multisplitter/views/View.h" // TODO
 
 // clazy:excludeall=ctor-missing-parent-argument
 
@@ -108,7 +109,7 @@ public:
     ///       Override to provide your own Separator sub-class. The Separator allows
     ///       the user to resize nested dock widgets.
     ///@param parent Just forward to Separator's constructor.
-    virtual Layouting::Separator *createSeparator(Layouting::Widget *parent = nullptr) const = 0;
+    virtual Layouting::Separator *createSeparator(View *parent = nullptr) const = 0;
 
     ///@brief Called internally by the framework to create a FloatingWindow
     ///       Override to provide your own FloatingWindow sub-class. If overridden then
@@ -129,7 +130,7 @@ public:
     virtual DropIndicatorOverlayInterface *createDropIndicatorOverlay(DropArea *dropArea) const = 0;
 
     ///@brief Called internally by the framework to create a RubberBand to show as drop zone
-    ///Returns a rubber band
+    /// Returns a rubber band
     virtual QWidgetOrQuick *createRubberBand(QWidgetOrQuick *parent) const = 0;
 
     ///@brief Called internally by the framework to create a SideBar
@@ -169,7 +170,7 @@ public:
     TitleBar *createTitleBar(FloatingWindow *) const override;
     TabWidget *createTabWidget(Frame *parent, TabWidgetOptions = TabWidgetOption_None) const override;
     TabBar *createTabBar(TabWidget *parent) const override;
-    Layouting::Separator *createSeparator(Layouting::Widget *parent = nullptr) const override;
+    Layouting::Separator *createSeparator(View *parent = nullptr) const override;
     FloatingWindow *createFloatingWindow(MainWindowBase *parent = nullptr) const override;
     FloatingWindow *createFloatingWindow(Frame *frame, MainWindowBase *parent = nullptr, QRect suggestedGeometry = {}) const override;
     DropIndicatorOverlayInterface *createDropIndicatorOverlay(DropArea *) const override;

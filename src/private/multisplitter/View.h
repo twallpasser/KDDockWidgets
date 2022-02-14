@@ -14,18 +14,36 @@
 #include <QSize> // TODO Remove Qt headers, introduce Size and Rect structs
 #include <QRect>
 
+#include <QObject>
+
+namespace Layouting {
+class Item;
+}
+
 namespace KDDockWidgets {
 
 class View
 {
 public:
+    explicit View(QObject *thisObj);
     virtual ~View();
+
+    QObject *asQObject() const;
+    QObject *parent() const;
+
+    ///@brief returns an id for corelation purposes for saving layouts
+    QString id() const;
 
     /// @brief Deletes this view.
     /// The default impl will just do a normal C++ "delete", but derived classes are free
     /// to implement other ways, for example QObject::deleteLater(), which is recommended for Qt.
     virtual void free();
 
+    /// @brief Called by the layouting engine
+    /// Override it in case your widget needs to know where it is in the layout. Usually only needed by Frame.s
+    virtual void setLayoutItem(Layouting::Item *) {};
+
+    virtual void setParent(View *) = 0;
     virtual QSize sizeHint() const;
     virtual QSize minSize() const = 0;
     virtual QSize maxSizeHint() const = 0;
@@ -50,6 +68,12 @@ public:
 
     static QSize hardcodedMinimumSize();
     static QSize boundedMaxSize(QSize min, QSize max);
+
+protected:
+    QObject *const m_thisObj;
+
+private:
+    const QString m_id;
 };
 
 }
