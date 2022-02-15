@@ -64,7 +64,7 @@ static TabWidgetOptions tabWidgetOptions(FrameOptions options)
 }
 
 Frame::Frame(QWidgetOrQuick *parent, FrameOptions options, int userType)
-    : Views::View_qtwidgets(parent)
+    : Views::View_qtwidgets(nullptr, parent)
     , FocusScope(this)
     , m_tabWidget(Config::self().frameworkWidgetFactory()->createTabWidget(this, tabWidgetOptions(options)))
     , m_titleBar(Config::self().frameworkWidgetFactory()->createTitleBar(this))

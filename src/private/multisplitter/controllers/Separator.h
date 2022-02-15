@@ -53,7 +53,7 @@ public:
     /// Returns the total amount of Separator() instances currently alive.
     static int numSeparators();
 
-protected:
+public:
     void onMousePress();
     void onMouseReleased();
     void onMouseDoubleClick();

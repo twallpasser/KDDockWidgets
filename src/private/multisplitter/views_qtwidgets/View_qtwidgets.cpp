@@ -10,9 +10,9 @@
 using namespace KDDockWidgets;
 using namespace KDDockWidgets::Views;
 
-View_qtwidgets::View_qtwidgets(QWidget *parent)
+View_qtwidgets::View_qtwidgets(Controller *controller, QWidget *parent)
     : QWidget(parent)
-    , View(this)
+    , View(controller, this)
 {
 }
 
@@ -113,7 +113,7 @@ void View_qtwidgets::setParent(View *parent)
 std::unique_ptr<View> View_qtwidgets::window() const
 {
     if (auto w = QWidget::window())
-        return std::unique_ptr<View>(new View_qtwidgets(w));
+        return std::unique_ptr<View>(new View_qtwidgets(nullptr, w));
 
     return {};
 }

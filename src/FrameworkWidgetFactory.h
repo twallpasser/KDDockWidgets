@@ -51,6 +51,10 @@ namespace Views {
 class Separator;
 }
 
+namespace Controllers {
+class Separator;
+}
+
 /**
  * @brief A factory class for allowing the user to customize some internal widgets.
  * This is optional, and if not provided, a default one will be used, @ref DefaultWidgetFactory.
@@ -112,7 +116,7 @@ public:
     ///       Override to provide your own Separator sub-class. The Separator allows
     ///       the user to resize nested dock widgets.
     ///@param parent Just forward to Separator's constructor.
-    virtual View *createSeparator(View *parent = nullptr) const = 0;
+    virtual View *createSeparator(Controllers::Separator *, View *parent = nullptr) const = 0;
 
     ///@brief Called internally by the framework to create a FloatingWindow
     ///       Override to provide your own FloatingWindow sub-class. If overridden then
@@ -173,7 +177,7 @@ public:
     TitleBar *createTitleBar(FloatingWindow *) const override;
     TabWidget *createTabWidget(Frame *parent, TabWidgetOptions = TabWidgetOption_None) const override;
     TabBar *createTabBar(TabWidget *parent) const override;
-    View *createSeparator(View *parent = nullptr) const override;
+    View *createSeparator(Controllers::Separator *, View *parent = nullptr) const override;
     FloatingWindow *createFloatingWindow(MainWindowBase *parent = nullptr) const override;
     FloatingWindow *createFloatingWindow(Frame *frame, MainWindowBase *parent = nullptr, QRect suggestedGeometry = {}) const override;
     DropIndicatorOverlayInterface *createDropIndicatorOverlay(DropArea *) const override;

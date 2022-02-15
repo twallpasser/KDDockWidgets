@@ -26,10 +26,10 @@ Config::Config()
     registerQmlTypes();
 }
 
-View *Config::createSeparator(View *parent) const
+View *Config::createSeparator(Controllers::Separator *controller, View *parent) const
 {
     if (m_separatorFactoryFunc)
-        return m_separatorFactoryFunc(parent);
+        return m_separatorFactoryFunc(controller, parent);
 
     return nullptr;
 }

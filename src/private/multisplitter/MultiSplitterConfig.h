@@ -26,7 +26,7 @@ class Separator;
 
 namespace Layouting {
 
-typedef KDDockWidgets::View *(*SeparatorFactoryFunc)(KDDockWidgets::View *parent);
+typedef KDDockWidgets::View *(*SeparatorFactoryFunc)(KDDockWidgets::Controllers::Separator *controller, KDDockWidgets::View *parent);
 
 class DOCKS_EXPORT_FOR_UNIT_TESTS Config
 {
@@ -68,7 +68,7 @@ public:
     void setFlags(Layouting::Config::Flags);
 
     Config();
-    KDDockWidgets::View *createSeparator(KDDockWidgets::View *) const;
+    KDDockWidgets::View *createSeparator(KDDockWidgets::Controllers::Separator *, KDDockWidgets::View *) const;
 
 private:
     friend class Item;

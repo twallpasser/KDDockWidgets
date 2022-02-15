@@ -20,8 +20,9 @@ namespace KDDockWidgets {
 static qint64 s_nextId = 1;
 }
 
-View::View(QObject *thisObj)
-    : m_thisObj(thisObj)
+View::View(Controller *controller, QObject *thisObj)
+    : m_controller(controller)
+    , m_thisObj(thisObj)
     , m_id(QString::number(KDDockWidgets::s_nextId++))
 {
 }

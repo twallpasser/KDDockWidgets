@@ -72,8 +72,8 @@ MyTitleBar::~MyTitleBar() = default;
 class MySeparator : public KDDockWidgets::Views::Separator_qtwidgets
 {
 public:
-    explicit MySeparator(QWidget *parent)
-        : KDDockWidgets::Views::Separator_qtwidgets(parent)
+    explicit MySeparator(KDDockWidgets::Controllers::Separator *controller, QWidget *parent)
+        : KDDockWidgets::Views::Separator_qtwidgets(controller, parent)
     {
     }
 
@@ -100,7 +100,7 @@ KDDockWidgets::TitleBar *CustomWidgetFactory::createTitleBar(KDDockWidgets::Floa
     return new MyTitleBar(fw);
 }
 
-KDDockWidgets::View *CustomWidgetFactory::createSeparator(KDDockWidgets::View *parent) const
+KDDockWidgets::View *CustomWidgetFactory::createSeparator(KDDockWidgets::Controllers::Separator *controller, KDDockWidgets::View *parent) const
 {
-    return new MySeparator(parent ? static_cast<KDDockWidgets::Views::View_qtwidgets *>(parent) : nullptr);
+    return new MySeparator(controller, parent ? static_cast<KDDockWidgets::Views::View_qtwidgets *>(parent) : nullptr);
 }

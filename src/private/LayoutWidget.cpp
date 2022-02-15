@@ -25,7 +25,7 @@ using namespace KDDockWidgets;
 
 
 LayoutWidget::LayoutWidget(QWidgetOrQuick *parent)
-    : Views::View_qtwidgets(parent)
+    : Views::View_qtwidgets(nullptr, parent)
 {
 }
 

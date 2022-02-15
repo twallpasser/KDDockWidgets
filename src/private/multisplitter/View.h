@@ -12,6 +12,7 @@
 #pragma once
 
 #include "kddockwidgets/docks_export.h"
+#include "Controller.h"
 
 #include <QSize> // TODO Remove Qt headers, introduce Size and Rect structs
 #include <QRect>
@@ -24,17 +25,23 @@ namespace Layouting {
 class Item;
 }
 
+
 namespace KDDockWidgets {
+
+class Controller;
 
 class DOCKS_EXPORT View
 {
 public:
-    explicit View(QObject *thisObj);
+    explicit View(Controller *controller, QObject *thisObj);
     virtual ~View();
 
     QObject *asQObject() const;
     QWidget *asQWidget() const; // TODO: Remove
     QObject *parent() const;
+
+    /// @brief Returns this view's controller
+    Controller *controller() const;
 
     ///@brief returns an id for corelation purposes for saving layouts
     QString id() const;
@@ -122,6 +129,7 @@ public:
     }
 
 protected:
+    Controller *const m_controller;
     QObject *const m_thisObj;
 
 private:

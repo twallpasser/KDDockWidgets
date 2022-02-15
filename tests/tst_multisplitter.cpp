@@ -40,7 +40,7 @@ class MyGuestWidget : public Views::View_qtwidgets
     Q_OBJECT
 public:
     MyGuestWidget()
-        : Views::View_qtwidgets()
+        : Views::View_qtwidgets(nullptr)
     {
     }
 
@@ -133,8 +133,8 @@ public Q_SLOTS:
         s_original = qInstallMessageHandler(fatalWarningsMessageHandler);
         s_testObject = this;
 
-        Layouting::Config::self().setSeparatorFactoryFunc([](View *parent) -> View * {
-            return new Views::Separator_qtwidgets(parent ? parent->asQWidget() : nullptr);
+        Layouting::Config::self().setSeparatorFactoryFunc([](Controllers::Separator *controller, View *parent) -> View * {
+            return new Views::Separator_qtwidgets(controller, parent ? parent->asQWidget() : nullptr);
         });
     }
 
@@ -202,7 +202,7 @@ class MyHostWidget : public Views::View_qtwidgets
 {
 public:
     MyHostWidget()
-        : Views::View_qtwidgets()
+        : Views::View_qtwidgets(nullptr)
     {
         s_testObject->m_hostWidgets << this;
     }

@@ -16,6 +16,7 @@
 #include "../Logging_p.h"
 #include "Config.h"
 
+#include <QApplication> // TODO remove, add Platform instead
 #include <qnamespace.h>
 
 using namespace KDDockWidgets::Controllers;
@@ -75,7 +76,8 @@ Separator::~Separator()
 void Separator::createView(View *parent)
 {
     Q_ASSERT(!m_view);
-    m_view = Layouting::Config::self().createSeparator(parent);
+    m_view = Layouting::Config::self().createSeparator(this, parent);
+    m_view->show();
 }
 
 void Separator::init(Layouting::ItemBoxContainer *parentContainer, Qt::Orientation orientation)
@@ -228,6 +230,48 @@ void Separator::onMouseDoubleClick()
 void Separator::onMouseMove(QPoint pos)
 {
     Q_UNUSED(pos);
+    if (!isBeingDragged())
+        return;
+
+    if (!(qApp->mouseButtons() & Qt::LeftButton)) {
+        qCDebug(separators) << Q_FUNC_INFO << "Ignoring spurious mouse event. Someone ate our ReleaseEvent";
+        onMouseReleased();
+        return;
+    }
+
+#ifdef Q_OS_WIN
+    // Try harder, Qt can be wrong, if mixed with MFC
+    const bool mouseButtonIsReallyDown = (GetKeyState(VK_LBUTTON) & 0x8000) || (GetKeyState(VK_RBUTTON) & 0x8000);
+    if (!mouseButtonIsReallyDown) {
+        qCDebug(separators) << Q_FUNC_INFO << "Ignoring spurious mouse event. Someone ate our ReleaseEvent";
+        onMouseReleased();
+        return;
+    }
+#endif
+
+    const int positionToGoTo = Layouting::pos(pos, d->orientation);
+    const int minPos = d->parentContainer->minPosForSeparator_global(this);
+    const int maxPos = d->parentContainer->maxPosForSeparator_global(this);
+
+    if ((positionToGoTo > maxPos && position() <= positionToGoTo) || (positionToGoTo < minPos && position() >= positionToGoTo)) {
+        // if current pos is 100, and max is 80, we do allow going to 90.
+        // Would continue to violate, but only by 10, so allow.
+
+        // On the other hand, if we're already past max-pos, don't make it worse and just
+        // return if positionToGoTo is further away from maxPos.
+
+        // Same reasoning for minPos
+        return;
+    }
+
+    d->lastMoveDirection = positionToGoTo < position() ? Layouting::Side1
+                                                       : (positionToGoTo > position() ? Layouting::Side2
+                                                                                      : Layouting::Side1); // Last case shouldn't happen though.
+
+    // if (d->lazyResizeRubberBand)
+    //     setLazyPosition(positionToGoTo);
+    // else
+    d->parentContainer->requestSeparatorMove(this, positionToGoTo - position());
 }
 
 Layouting::ItemBoxContainer *Separator::parentContainer() const

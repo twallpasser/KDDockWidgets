@@ -24,6 +24,7 @@
 #include "private/Utils_p.h"
 #include "private/DragController_p.h"
 #include "FrameworkWidgetFactory.h"
+#include "private/multisplitter/controllers/Separator.h"
 
 #include <QDebug>
 #include <QOperatingSystemVersion>
@@ -74,8 +75,8 @@ Config::Config()
     d->fixFlags();
 
     // stuff in multisplitter/ can't include the framework widget factory, so set it here
-    auto separatorCreator = [](View *parent) {
-        return Config::self().frameworkWidgetFactory()->createSeparator(parent);
+    auto separatorCreator = [](Controllers::Separator *controller, View *parent) {
+        return Config::self().frameworkWidgetFactory()->createSeparator(controller, parent);
     };
 
     Layouting::Config::self().setSeparatorFactoryFunc(separatorCreator);

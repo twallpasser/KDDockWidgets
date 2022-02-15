@@ -12,18 +12,16 @@
 #pragma once
 
 #include "../View.h"
+#include "../Controller.h"
 
 #include <QWidget>
-#include <qglobal.h>
 
 namespace KDDockWidgets::Views {
 
 class DOCKS_EXPORT View_qtwidgets : public QWidget, public View
 {
 public:
-    using View::setVisible;
-
-    explicit View_qtwidgets(QWidget *parent = nullptr);
+    explicit View_qtwidgets(KDDockWidgets::Controller *, QWidget *parent = nullptr);
     ~View_qtwidgets() override;
 
     void free() override;
