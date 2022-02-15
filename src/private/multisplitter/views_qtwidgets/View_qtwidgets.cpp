@@ -13,7 +13,6 @@ using namespace KDDockWidgets::Views;
 View_qtwidgets::View_qtwidgets(QWidget *parent)
     : QWidget(parent)
     , View(this)
-    , m_widget(this) // TODO: Remove
 {
 }
 
@@ -21,60 +20,54 @@ View_qtwidgets::~View_qtwidgets()
 {
 }
 
-QWidget *View_qtwidgets::widget() const
-{
-    return m_widget;
-}
-
 void View_qtwidgets::free()
 {
-    m_widget->deleteLater();
-    delete this;
+    deleteLater();
 }
 
 QSize View_qtwidgets::sizeHint() const
 {
-    return m_widget->sizeHint();
+    return QWidget::sizeHint();
 }
 
 QSize View_qtwidgets::minSize() const
 {
-    return widgetMinSize(m_widget);
+    return widgetMinSize(this);
 }
 
 QSize View_qtwidgets::maxSizeHint() const
 {
-    return widgetMaxSize(m_widget);
+    return widgetMaxSize(this);
 }
 
 QRect View_qtwidgets::geometry() const
 {
-    return m_widget->geometry();
+    return QWidget::geometry();
 }
 
 void View_qtwidgets::setGeometry(QRect geo)
 {
-    m_widget->setGeometry(geo);
+    QWidget::setGeometry(geo);
 }
 
 bool View_qtwidgets::isVisible() const
 {
-    return m_widget->isVisible();
+    return QWidget::isVisible();
 }
 
-void View_qtwidgets::setVisible(bool is) const
+void View_qtwidgets::setVisible(bool is)
 {
-    m_widget->setVisible(is);
+    QWidget::setVisible(is);
 }
 
 void View_qtwidgets::move(int x, int y)
 {
-    m_widget->move(x, y);
+    QWidget::move(x, y);
 }
 
 void View_qtwidgets::setSize(int width, int height)
 {
-    m_widget->resize(width, height);
+    QWidget::resize(width, height);
 }
 
 void View_qtwidgets::setWidth(int width)
@@ -89,28 +82,28 @@ void View_qtwidgets::setHeight(int height)
 
 void View_qtwidgets::show()
 {
-    m_widget->show();
+    QWidget::show();
 }
 
 void View_qtwidgets::hide()
 {
-    m_widget->hide();
+    QWidget::hide();
 }
 
 void View_qtwidgets::update()
 {
-    m_widget->update();
+    QWidget::update();
 }
 
 void View_qtwidgets::setParent(View *parent)
 {
     if (!parent) {
-        m_widget->setParent(nullptr);
+        QWidget::setParent(nullptr);
         return;
     }
 
     if (auto qwidget = qobject_cast<QWidget *>(parent->asQObject())) {
-        m_widget->setParent(qwidget);
+        QWidget::setParent(qwidget);
     } else {
         qWarning() << Q_FUNC_INFO << "parent is not a widget, you have a bug" << parent->asQObject();
         Q_ASSERT(false);
@@ -119,7 +112,7 @@ void View_qtwidgets::setParent(View *parent)
 
 std::unique_ptr<View> View_qtwidgets::window() const
 {
-    if (auto w = m_widget->window())
+    if (auto w = QWidget::window())
         return std::unique_ptr<View>(new View_qtwidgets(w));
 
     return {};

@@ -26,8 +26,6 @@ public:
     explicit View_qtwidgets(QWidget *parent = nullptr);
     ~View_qtwidgets() override;
 
-    QWidget *widget() const;
-
     void free() override;
     QSize sizeHint() const override;
     QSize minSize() const override;
@@ -35,7 +33,7 @@ public:
     QRect geometry() const override;
     void setGeometry(QRect) override;
     bool isVisible() const override;
-    void setVisible(bool) const override;
+    void setVisible(bool) override;
     void move(int x, int y) override;
     void setSize(int width, int height) override;
     void setWidth(int width) override;
@@ -54,7 +52,6 @@ protected:
 
 private:
     Q_DISABLE_COPY(View_qtwidgets)
-    QWidget *const m_widget;
 };
 
 }

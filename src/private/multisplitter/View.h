@@ -55,7 +55,7 @@ public:
     virtual QRect geometry() const = 0;
     virtual void setGeometry(QRect) = 0;
     virtual bool isVisible() const = 0;
-    virtual void setVisible(bool) const = 0;
+    virtual void setVisible(bool) = 0;
     virtual void move(int x, int y) = 0;
     virtual void setSize(int width, int height) = 0;
     virtual void setWidth(int width) = 0;
