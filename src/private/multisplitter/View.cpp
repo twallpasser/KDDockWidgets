@@ -10,7 +10,9 @@
 */
 
 #include "View.h"
-#include "../Item_p.h"
+#include "Item_p.h"
+
+#include <QWidget> // TODO remove
 
 using namespace KDDockWidgets;
 
@@ -36,6 +38,11 @@ QString View::id() const
 QObject *View::asQObject() const
 {
     return m_thisObj;
+}
+
+QWidget *View::asQWidget() const
+{
+    return qobject_cast<QWidget *>(m_thisObj);
 }
 
 QObject *View::parent() const
@@ -81,6 +88,11 @@ int View::height() const
 int View::width() const
 {
     return geometry().width();
+}
+
+void View::resize(QSize sz)
+{
+    setSize(sz.width(), sz.height());
 }
 
 QSize View::boundedMaxSize(QSize min, QSize max)

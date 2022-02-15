@@ -92,10 +92,23 @@ set(DOCKSLIBS_SRCS
     private/multisplitter/Logging_p.h
     private/multisplitter/MultiSplitterConfig.cpp
     private/multisplitter/MultiSplitterConfig.h
-    private/multisplitter/Separator.cpp
-    private/multisplitter/Separator_p.h
+    # private/multisplitter/Separator.cpp
+    # private/multisplitter/Separator_p.h
     private/multisplitter/Widget.cpp
     private/multisplitter/Widget.h
+
+    private/multisplitter/controllers/Separator.cpp
+    private/multisplitter/controllers/Separator.h
+    private/multisplitter/View.cpp
+    private/multisplitter/View.h
+    private/multisplitter/Controller.cpp
+    private/multisplitter/Controller.h
+
+    private/multisplitter/views_qtwidgets/View_qtwidgets.cpp
+    private/multisplitter/views_qtwidgets/View_qtwidgets.h
+    private/multisplitter/views_qtwidgets/Separator_qtwidgets.cpp
+    private/multisplitter/views_qtwidgets/Separator_qtwidgets.h
+
 )
 
 #--------------------------------
@@ -114,18 +127,18 @@ set(KDDW_BACKEND_SRCS
   private/multisplitter/View.h
   private/multisplitter/Controller.cpp
   private/multisplitter/Controller.h
-  private/multisplitter/views_qtwidgets/DockWidget.cpp
-  private/multisplitter/views_qtwidgets/DockWidget.h
-  private/multisplitter/views_qtwidgets/FloatingWindow.cpp
-  private/multisplitter/views_qtwidgets/FloatingWindow.h
-  private/multisplitter/views_qtwidgets/Frame.cpp
-  private/multisplitter/views_qtwidgets/Frame.h
-  private/multisplitter/views_qtwidgets/Separator.cpp
-  private/multisplitter/views_qtwidgets/Separator.h
-  private/multisplitter/views_qtwidgets/TabBar.cpp
-  private/multisplitter/views_qtwidgets/TabBar.h
-  private/multisplitter/views_qtwidgets/TitleBar.cpp
-  private/multisplitter/views_qtwidgets/TitleBar.h
+  # private/multisplitter/views_qtwidgets/DockWidget.cpp
+  # private/multisplitter/views_qtwidgets/DockWidget.h
+  # private/multisplitter/views_qtwidgets/FloatingWindow.cpp
+  # private/multisplitter/views_qtwidgets/FloatingWindow.h
+  # private/multisplitter/views_qtwidgets/Frame.cpp
+  # private/multisplitter/views_qtwidgets/Frame.h
+  # private/multisplitter/views_qtwidgets/Separator.cpp
+  # private/multisplitter/views_qtwidgets/Separator.h
+  # private/multisplitter/views_qtwidgets/TabBar.cpp
+  # private/multisplitter/views_qtwidgets/TabBar.h
+  # private/multisplitter/views_qtwidgets/TitleBar.cpp
+  # private/multisplitter/views_qtwidgets/TitleBar.h
 
   # private/multisplitter/controllers/DockWidget.cpp
   # private/multisplitter/controllers/DockWidget.h
@@ -146,14 +159,14 @@ set(KDDW_BACKEND_SRCS
   private/multisplitter/views_qtwidgets/Separator_qtwidgets.h
 )
 
-add_library(kddockwidgets_backend STATIC ${KDDW_BACKEND_SRCS})
-target_link_libraries(kddockwidgets_backend Qt5::Widgets)
-target_include_directories(kddockwidgets_backend
-  PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/backend_temp_includes> # TODO remove
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/backend_temp_includes/kddockwidgets>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/3rdparty> # TODO: Link to KDBindings instead
-  )
+# add_library(kddockwidgets_backend STATIC ${KDDW_BACKEND_SRCS})
+# target_link_libraries(kddockwidgets_backend Qt5::Widgets)
+# target_include_directories(kddockwidgets_backend
+#   PUBLIC
+#   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/backend_temp_includes> # TODO remove
+#   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/backend_temp_includes/kddockwidgets>
+#   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/3rdparty> # TODO: Link to KDBindings instead
+#   )
 
 #--------------------------------
 
@@ -255,8 +268,6 @@ else()
       DockWidget.h
       private/multisplitter/Widget_qwidget.cpp
       private/multisplitter/Widget_qwidget.h
-      private/multisplitter/Separator_qwidget.cpp
-      private/multisplitter/Separator_qwidget.h
       private/widgets/TabBarWidget.cpp
       private/widgets/TabBarWidget_p.h
       private/widgets/FloatingWindowWidget.cpp
@@ -412,7 +423,6 @@ install(FILES ${DOCKS_INSTALLABLE_INCLUDES} DESTINATION ${DOCKS_INCLUDES_INSTALL
 install(FILES ${DOCKS_INSTALLABLE_PRIVATE_INCLUDES} DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets/private)
 install(FILES private/multisplitter/Item_p.h DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets/private/multisplitter)
 install(FILES private/multisplitter/Widget.h DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets/private/multisplitter)
-install(FILES private/multisplitter/Separator_p.h DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets/private/multisplitter)
 install(FILES private/indicators/ClassicIndicators_p.h DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets/private/indicators)
 install(FILES private/indicators/SegmentedIndicators_p.h DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets/private/indicators)
 
@@ -422,7 +432,6 @@ if(KDDockWidgets_QTQUICK)
   install(FILES private/multisplitter/Widget_quick.h DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets/private/multisplitter)
 else()
   install(FILES ${DOCKS_INSTALLABLE_PRIVATE_WIDGET_INCLUDES} DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets/private/widgets)
-  install(FILES private/multisplitter/Separator_qwidget.h DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets/private/multisplitter)
   install(FILES private/multisplitter/Widget_qwidget.h DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets/private/multisplitter)
 endif()
 

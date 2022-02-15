@@ -19,7 +19,7 @@
 #include <kddockwidgets/private/widgets/TabBarWidget_p.h>
 #include <kddockwidgets/private/widgets/TabWidgetWidget_p.h>
 #include <kddockwidgets/private/widgets/TitleBarWidget_p.h>
-#include <kddockwidgets/private/multisplitter/Separator_qwidget.h>
+#include "../../src/private/multisplitter/views_qtwidgets/Separator_qtwidgets.h" // TODO
 
 #include <QApplication>
 
@@ -62,18 +62,18 @@ public:
         f.setPixelSize(30);
         f.setBold(true);
         p.setFont(f);
-        p.drawText(QPoint(10,40), title());
+        p.drawText(QPoint(10, 40), title());
     }
 };
 
 MyTitleBar::~MyTitleBar() = default;
 
 // Inheriting from SeparatorWidget instead of Separator as it handles moving and mouse cursor changing
-class MySeparator : public Layouting::SeparatorWidget
+class MySeparator : public KDDockWidgets::Views::Separator_qtwidgets
 {
 public:
-    explicit MySeparator(Layouting::Widget *parent)
-        : Layouting::SeparatorWidget(parent)
+    explicit MySeparator(QWidget *parent)
+        : KDDockWidgets::Views::Separator_qtwidgets(parent)
     {
     }
 
@@ -88,19 +88,19 @@ public:
 
 MySeparator::~MySeparator() = default;
 
-KDDockWidgets::TitleBar * CustomWidgetFactory::createTitleBar(KDDockWidgets::Frame *frame) const
+KDDockWidgets::TitleBar *CustomWidgetFactory::createTitleBar(KDDockWidgets::Frame *frame) const
 {
     // Feel free to return MyTitleBar_CSS here instead, but just for education purposes!
     return new MyTitleBar(frame);
 }
 
-KDDockWidgets::TitleBar * CustomWidgetFactory::createTitleBar(KDDockWidgets::FloatingWindow *fw) const
+KDDockWidgets::TitleBar *CustomWidgetFactory::createTitleBar(KDDockWidgets::FloatingWindow *fw) const
 {
     // Feel free to return MyTitleBar_CSS here instead, but just for education purposes!
     return new MyTitleBar(fw);
 }
 
-Layouting::Separator * CustomWidgetFactory::createSeparator(Layouting::Widget *parent) const
+KDDockWidgets::View *CustomWidgetFactory::createSeparator(KDDockWidgets::View *parent) const
 {
-    return new MySeparator(parent);
+    return new MySeparator(parent ? static_cast<KDDockWidgets::Views::View_qtwidgets *>(parent) : nullptr);
 }

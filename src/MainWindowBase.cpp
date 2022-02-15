@@ -34,9 +34,9 @@
 
 // Or we can have a createDockWidget() in the factory
 #ifdef KDDOCKWIDGETS_QTQUICK
-# include "DockWidgetQuick.h"
+#include "DockWidgetQuick.h"
 #else
-# include "DockWidget.h"
+#include "DockWidget.h"
 #endif
 
 using namespace KDDockWidgets;
@@ -75,7 +75,7 @@ public:
         return (m_options & MainWindowOption_HasCentralWidget) == MainWindowOption_HasCentralWidget;
     }
 
-    DockWidgetBase* createPersistentCentralDockWidget(const QString &uniqueName) const
+    DockWidgetBase *createPersistentCentralDockWidget(const QString &uniqueName) const
     {
         if (!supportsPersistentCentralWidget())
             return nullptr;
@@ -477,7 +477,7 @@ void MainWindowBase::Private::updateOverlayGeometry(QSize suggestedSize)
         }
     }
 
-    m_overlayedDockWidget->d->frame()->QWidgetAdapter::setGeometry(newGeometry);
+    m_overlayedDockWidget->d->frame()->QWidget::setGeometry(newGeometry);
 }
 
 void MainWindowBase::Private::clearSideBars()
@@ -551,7 +551,7 @@ void MainWindowBase::overlayOnSideBar(DockWidgetBase *dw)
     d->updateOverlayGeometry(dw->d->lastPosition()->lastOverlayedGeometry(sb->location()).size());
 
     frame->setAllowedResizeSides(d->allowedResizeSides(sb->location()));
-    frame->QWidgetAdapter::show();
+    frame->QWidget::show();
 
     Q_EMIT dw->isOverlayedChanged(true);
 }
@@ -578,7 +578,7 @@ void MainWindowBase::clearSideBarOverlay(bool deleteFrame)
 
     const SideBarLocation loc = d->m_overlayedDockWidget->sideBarLocation();
     d->m_overlayedDockWidget->d->lastPosition()->setLastOverlayedGeometry(
-        loc, frame->QWidgetAdapter::geometry());
+        loc, frame->QWidget::geometry());
 
     frame->unoverlay();
 
@@ -686,7 +686,7 @@ void MainWindowBase::setUniqueName(const QString &uniqueName)
 void MainWindowBase::onResized(QResizeEvent *)
 {
     if (d->m_overlayedDockWidget)
-        d->updateOverlayGeometry(d->m_overlayedDockWidget->d->frame()->QWidgetAdapter::size());
+        d->updateOverlayGeometry(d->m_overlayedDockWidget->d->frame()->QWidget::size());
 }
 
 bool MainWindowBase::deserialize(const LayoutSaver::MainWindow &mw)
@@ -728,7 +728,7 @@ bool MainWindowBase::deserialize(const LayoutSaver::MainWindow &mw)
     }
 
     // Commented-out for now, we don't want to restore the popup/overlay. popups are perishable
-    //if (!mw.overlayedDockWidget.isEmpty())
+    // if (!mw.overlayedDockWidget.isEmpty())
     //    overlayOnSideBar(DockRegistry::self()->dockByName(mw.overlayedDockWidget));
 
     return success;

@@ -39,8 +39,14 @@ struct Separator::Private
     // Only set when anchor is moved through mouse. Side1 if going towards left or top, Side2 otherwise.
 
     Private()
-
     {
+        Q_UNUSED(rubberBandIsTopLevel);
+        s_numSeparators++;
+    }
+
+    ~Private()
+    {
+        s_numSeparators--;
     }
 
     Qt::Orientation orientation = Qt::Horizontal;
@@ -55,15 +61,21 @@ struct Separator::Private
     // Widget *const m_hostWidget;
 };
 
-Separator::Separator()
+Separator::Separator(View *host)
     : d(new Private())
-
 {
+    createView(host);
 }
 
 Separator::~Separator()
 {
     delete d;
+}
+
+void Separator::createView(View *parent)
+{
+    Q_ASSERT(!m_view);
+    m_view = Layouting::Config::self().createSeparator(parent);
 }
 
 void Separator::init(Layouting::ItemBoxContainer *parentContainer, Qt::Orientation orientation)
@@ -90,7 +102,13 @@ void Separator::move(int p)
     if (p == position())
         return;
 
-    d->position = p;
+    QRect geo = d->geometry;
+    if (isVertical()) {
+        geo.moveTop(p);
+    } else {
+        geo.moveLeft(p);
+    }
+    setGeometry(geo);
 
     if (View *v = view()) {
         if (isVertical()) {
@@ -209,6 +227,7 @@ void Separator::onMouseDoubleClick()
 
 void Separator::onMouseMove(QPoint pos)
 {
+    Q_UNUSED(pos);
 }
 
 Layouting::ItemBoxContainer *Separator::parentContainer() const

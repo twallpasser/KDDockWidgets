@@ -18,11 +18,13 @@
 
 namespace KDDockWidgets::Views {
 
-class View_qtwidgets : public View
+class DOCKS_EXPORT View_qtwidgets : public QWidget, public View
 {
 public:
-    explicit View_qtwidgets(QWidget *widget);
-    virtual ~View_qtwidgets();
+    using View::setVisible;
+
+    explicit View_qtwidgets(QWidget *parent = nullptr);
+    ~View_qtwidgets() override;
 
     QWidget *widget() const;
 
@@ -42,6 +44,13 @@ public:
     void hide() override;
     void update() override;
     void setParent(View *) override;
+    std::unique_ptr<View> window() const override;
+    void raiseAndActivate() override;
+    QPoint mapToGlobal(QPoint) const override;
+
+protected:
+    bool event(QEvent *) override;
+    void resizeEvent(QResizeEvent *) override;
 
 private:
     Q_DISABLE_COPY(View_qtwidgets)

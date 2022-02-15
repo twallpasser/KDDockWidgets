@@ -56,7 +56,7 @@ DropArea::DropArea(QWidgetOrQuick *parent, bool isMDIWrapper)
             }
 
             if (visibleCount() > 0) {
-               // The title of our MDI frame will need to change to the app name if we have more than 1 dock widget nested
+                // The title of our MDI frame will need to change to the app name if we have more than 1 dock widget nested
                 Q_EMIT dw->titleChanged(dw->title());
             } else {
                 // Our wrapeper isn't needed anymore
@@ -82,7 +82,7 @@ Frame *DropArea::frameContainingPos(QPoint globalPos) const
     const Layouting::Item::List &items = this->items();
     for (Layouting::Item *item : items) {
         auto frame = static_cast<Frame *>(item->guestAsQObject());
-        if (!frame || !frame->QWidgetAdapter::isVisible()) {
+        if (!frame || !frame->QWidget::isVisible()) {
             continue;
         }
 
@@ -234,7 +234,7 @@ bool DropArea::drop(WindowBeingDragged *droppedWindow, QPoint globalPos)
 {
     FloatingWindow *floatingWindow = droppedWindow->floatingWindow();
 
-    if (floatingWindow == window()) {
+    if (floatingWindow == QWidget::window()) {
         qWarning() << "Refusing to drop onto itself"; // Doesn't happen
         return false;
     }
@@ -283,7 +283,7 @@ bool DropArea::drop(WindowBeingDragged *draggedWindow, Frame *acceptingFrame,
     const DockWidgetBase::List droppedDockWidgets = needToFocusNewlyDroppedWidgets
         ? droppedWindow->layoutWidget()->dockWidgets()
         : DockWidgetBase::List(); // just so save some memory allocations for the case where this
-        // variable isn't used
+    // variable isn't used
 
     switch (droploc) {
     case DropLocation_Left:
@@ -393,7 +393,7 @@ bool DropArea::isMDIWrapper() const
 DockWidgetBase *DropArea::mdiDockWidgetWrapper() const
 {
     if (m_isMDIWrapper)
-        return qobject_cast<DockWidgetBase *>(QWidgetAdapter::parent());
+        return qobject_cast<DockWidgetBase *>(QWidget::parent());
 
     return nullptr;
 }

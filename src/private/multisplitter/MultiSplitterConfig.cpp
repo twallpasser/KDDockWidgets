@@ -10,9 +10,8 @@
 */
 
 #include "MultiSplitterConfig.h"
-#include "views/View.h"
+#include "View.h"
 #include "Item_p.h"
-#include "Separator_p.h"
 
 #ifdef KDMULTISPLITTER_QTQUICK
 #include <QQmlEngine>
@@ -27,7 +26,7 @@ Config::Config()
     registerQmlTypes();
 }
 
-Separator *Config::createSeparator(View *parent) const
+View *Config::createSeparator(View *parent) const
 {
     if (m_separatorFactoryFunc)
         return m_separatorFactoryFunc(parent);
@@ -89,7 +88,7 @@ Config::Flags Config::flags() const
     return m_flags;
 }
 
-void Config::setFlags(Flags flags)
+void Config::setFlags(Layouting::Config::Flags flags)
 {
     if (m_flags == flags)
         return;

@@ -160,7 +160,7 @@ void ClassicIndicators::setDropLocation(DropLocation location)
     }
 
     if (location == DropLocation_Center) {
-        m_rubberBand->setGeometry(geometryForRubberband(m_hoveredFrame ? m_hoveredFrame->QWidgetAdapter::geometry() : rect()));
+        m_rubberBand->setGeometry(geometryForRubberband(m_hoveredFrame ? m_hoveredFrame->QWidget::geometry() : rect()));
         m_rubberBand->setVisible(true);
         if (rubberBandIsTopLevel()) {
             m_rubberBand->raise();
@@ -231,7 +231,7 @@ QRect ClassicIndicators::geometryForRubberband(QRect localRect) const
         return localRect;
 
     QPoint topLeftLocal = localRect.topLeft();
-    QPoint topLeftGlobal = m_dropArea->QWidgetAdapter::mapToGlobal(topLeftLocal);
+    QPoint topLeftGlobal = m_dropArea->QWidget::mapToGlobal(topLeftLocal);
 
     localRect.moveTopLeft(topLeftGlobal);
 

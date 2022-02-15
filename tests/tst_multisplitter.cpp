@@ -9,12 +9,12 @@
   Contact KDAB at <info@kdab.com> for commercial licensing options.
 */
 
+#include "multisplitter/views_qtwidgets/View_qtwidgets.h"
 #include "private/multisplitter/Item_p.h"
-#include "private/multisplitter/Separator_p.h"
-#include "private/multisplitter/Widget_qwidget.h"
 #include "private/multisplitter/MultiSplitterConfig.h"
-#include "private/multisplitter/Separator_qwidget.h"
-#include "private/multisplitter/views/View.h"
+#include "private/multisplitter/View.h"
+#include "private/multisplitter/controllers/Separator.h"
+#include "private/multisplitter/views_qtwidgets/Separator_qtwidgets.h"
 
 #include <QPainter>
 #include <QtTest/QtTest>
@@ -35,13 +35,12 @@ static QString s_expectedWarning;
 class TestMultiSplitter;
 static TestMultiSplitter *s_testObject = nullptr;
 
-class MyGuestWidget : public QWidget, public Widget_qwidget
+class MyGuestWidget : public Views::View_qtwidgets
 {
     Q_OBJECT
 public:
     MyGuestWidget()
-        : QWidget()
-        , Widget_qwidget(this)
+        : Views::View_qtwidgets()
     {
     }
 
@@ -134,9 +133,8 @@ public Q_SLOTS:
         s_original = qInstallMessageHandler(fatalWarningsMessageHandler);
         s_testObject = this;
 
-        Config::self().setSeparatorFactoryFunc([](View *parent) {
-            // return new SeparatorWidget(parent);
-            return static_cast<Separator *>(new SeparatorWidget(parent));
+        Layouting::Config::self().setSeparatorFactoryFunc([](View *parent) -> View * {
+            return new Views::Separator_qtwidgets(parent ? parent->asQWidget() : nullptr);
         });
     }
 
@@ -200,12 +198,11 @@ private Q_SLOTS:
     void tst_adjacentLayoutBorders();
 };
 
-class MyHostWidget : public QWidget, public Layouting::Widget_qwidget
+class MyHostWidget : public Views::View_qtwidgets
 {
 public:
     MyHostWidget()
-        : QWidget()
-        , Widget_qwidget(this)
+        : Views::View_qtwidgets()
     {
         s_testObject->m_hostWidgets << this;
     }

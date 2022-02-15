@@ -463,7 +463,7 @@ bool StateInternalMDIDragging::handleMouseMove(QPoint globalPos)
         return false;
     }
 
-    const QSize parentSize = frame->QWidgetAdapter::parentWidget()->size();
+    const QSize parentSize = frame->QWidget::parentWidget()->size();
     const QPoint oldPos = frame->mapToGlobal(QPoint(0, 0));
     const QPoint delta = globalPos - oldPos;
     const QPoint newLocalPos = frame->pos() + delta - q->m_offset;
@@ -471,8 +471,8 @@ bool StateInternalMDIDragging::handleMouseMove(QPoint globalPos)
     // Let's not allow the MDI window to go outside of its parent
 
     QPoint newLocalPosBounded = { qMax(0, newLocalPos.x()), qMax(0, newLocalPos.y()) };
-    newLocalPosBounded.setX(qMin(newLocalPosBounded.x(), parentSize.width() - frame->width()));
-    newLocalPosBounded.setY(qMin(newLocalPosBounded.y(), parentSize.height() - frame->height()));
+    newLocalPosBounded.setX(qMin(newLocalPosBounded.x(), parentSize.width() - frame->QWidget::width()));
+    newLocalPosBounded.setY(qMin(newLocalPosBounded.y(), parentSize.height() - frame->QWidget::height()));
 
     auto layout = frame->mdiLayoutWidget();
     Q_ASSERT(layout);
@@ -895,7 +895,7 @@ WidgetType *DragController::qtTopLevelUnderCursor() const
 #endif // Q_OS_WIN
     } else if (linksToXLib() && isXCB()) {
         bool ok = false;
-        const QVector<QWindow*> orderedWindows = KDDockWidgets::orderedWindows(ok);
+        const QVector<QWindow *> orderedWindows = KDDockWidgets::orderedWindows(ok);
         FloatingWindow *tlwBeingDragged = m_windowBeingDragged->floatingWindow();
         if (auto tl = qtTopLevelUnderCursor_impl(globalPos, orderedWindows, tlwBeingDragged))
             return tl;

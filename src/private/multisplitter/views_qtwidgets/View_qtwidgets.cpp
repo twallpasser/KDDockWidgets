@@ -1,46 +1,19 @@
 #include "View_qtwidgets.h"
+#include "../../Utils_p.h"
 
 #include <QDebug>
+#include <QEvent>
+#include <QResizeEvent>
+
+#include <memory>
 
 using namespace KDDockWidgets;
 using namespace KDDockWidgets::Views;
 
-template<typename T>
-static QSize widgetMinSize(const T *w)
-{
-    const int minW = w->minimumWidth() > 0 ? w->minimumWidth()
-                                           : w->minimumSizeHint().width();
-
-    const int minH = w->minimumHeight() > 0 ? w->minimumHeight()
-                                            : w->minimumSizeHint().height();
-
-    return QSize(minW, minH).expandedTo(View::hardcodedMinimumSize());
-}
-
-template<typename T>
-static QSize widgetMaxSize(const T *w)
-{
-    // The max size is usually QWidget::maximumSize(), but we also honour the QSizePolicy::Fixed+sizeHint() case
-    // as widgets don't need to have QWidget::maximumSize() to have a max size honoured
-
-    const QSize min = widgetMinSize(w);
-    QSize max = w->maximumSize();
-    max = View::boundedMaxSize(min, max); // for safety against weird values
-
-    const QSizePolicy policy = w->sizePolicy();
-
-    if (policy.verticalPolicy() == QSizePolicy::Fixed || policy.verticalPolicy() == QSizePolicy::Maximum)
-        max.setHeight(qMin(max.height(), w->sizeHint().height()));
-    if (policy.horizontalPolicy() == QSizePolicy::Fixed || policy.horizontalPolicy() == QSizePolicy::Maximum)
-        max.setWidth(qMin(max.width(), w->sizeHint().width()));
-
-    max = View::boundedMaxSize(min, max); // for safety against weird values
-    return max;
-}
-
-View_qtwidgets::View_qtwidgets(QWidget *widget)
-    : View(widget)
-    , m_widget(widget)
+View_qtwidgets::View_qtwidgets(QWidget *parent)
+    : QWidget(parent)
+    , View(this)
+    , m_widget(this) // TODO: Remove
 {
 }
 
@@ -106,12 +79,12 @@ void View_qtwidgets::setSize(int width, int height)
 
 void View_qtwidgets::setWidth(int width)
 {
-    setSize(width, height());
+    setSize(width, QWidget::height());
 }
 
 void View_qtwidgets::setHeight(int height)
 {
-    setSize(width(), height);
+    setSize(QWidget::width(), height);
 }
 
 void View_qtwidgets::show()
@@ -142,4 +115,38 @@ void View_qtwidgets::setParent(View *parent)
         qWarning() << Q_FUNC_INFO << "parent is not a widget, you have a bug" << parent->asQObject();
         Q_ASSERT(false);
     }
+}
+
+std::unique_ptr<View> View_qtwidgets::window() const
+{
+    if (auto w = m_widget->window())
+        return std::unique_ptr<View>(new View_qtwidgets(w));
+
+    return {};
+}
+
+bool View_qtwidgets::event(QEvent *e)
+{
+    if (e->type() == QEvent::LayoutRequest)
+        onLayoutRequest();
+
+    return QWidget::event(e);
+}
+
+void View_qtwidgets::resizeEvent(QResizeEvent *ev)
+{
+    if (!onResize(ev->size()))
+        QWidget::resizeEvent(ev);
+}
+
+void View_qtwidgets::raiseAndActivate()
+{
+    QWidget::window()->raise();
+    if (!isWayland())
+        QWidget::window()->activateWindow();
+}
+
+QPoint View_qtwidgets::mapToGlobal(QPoint localPt) const
+{
+    return QWidget::mapToGlobal(localPt);
 }

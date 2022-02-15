@@ -117,7 +117,7 @@ void MultiSplitter::addWidget(QWidgetOrQuick *w, Location location,
     if (itemForFrame(frame) != nullptr) {
         // Item already exists, remove it.
         // Changing the frame parent will make the item clean itself up. It turns into a placeholder and is removed by unrefOldPlaceholders
-        frame->QWidgetAdapter::setParent(nullptr); // so ~Item doesn't delete it
+        frame->QWidget::setParent(nullptr); // so ~Item doesn't delete it
         frame->setLayoutItem(nullptr); // so Item is destroyed, as there's no refs to it
     }
 
@@ -174,7 +174,7 @@ void MultiSplitter::addMultiSplitter(MultiSplitter *sourceMultiSplitter, Locatio
     addWidget(sourceMultiSplitter, location, relativeTo, option);
 }
 
-QVector<Layouting::Separator *> MultiSplitter::separators() const
+QVector<Controllers::Separator *> MultiSplitter::separators() const
 {
     return m_rootItem->separators_recursive();
 }

@@ -231,7 +231,7 @@ std::unique_ptr<WindowBeingDragged> TabWidget::makeWindow()
         }
     }
 
-    QRect r = m_frame->QWidgetAdapter::geometry();
+    QRect r = m_frame->QWidget::geometry();
 
     const QPoint globalPoint = m_thisWidget->mapToGlobal(QPoint(0, 0));
 

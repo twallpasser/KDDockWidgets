@@ -22,6 +22,7 @@
 #include "private/TitleBar_p.h"
 #include "private/Frame_p.h"
 #include "private/DockRegistry_p.h"
+#include "private/multisplitter/views_qtwidgets/View_qtwidgets.h"
 
 #include <QObject>
 #include <QGuiApplication>
@@ -30,10 +31,10 @@
 using namespace KDDockWidgets;
 
 // Our Private inherits from QObject since FocusScope can't (Since Frame is already QObject)
-class FocusScope::Private : public QObject //clazy:exclude=missing-qobject-macro (breaks unity build with earlier cmake due to including .moc here.)
+class FocusScope::Private : public QObject // clazy:exclude=missing-qobject-macro (breaks unity build with earlier cmake due to including .moc here.)
 {
 public:
-    Private(FocusScope *qq, QWidgetAdapter *thisWidget)
+    Private(FocusScope *qq, Views::View_qtwidgets *thisWidget)
         : q(qq)
         , m_thisWidget(thisWidget)
     {
@@ -67,7 +68,7 @@ public:
     bool isInFocusScope(WidgetType *) const;
 
     FocusScope *const q;
-    QWidgetAdapter *const m_thisWidget;
+    Views::View_qtwidgets *const m_thisWidget;
     bool m_isFocused = false;
     bool m_inCtor = true;
     QPointer<WidgetType> m_lastFocusedInScope;
@@ -77,7 +78,7 @@ FocusScope::Private::~Private()
 {
 }
 
-FocusScope::FocusScope(QWidgetAdapter *thisWidget)
+FocusScope::FocusScope(Views::View_qtwidgets *thisWidget)
     : d(new Private(this, thisWidget))
 {
 }

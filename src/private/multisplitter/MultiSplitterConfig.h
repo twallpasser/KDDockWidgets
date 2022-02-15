@@ -17,13 +17,16 @@
 
 namespace KDDockWidgets {
 class View;
+
+namespace Controllers {
+class Separator;
+}
+
 }
 
 namespace Layouting {
 
-class Separator;
-
-typedef Separator *(*SeparatorFactoryFunc)(KDDockWidgets::View *parent);
+typedef KDDockWidgets::View *(*SeparatorFactoryFunc)(KDDockWidgets::View *parent);
 
 class DOCKS_EXPORT_FOR_UNIT_TESTS Config
 {
@@ -62,14 +65,14 @@ public:
     Config::Flags flags() const;
 
     ///@brief sets the flags. Set only before creating any Item
-    void setFlags(Flags);
+    void setFlags(Layouting::Config::Flags);
+
+    Config();
+    KDDockWidgets::View *createSeparator(KDDockWidgets::View *) const;
 
 private:
     friend class Item;
     friend class ItemBoxContainer;
-
-    Config();
-    Separator *createSeparator(KDDockWidgets::View *) const;
 
     void registerQmlTypes();
 

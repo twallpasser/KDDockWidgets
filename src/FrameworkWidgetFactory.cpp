@@ -14,12 +14,12 @@
 
 #include "private/Frame_p.h"
 #include "private/TitleBar_p.h"
-#include "private/multisplitter/Separator_p.h"
 #include "private/FloatingWindow_p.h"
 #include "private/indicators/ClassicIndicators_p.h"
 #include "private/indicators/NullIndicators_p.h"
 #include "private/Utils_p.h"
 #include "private/TabWidget_p.h"
+#include "private/multisplitter/views_qtwidgets/View_qtwidgets.h"
 
 #ifdef KDDOCKWIDGETS_QTWIDGETS
 #include "private/widgets/FrameWidget_p.h"
@@ -27,9 +27,10 @@
 #include "private/widgets/TabBarWidget_p.h"
 #include "private/widgets/SideBarWidget_p.h"
 #include "private/widgets/TabWidgetWidget_p.h"
-#include "private/multisplitter/Separator_qwidget.h"
 #include "private/widgets/FloatingWindowWidget_p.h"
 #include "private/indicators/SegmentedIndicators_p.h"
+
+#include "private/multisplitter/views_qtwidgets/Separator_qtwidgets.h"
 
 #include <QRubberBand>
 #include <QToolButton>
@@ -80,9 +81,9 @@ TabWidget *DefaultWidgetFactory::createTabWidget(Frame *parent, TabWidgetOptions
     return new TabWidgetWidget(parent, options);
 }
 
-Layouting::Separator *DefaultWidgetFactory::createSeparator(View *parent) const
+View *DefaultWidgetFactory::createSeparator(View *parent) const
 {
-    return new Layouting::SeparatorWidget(parent);
+    return new Views::Separator_qtwidgets(parent ? static_cast<Views::View_qtwidgets *>(parent) : nullptr);
 }
 
 FloatingWindow *DefaultWidgetFactory::createFloatingWindow(MainWindowBase *parent) const

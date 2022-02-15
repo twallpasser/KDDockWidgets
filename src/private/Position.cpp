@@ -92,7 +92,7 @@ void Position::removePlaceholders()
 void Position::removePlaceholders(const LayoutWidget *ms)
 {
     m_placeholders.erase(std::remove_if(m_placeholders.begin(), m_placeholders.end(), [ms](const std::unique_ptr<ItemRef> &itemref) {
-                             return itemref->item->hostWidget() == *ms;
+                             return itemref->item->hostWidget()->asQObject() == ms;
                          }),
                          m_placeholders.end());
 }

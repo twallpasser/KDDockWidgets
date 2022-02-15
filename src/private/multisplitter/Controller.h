@@ -11,11 +11,14 @@
 
 #pragma once
 
+#include "docks_export.h"
+#include "kddockwidgets/docks_export.h"
+
 namespace KDDockWidgets {
 
 class View;
 
-class Controller
+class DOCKS_EXPORT Controller
 {
 public:
     virtual ~Controller();
@@ -24,6 +27,7 @@ public:
     View *view() const;
 
 protected:
+    virtual void createView(View *parent) = 0;
     View *m_view = nullptr;
 };
 

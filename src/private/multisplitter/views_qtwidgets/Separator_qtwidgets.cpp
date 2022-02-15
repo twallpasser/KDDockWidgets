@@ -14,8 +14,7 @@
 
 using namespace KDDockWidgets::Views;
 
-Separator_qtwidgets::Separator_qtwidgets()
-    : QWidget()
-    , View_qtwidgets(this)
+Separator_qtwidgets::Separator_qtwidgets(QWidget *parent)
+    : View_qtwidgets(parent)
 {
 }

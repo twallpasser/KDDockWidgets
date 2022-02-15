@@ -267,7 +267,7 @@ QSize WindowBeingDraggedWayland::size() const
     if (m_floatingWindow)
         return WindowBeingDragged::size();
     else if (m_frame)
-        return m_frame->QWidgetAdapter::size();
+        return m_frame->QWidget::size();
     else if (m_dockWidget)
         return m_dockWidget->size();
 

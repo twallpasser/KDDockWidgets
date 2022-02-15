@@ -20,11 +20,11 @@
 #define KD_FRAME_P_H
 
 #include "kddockwidgets/docks_export.h"
-#include "kddockwidgets/QWidgetAdapter.h"
 #include "kddockwidgets/FocusScope.h"
 #include "kddockwidgets/DockWidgetBase.h"
 #include "kddockwidgets/LayoutSaver.h"
 #include "multisplitter/Widget.h"
+#include "multisplitter/views_qtwidgets/View_qtwidgets.h"
 
 #include <QVector>
 #include <QDebug>
@@ -53,7 +53,7 @@ class WidgetResizeHandler;
  * FloatingWindow.
  */
 class DOCKS_EXPORT Frame
-    : public LayoutGuestWidget,
+    : public Views::View_qtwidgets, // TODO make generic
       public FocusScope
 {
     Q_OBJECT
@@ -207,7 +207,7 @@ public:
      */
     void restoreToPreviousPosition();
 
-    void onCloseEvent(QCloseEvent *e) override;
+    void closeEvent(QCloseEvent *e) override; // TODO move to controller and specialized view
     int currentTabIndex() const;
 
     FrameOptions options() const
@@ -400,7 +400,7 @@ inline QDebug operator<<(QDebug d, KDDockWidgets::Frame *frame)
 {
     if (frame) {
         d << static_cast<QObject *>(frame);
-        d << "; window=" << frame->window();
+        d << "; window=" << frame->QWidget::window();
         d << "; options=" << frame->options();
         d << "; dockwidgets=" << frame->dockWidgets();
     } else {

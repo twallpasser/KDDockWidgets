@@ -1106,9 +1106,9 @@ bool ItemBoxContainer::checkSanity()
         Item *item = visibleChildren.at(i);
         const int expectedSeparatorPos = mapToRoot(item->m_sizingInfo.edge(d->m_orientation) + 1, d->m_orientation);
 
-        if (separator->host() != host()) {
+        if (separator->view()->parent() != host()) {
             qWarning() << Q_FUNC_INFO << "Invalid host widget for separator"
-                       << separator->host() << host() << this;
+                       << separator->view()->parent() << host() << this;
             return false;
         }
 
@@ -1143,9 +1143,9 @@ bool ItemBoxContainer::checkSanity()
             return false;
         }
 
-        if (separator->host() != host()) {
+        if (separator->view()->parent() != host()) {
             qWarning() << Q_FUNC_INFO << "Unexpected host widget in separator"
-                       << separator->host() << "; expected=" << host();
+                       << separator->view()->parent() << "; expected=" << host();
             return false;
         }
 
@@ -3031,7 +3031,7 @@ void ItemBoxContainer::Private::updateSeparators()
                 newSeparators.push_back(separator);
                 m_separators.removeOne(separator);
             } else {
-                separator = Config::self().createSeparator(q->hostWidget());
+                separator = new Controllers::Separator(q->hostWidget());
                 separator->init(q, m_orientation);
                 newSeparators.push_back(separator);
             }

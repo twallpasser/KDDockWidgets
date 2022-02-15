@@ -239,7 +239,7 @@ QString DockWidgetBase::title() const
 {
     if (d->isMDIWrapper()) {
         // It's just a wrapper to help implementing Option_MDINestable. Return the title of the real dock widget we're hosting.
-        auto dropAreaGuest = qobject_cast<DropArea*>(widget());
+        auto dropAreaGuest = qobject_cast<DropArea *>(widget());
         Q_ASSERT(dropAreaGuest);
         if (dropAreaGuest->hasSingleFrame()) {
             return dropAreaGuest->frames().constFirst()->title();
@@ -263,7 +263,7 @@ void DockWidgetBase::setTitle(const QString &title)
 QRect DockWidgetBase::frameGeometry() const
 {
     if (Frame *f = d->frame())
-        return f->QWidgetAdapter::geometry();
+        return f->QWidget::geometry();
 
     // Means the dock widget isn't visible. Just fallback to its own geometry
     return QWidgetAdapter::geometry();
@@ -545,17 +545,17 @@ MDILayoutWidget *DockWidgetBase::Private::mdiLayout() const
 {
     auto p = const_cast<QObject *>(q->parent());
     while (p) {
-        if (qobject_cast<const QWindow*>(p)) {
+        if (qobject_cast<const QWindow *>(p)) {
             // Ignore QObject hierarchies spanning though multiple windows
             return nullptr;
         }
 
-        if (qobject_cast<LayoutWidget*>(p)) {
+        if (qobject_cast<LayoutWidget *>(p)) {
             // We found a layout
-            if (auto mdiLayout = qobject_cast<MDILayoutWidget*>(p)) {
+            if (auto mdiLayout = qobject_cast<MDILayoutWidget *>(p)) {
                 // And it's MDI
                 return mdiLayout;
-            } else if (auto dropArea = qobject_cast<DropArea*>(p)) {
+            } else if (auto dropArea = qobject_cast<DropArea *>(p)) {
                 // It's a DropArea. But maybe it's a drop area that's just helping
                 // making the MDI windows accept drops (Option_MDINestable)
                 if (!dropArea->isMDIWrapper())
@@ -595,16 +595,15 @@ DockWidgetBase *DockWidgetBase::Private::mdiDockWidgetWrapper() const
 
     auto p = const_cast<QObject *>(q->parent());
     while (p) {
-        if (qobject_cast<const QWindow*>(p)) {
+        if (qobject_cast<const QWindow *>(p)) {
             // Ignore QObject hierarchies spanning though multiple windows
             return nullptr;
         }
 
-        if (qobject_cast<LayoutWidget*>(p)) {
-            if (auto dropArea = qobject_cast<DropArea*>(p)) {
+        if (qobject_cast<LayoutWidget *>(p)) {
+            if (auto dropArea = qobject_cast<DropArea *>(p)) {
                 if (dropArea->isMDIWrapper())
                     return dropArea->mdiDockWidgetWrapper();
-
             }
 
             return nullptr;
@@ -774,7 +773,7 @@ void DockWidgetBase::Private::maybeRestoreToPreviousPosition()
 
     Frame *frame = this->frame();
 
-    if (frame && frame->QWidgetAdapter::parentWidget() == DockRegistry::self()->layoutForItem(layoutItem)) {
+    if (frame && frame->QWidget::parentWidget() == DockRegistry::self()->layoutForItem(layoutItem)) {
         // There's a frame already. Means the DockWidget was hidden instead of closed.
         // Nothing to do, the dock widget will simply be shown
         return;
@@ -854,7 +853,7 @@ bool DockWidgetBase::onResize(QSize newSize)
 {
     if (isOverlayed()) {
         if (auto frame = d->frame()) {
-            d->m_lastOverlayedSize = frame->QWidgetAdapter::size();
+            d->m_lastOverlayedSize = frame->QWidget::size();
         } else {
             qWarning() << Q_FUNC_INFO << "Overlayed dock widget without frame shouldn't happen";
         }
@@ -973,8 +972,8 @@ DockWidgetBase::Private::Private(const QString &dockName, DockWidgetBase::Option
     q->connect(toggleAction, &QAction::toggled, q, [this](bool enabled) {
         if (!m_updatingToggleAction) { // guard against recursiveness
             toggleAction->blockSignals(true); // and don't emit spurious toggle. Like when a dock
-                // widget is inserted into a tab widget it might get
-                // hide events, ignore those. The Dock Widget is open.
+                                              // widget is inserted into a tab widget it might get
+                                              // hide events, ignore those. The Dock Widget is open.
             m_processingToggleAction = true;
             toggle(enabled);
             toggleAction->blockSignals(false);

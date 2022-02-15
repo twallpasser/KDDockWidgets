@@ -64,7 +64,7 @@ static TabWidgetOptions tabWidgetOptions(FrameOptions options)
 }
 
 Frame::Frame(QWidgetOrQuick *parent, FrameOptions options, int userType)
-    : LayoutGuestWidget(parent)
+    : Views::View_qtwidgets(parent)
     , FocusScope(this)
     , m_tabWidget(Config::self().frameworkWidgetFactory()->createTabWidget(this, tabWidgetOptions(options)))
     , m_titleBar(Config::self().frameworkWidgetFactory()->createTitleBar(this))
@@ -79,7 +79,7 @@ Frame::Frame(QWidgetOrQuick *parent, FrameOptions options, int userType)
     connect(m_tabWidget->asWidget(), SIGNAL(currentTabChanged(int)), // clazy:exclude=old-style-connect
             this, SLOT(onCurrentTabChanged(int)));
 
-    setLayoutWidget(qobject_cast<LayoutWidget *>(QWidgetAdapter::parentWidget()));
+    setLayoutWidget(qobject_cast<LayoutWidget *>(QWidget::parentWidget()));
     m_inCtor = false;
 }
 
@@ -179,7 +179,7 @@ void Frame::insertWidget(DockWidgetBase *dockWidget, int index, InitialOption ad
                 // When adding the 1st dock widget of a fresh frame, let's give the frame the size
                 // of the dock widget, so that when adding it to the main window, the main window can
                 // use that size as the initial suggested size.
-                resize(dockWidget->size());
+                QWidget::resize(dockWidget->size());
             }
         }
     }
@@ -373,7 +373,7 @@ void Frame::updateFloatingActions()
 
 bool Frame::containsMouse(QPoint globalPos) const
 {
-    return QWidgetAdapter::rect().contains(KDDockWidgets::QWidgetAdapter::mapFromGlobal(globalPos));
+    return QWidget::rect().contains(QWidget::mapFromGlobal(globalPos));
 }
 
 TitleBar *Frame::titleBar() const
@@ -436,7 +436,7 @@ FloatingWindow *Frame::floatingWindow() const
     // However, if there's a MainWindow in the hierarchy it stops, which can
     // happen with nested main windows.
 
-    auto p = QWidgetAdapter::parentWidget();
+    auto p = QWidget::parentWidget();
     while (p) {
         if (qobject_cast<KDDockWidgets::MainWindowBase *>(p))
             return nullptr;
@@ -444,7 +444,7 @@ FloatingWindow *Frame::floatingWindow() const
         if (auto fw = qobject_cast<FloatingWindow *>(p))
             return fw;
 
-        if (p == window()) {
+        if (p == QWidget::window()) {
             // We stop at the window. (top-levels can have parent, but we're not interested)
             return nullptr;
         }
@@ -481,7 +481,7 @@ int Frame::currentTabIndex() const
     return currentIndex();
 }
 
-void Frame::onCloseEvent(QCloseEvent *e)
+void Frame::closeEvent(QCloseEvent *e)
 {
     qCDebug(closing) << "Frame::closeEvent";
     e->accept(); // Accepted by default (will close unless ignored)
@@ -516,11 +516,11 @@ bool Frame::anyNonDockable() const
 void Frame::onDockWidgetShown(DockWidgetBase *w)
 {
     if (hasSingleDockWidget() && containsDockWidget(w)) { // We have to call contains because it might be being in process of being reparented
-        if (!QWidgetAdapter::isVisible()) {
+        if (!QWidget::isVisible()) {
             qCDebug(hiding) << "Widget" << w << " was shown, we're="
                             << "; visible="
-                            << QWidgetAdapter::isVisible();
-            QWidgetAdapter::setVisible(true);
+                            << QWidget::isVisible();
+            QWidget::setVisible(true);
         }
     }
 }
@@ -528,11 +528,11 @@ void Frame::onDockWidgetShown(DockWidgetBase *w)
 void Frame::onDockWidgetHidden(DockWidgetBase *w)
 {
     if (!isCentralFrame() && hasSingleDockWidget() && containsDockWidget(w)) { // We have to call contains because it might be being in process of being reparented
-        if (QWidgetAdapter::isVisible()) {
+        if (QWidget::isVisible()) {
             qCDebug(hiding) << "Widget" << w << " was hidden, we're="
-                            << "; visible=" << QWidgetAdapter::isVisible()
+                            << "; visible=" << QWidget::isVisible()
                             << "; dockWidgets=" << dockWidgets();
-            QWidgetAdapter::setVisible(false);
+            QWidget::setVisible(false);
         }
     }
 }
@@ -657,14 +657,14 @@ bool Frame::isInMainWindow() const
 bool Frame::event(QEvent *e)
 {
     if (e->type() == QEvent::ParentChange) {
-        if (auto layoutWidget = qobject_cast<LayoutWidget *>(QWidgetAdapter::parentWidget())) {
+        if (auto layoutWidget = qobject_cast<LayoutWidget *>(QWidget::parentWidget())) {
             setLayoutWidget(layoutWidget);
         } else {
             setLayoutWidget(nullptr);
         }
     }
 
-    return QWidgetAdapter::event(e);
+    return QWidget::event(e);
 }
 
 Frame *Frame::deserialize(const LayoutSaver::Frame &f)
@@ -712,7 +712,7 @@ Frame *Frame::deserialize(const LayoutSaver::Frame &f)
     }
 
     frame->setCurrentTabIndex(f.currentTabIndex);
-    frame->QWidgetAdapter::setGeometry(f.geometry);
+    frame->QWidget::setGeometry(f.geometry);
 
     return frame;
 }
@@ -725,7 +725,7 @@ LayoutSaver::Frame Frame::serialize() const
     const DockWidgetBase::List docks = dockWidgets();
 
     frame.objectName = objectName();
-    frame.geometry = QWidgetAdapter::geometry();
+    frame.geometry = QWidget::geometry();
     frame.options = options();
     frame.currentTabIndex = currentTabIndex();
     frame.id = id(); // for coorelation purposes
@@ -865,13 +865,13 @@ Frame *Frame::mdiFrame() const
         return dwWrapper->d->frame();
     }
 
-   return nullptr;
+    return nullptr;
 }
 
 DockWidgetBase *Frame::mdiDockWidgetWrapper() const
 {
     if (auto dropArea = mdiDropAreaWrapper()) {
-        return qobject_cast<DockWidgetBase *>(dropArea->QWidgetAdapter::parent());
+        return qobject_cast<DockWidgetBase *>(dropArea->QWidget::parent());
     }
 
     return nullptr;
@@ -879,7 +879,7 @@ DockWidgetBase *Frame::mdiDockWidgetWrapper() const
 
 DropArea *Frame::mdiDropAreaWrapper() const
 {
-    auto dropArea = qobject_cast<DropArea *>(QWidgetAdapter::parent());
+    auto dropArea = qobject_cast<DropArea *>(QWidget::parent());
     if (dropArea && dropArea->isMDIWrapper())
         return dropArea;
     return nullptr;

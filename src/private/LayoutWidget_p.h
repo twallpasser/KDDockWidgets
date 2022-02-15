@@ -22,12 +22,17 @@
 #ifndef KDDOCKWIDGETS_LAYOUTWIDGET_P_H
 #define KDDOCKWIDGETS_LAYOUTWIDGET_P_H
 
+#include "private/multisplitter/View.h"
+#include "private/multisplitter/views_qtwidgets/View_qtwidgets.h"
 #pragma once
 
 #include "kddockwidgets/docks_export.h"
 #include "kddockwidgets/KDDockWidgets.h"
 #include "kddockwidgets/LayoutSaver.h"
 #include "kddockwidgets/QWidgetAdapter.h"
+
+#include "multisplitter/views_qtwidgets/View_qtwidgets.h"
+
 #include "kdbindings/signal.h"
 
 #include <QList>
@@ -57,7 +62,7 @@ class DockWidgetBase;
  * It's suitable to be set as a main window central widget for instance. The actual layouting is
  * then done by the root Item.
  */
-class DOCKS_EXPORT LayoutWidget : public LayoutGuestWidget
+class DOCKS_EXPORT LayoutWidget : public Views::View_qtwidgets
 {
     Q_OBJECT
 public:

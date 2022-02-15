@@ -29,12 +29,12 @@ class ItemBoxContainer;
 
 namespace KDDockWidgets::Controllers {
 
-class Separator : public Controller
+class DOCKS_EXPORT Separator : public Controller
 {
 public:
     typedef QVector<Separator *> List;
 
-    Separator();
+    explicit Separator(View *host);
     virtual ~Separator() override;
 
     void init(Layouting::ItemBoxContainer *parentContainer, Qt::Orientation orientation);
@@ -66,6 +66,8 @@ private:
     void setLazyPosition(int);
     bool isBeingDragged() const;
     bool usesLazyResize() const;
+
+    void createView(View *parent) override;
 
     struct Private;
     Private *const d;

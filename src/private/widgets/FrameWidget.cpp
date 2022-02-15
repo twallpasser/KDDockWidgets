@@ -30,7 +30,7 @@
 using namespace KDDockWidgets;
 
 ///@brief a QVBoxLayout that emits layoutInvalidated so that Item can detect minSize changes
-class VBoxLayout : public QVBoxLayout //clazy:exclude=missing-qobject-macro
+class VBoxLayout : public QVBoxLayout // clazy:exclude=missing-qobject-macro
 {
 public:
     explicit VBoxLayout(FrameWidget *parent)
@@ -158,7 +158,7 @@ QRect FrameWidget::dragRect() const
     if (Config::self().flags() & Config::Flag_HideTitleBarWhenTabsVisible) {
         QTabBar *tabBar = this->tabBar();
         rect.setHeight(tabBar->height());
-        rect.setWidth(width() - tabBar->width());
+        rect.setWidth(QWidget::width() - tabBar->width());
         rect.moveTopLeft(QPoint(tabBar->width(), tabBar->y()));
         rect.moveTopLeft(QWidget::mapToGlobal(rect.topLeft()));
     }

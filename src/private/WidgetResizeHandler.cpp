@@ -123,7 +123,7 @@ bool WidgetResizeHandler::eventFilter(QObject *o, QEvent *e)
             // Usually in KDDW all geometry changes are done in the layout items, which propagate to the widgets
             // When resizing a MDI however, we're resizing the widget directly. So update the corresponding layout
             // item when we're finished.
-            frame->mdiLayoutWidget()->setDockWidgetGeometry(frame, frame->QWidgetAdapter::geometry());
+            frame->mdiLayoutWidget()->setDockWidgetGeometry(frame, frame->QWidget::geometry());
         }
         updateCursor(CursorPosition_Undefined);
         auto mouseEvent = static_cast<QMouseEvent *>(e);
@@ -421,7 +421,7 @@ void WidgetResizeHandler::setTarget(QWidgetOrQuick *w)
 void WidgetResizeHandler::updateCursor(CursorPosition m)
 {
 #ifdef KDDOCKWIDGETS_QTWIDGETS
-    //Need for updating cursor when we change child widget
+    // Need for updating cursor when we change child widget
     const QObjectList children = mTarget->children();
     for (int i = 0, total = children.size(); i < total; ++i) {
         if (auto child = qobject_cast<WidgetType *>(children.at(i))) {

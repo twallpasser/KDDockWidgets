@@ -25,7 +25,7 @@ using namespace KDDockWidgets;
 
 
 LayoutWidget::LayoutWidget(QWidgetOrQuick *parent)
-    : LayoutGuestWidget(parent)
+    : Views::View_qtwidgets(parent)
 {
 }
 
@@ -33,7 +33,7 @@ LayoutWidget::~LayoutWidget()
 {
     m_minSizeChangedHandler.disconnect();
 
-    if (m_rootItem->hostWidget()->asQObject() == this)
+    if (m_rootItem->hostWidget() == this)
         delete m_rootItem;
     DockRegistry::self()->unregisterLayout(this);
 }
@@ -53,7 +53,7 @@ MainWindowBase *LayoutWidget::mainWindow(bool honourNesting) const
         return firstParentOfType<MainWindowBase>(this);
     } else {
 
-        if (auto pw = QWidgetAdapter::parentWidget()) {
+        if (auto pw = QWidget::parentWidget()) {
             // Note that if pw is a FloatingWindow then pw->parentWidget() can be a MainWindow too, as
             // it's parented
             if (pw->objectName() == QLatin1String("MyCentralWidget"))
@@ -69,14 +69,14 @@ MainWindowBase *LayoutWidget::mainWindow(bool honourNesting) const
 
 FloatingWindow *LayoutWidget::floatingWindow() const
 {
-    return qobject_cast<FloatingWindow *>(QWidgetAdapter::parentWidget());
+    return qobject_cast<FloatingWindow *>(QWidget::parentWidget());
 }
 
 void LayoutWidget::setRootItem(Layouting::ItemContainer *root)
 {
     delete m_rootItem;
     m_rootItem = root;
-    m_rootItem->numVisibleItemsChanged.connect([this] (int count) {
+    m_rootItem->numVisibleItemsChanged.connect([this](int count) {
         Q_EMIT visibleWidgetCountChanged(count);
     });
 
@@ -137,7 +137,7 @@ void LayoutWidget::restorePlaceholder(DockWidgetBase *dw, Layouting::Item *item,
         frame->addWidget(dw);
     }
 
-    frame->QWidgetAdapter::setVisible(true);
+    frame->QWidget::setVisible(true);
 }
 
 void LayoutWidget::unrefOldPlaceholders(const Frame::List &framesBeingAdded) const
@@ -154,7 +154,7 @@ void LayoutWidget::setLayoutSize(QSize size)
     if (size != this->size()) {
         m_rootItem->setSize_recursive(size);
         if (!m_inResizeEvent && !LayoutSaver::restoreInProgress())
-            resize(size);
+            QWidget::resize(size); // TODO: Remove widget references
     }
 }
 
@@ -245,7 +245,7 @@ void LayoutWidget::removeItem(Layouting::Item *item)
 void LayoutWidget::updateSizeConstraints()
 {
     const QSize newMinSize = m_rootItem->minSize();
-    qCDebug(sizing) << Q_FUNC_INFO << "Updating size constraints from" << minimumSize() << "to"
+    qCDebug(sizing) << Q_FUNC_INFO << "Updating size constraints from" << minSize() << "to"
                     << newMinSize;
 
     setLayoutMinimumSize(newMinSize);
@@ -253,7 +253,7 @@ void LayoutWidget::updateSizeConstraints()
 
 bool LayoutWidget::deserialize(const LayoutSaver::MultiSplitter &l)
 {
-    QHash<QString, Layouting::Widget *> frames;
+    QHash<QString, View *> frames;
     for (const LayoutSaver::Frame &frame : qAsConst(l.frames)) {
         Frame *f = Frame::deserialize(frame);
         Q_ASSERT(!frame.id.isEmpty());
@@ -266,7 +266,7 @@ bool LayoutWidget::deserialize(const LayoutSaver::MultiSplitter &l)
 
     // This qMin() isn't needed for QtWidgets (but harmless), but it's required for QtQuick
     // as some sizing is async
-    const QSize newLayoutSize = QWidgetAdapter::size().expandedTo(m_rootItem->minSize());
+    const QSize newLayoutSize = size().expandedTo(m_rootItem->minSize());
 
     m_rootItem->setSize_recursive(newLayoutSize);
 

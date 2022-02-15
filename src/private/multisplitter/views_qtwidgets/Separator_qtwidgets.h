@@ -15,10 +15,10 @@
 
 namespace KDDockWidgets::Views {
 
-class Separator_qtwidgets : public QWidget, public View_qtwidgets
+class DOCKS_EXPORT Separator_qtwidgets : public View_qtwidgets
 {
 public:
-    Separator_qtwidgets();
+    explicit Separator_qtwidgets(QWidget *parent = nullptr);
 };
 
 }
