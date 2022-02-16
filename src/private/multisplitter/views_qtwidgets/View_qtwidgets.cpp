@@ -110,14 +110,6 @@ void View_qtwidgets::setParent(View *parent)
     }
 }
 
-std::unique_ptr<View> View_qtwidgets::window() const
-{
-    if (auto w = QWidget::window())
-        return std::unique_ptr<View>(new View_qtwidgets(nullptr, w));
-
-    return {};
-}
-
 bool View_qtwidgets::event(QEvent *e)
 {
     if (e->type() == QEvent::LayoutRequest)

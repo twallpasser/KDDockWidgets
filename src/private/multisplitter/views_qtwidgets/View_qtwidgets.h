@@ -40,7 +40,6 @@ public:
     void hide() override;
     void update() override;
     void setParent(View *) override;
-    std::unique_ptr<View> window() const override;
     void raiseAndActivate() override;
     QPoint mapToGlobal(QPoint) const override;
 
