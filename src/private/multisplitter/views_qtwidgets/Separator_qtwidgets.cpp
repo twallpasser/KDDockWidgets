@@ -31,6 +31,9 @@ Separator_qtwidgets::Separator_qtwidgets(Controllers::Separator *controller, QWi
 
 void Separator_qtwidgets::paintEvent(QPaintEvent *ev)
 {
+    if (freed())
+        return;
+
     if (KDDockWidgets::Config::self().disabledPaintEvents() & KDDockWidgets::Config::CustomizableWidget_Separator) {
         QWidget::paintEvent(ev);
         return;
@@ -53,6 +56,9 @@ void Separator_qtwidgets::paintEvent(QPaintEvent *ev)
 
 void Separator_qtwidgets::enterEvent(KDDockWidgets::Qt5Qt6Compat::QEnterEvent *)
 {
+    if (freed())
+        return;
+
     qCDebug(separators) << Q_FUNC_INFO << this;
     if (m_controller->isVertical())
         setCursor(Qt::SizeVerCursor);
@@ -67,20 +73,32 @@ void Separator_qtwidgets::leaveEvent(QEvent *)
 
 void Separator_qtwidgets::mousePressEvent(QMouseEvent *)
 {
+    if (freed())
+        return;
+
     m_controller->onMousePress();
 }
 
 void Separator_qtwidgets::mouseMoveEvent(QMouseEvent *ev)
 {
+    if (freed())
+        return;
+
     m_controller->onMouseMove(mapToParent(ev->pos()));
 }
 
 void Separator_qtwidgets::mouseReleaseEvent(QMouseEvent *)
 {
+    if (freed())
+        return;
+
     m_controller->onMouseReleased();
 }
 
 void Separator_qtwidgets::mouseDoubleClickEvent(QMouseEvent *)
 {
+    if (freed())
+        return;
+
     m_controller->onMouseDoubleClick();
 }

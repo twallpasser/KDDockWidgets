@@ -53,6 +53,22 @@ QObject *View::parent() const
 
 void View::free()
 {
+    if (m_freed) {
+        qWarning() << Q_FUNC_INFO << "Free already called";
+        return;
+    }
+
+    m_freed = true;
+    free_impl();
+}
+
+bool View::freed() const
+{
+    return m_freed;
+}
+
+void View::free_impl()
+{
     delete this;
 }
 

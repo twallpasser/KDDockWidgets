@@ -20,7 +20,7 @@ View_qtwidgets::~View_qtwidgets()
 {
 }
 
-void View_qtwidgets::free()
+void View_qtwidgets::free_impl()
 {
     deleteLater();
 }

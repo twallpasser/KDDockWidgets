@@ -49,7 +49,11 @@ public:
     /// @brief Deletes this view.
     /// The default impl will just do a normal C++ "delete", but derived classes are free
     /// to implement other ways, for example QObject::deleteLater(), which is recommended for Qt.
-    virtual void free();
+    /// @sa free_impl()
+    void free();
+
+    /// @brief Returns whether free() has already been called
+    bool freed() const;
 
     /// @brief Called by the layouting engine
     /// Override it in case your widget needs to know where it is in the layout. Usually only needed by Frame.s
@@ -129,10 +133,13 @@ public:
     }
 
 protected:
+    virtual void free_impl();
+
     Controller *const m_controller;
     QObject *const m_thisObj;
 
 private:
+    bool m_freed = false;
     const QString m_id;
 };
 

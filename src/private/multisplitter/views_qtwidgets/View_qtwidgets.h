@@ -24,7 +24,7 @@ public:
     explicit View_qtwidgets(KDDockWidgets::Controller *, QWidget *parent = nullptr);
     ~View_qtwidgets() override;
 
-    void free() override;
+    void free_impl() override;
     QSize sizeHint() const override;
     QSize minSize() const override;
     QSize maxSizeHint() const override;
