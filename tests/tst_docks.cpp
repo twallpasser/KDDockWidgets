@@ -507,7 +507,7 @@ void TestDocks::tst_resizeWindow()
     const int maximizedWidth1 = dock1->width();
     const int maximizedWidth2 = dock2->width();
 
-    const double relativeDifference = qAbs((maximizedWidth1 - maximizedWidth2) / (1.0 * layout->width()));
+    const double relativeDifference = qAbs((maximizedWidth1 - maximizedWidth2) / (1.0 * layout->layoutWidth()));
 
     QVERIFY(relativeDifference <= 0.01);
 
@@ -813,7 +813,7 @@ void TestDocks::tst_dockInternal()
     auto centralWidget = static_cast<Frame *>(dropArea->items()[0]->guestAsQObject());
     nestDockWidget(dock1, dropArea, centralWidget, KDDockWidgets::Location_OnRight);
 
-    QVERIFY(dock1->width() < dropArea->width() - centralWidget->QWidget::width());
+    QVERIFY(dock1->width() < dropArea->layoutWidth() - centralWidget->QWidget::width());
 }
 
 void TestDocks::tst_maximizeAndRestore()
@@ -1413,8 +1413,8 @@ void TestDocks::tst_negativeAnchorPosition()
     layout->checkSanity();
 
     // Now resize the Window, after removing middle one
-    const int availableToShrink = layout->size().height() - layout->minimumSize().height();
-    const QSize newSize = { layout->width(), layout->height() - availableToShrink };
+    const int availableToShrink = layout->layoutSize().height() - layout->minimumSize().height();
+    const QSize newSize = { layout->layoutWidth(), layout->layoutHeight() - availableToShrink };
     if (layout->layoutMinimumSize().expandedTo(newSize) != newSize) {
         qDebug() << "Size to set is too small=" << newSize
                  << "; min=" << layout->layoutMinimumSize();
@@ -2038,8 +2038,8 @@ void TestDocks::tst_availableLengthForOrientation()
 
     int availableWidth = layout->availableLengthForOrientation(Qt::Horizontal);
     int availableHeight = layout->availableLengthForOrientation(Qt::Vertical);
-    QCOMPARE(availableWidth, layout->width());
-    QCOMPARE(availableHeight, layout->height());
+    QCOMPARE(availableWidth, layout->layoutWidth());
+    QCOMPARE(availableHeight, layout->layoutHeight());
 
     // 2. Now do the same, but we have some widget docked
 
@@ -2053,8 +2053,8 @@ void TestDocks::tst_availableLengthForOrientation()
 
     availableWidth = layout->availableLengthForOrientation(Qt::Horizontal);
     availableHeight = layout->availableLengthForOrientation(Qt::Vertical);
-    QCOMPARE(availableWidth, layout->width() - dock1MinWidth);
-    QCOMPARE(availableHeight, layout->height() - dock1MinHeight);
+    QCOMPARE(availableWidth, layout->layoutWidth() - dock1MinWidth);
+    QCOMPARE(availableHeight, layout->layoutHeight() - dock1MinHeight);
     m->layoutWidget()->checkSanity();
 }
 
@@ -2138,7 +2138,7 @@ void TestDocks::tst_placeholderDisappearsOnReadd()
     QCOMPARE(layout->placeholderCount(), 0);
 
     // The dock1 should occupy the entire width
-    QCOMPARE(dock1->dptr()->frame()->QWidget::width(), layout->width());
+    QCOMPARE(dock1->dptr()->frame()->QWidget::width(), layout->layoutWidth());
 
     QVERIFY(Testing::waitForDeleted(fw));
 }
@@ -3131,9 +3131,9 @@ void TestDocks::tst_addToSmallMainWindow2()
     QTest::qWait(100);
 #endif
 
-    QVERIFY(dropArea->width() > osWindowMinWidth());
+    QVERIFY(dropArea->layoutWidth() > osWindowMinWidth());
     QMargins margins = m->centerWidgetMargins();
-    QCOMPARE(dropArea->width(), m->width() - margins.left() - margins.right());
+    QCOMPARE(dropArea->layoutWidth(), m->width() - margins.left() - margins.right());
     QVERIFY(m->dropArea()->checkSanity());
 }
 
@@ -3178,7 +3178,7 @@ void TestDocks::tst_addToSmallMainWindow4()
 
     const int item2MinHeight =
         layout->itemForFrame(dock2->dptr()->frame())->minLength(Qt::Vertical);
-    QCOMPARE(dropArea->height(),
+    QCOMPARE(dropArea->layoutHeight(),
              dock1->dptr()->frame()->QWidget::height() + item2MinHeight + Item::separatorThickness);
 }
 
@@ -3568,7 +3568,7 @@ void TestDocks::tst_resizeViaAnchorsAfterPlaceholderCreation()
 
         Controllers::Separator *anchor1 = separators[0];
         int boundToTheRight = layout->rootItem()->maxPosForSeparator(anchor1);
-        int expectedBoundToTheRight = layout->size().width() - 3 * Item::separatorThickness - item2->minLength(Qt::Horizontal) - item3->minLength(Qt::Horizontal) - item4->minLength(Qt::Horizontal);
+        int expectedBoundToTheRight = layout->layoutWidth() - 3 * Item::separatorThickness - item2->minLength(Qt::Horizontal) - item3->minLength(Qt::Horizontal) - item4->minLength(Qt::Horizontal);
 
         QCOMPARE(boundToTheRight, expectedBoundToTheRight);
 
@@ -3581,7 +3581,7 @@ void TestDocks::tst_resizeViaAnchorsAfterPlaceholderCreation()
         QVERIFY(!item4->isPlaceholder());
 
         boundToTheRight = layout->rootItem()->maxPosForSeparator(anchor1);
-        expectedBoundToTheRight = layout->size().width() - 2 * Item::separatorThickness - item2->minLength(Qt::Horizontal) - item4->minLength(Qt::Horizontal);
+        expectedBoundToTheRight = layout->layoutWidth() - 2 * Item::separatorThickness - item2->minLength(Qt::Horizontal) - item4->minLength(Qt::Horizontal);
 
         QCOMPARE(boundToTheRight, expectedBoundToTheRight);
         dock3->deleteLater();
@@ -3624,13 +3624,13 @@ void TestDocks::tst_restoreAfterResize()
     auto dock1 = createDockWidget("1", new QPushButton("1"));
     m->addDockWidget(dock1, Location_OnLeft);
     auto layout = m->multiSplitter();
-    const QSize oldContentsSize = layout->size();
+    const QSize oldContentsSize = layout->layoutSize();
     const QSize oldWindowSize = m->size();
     LayoutSaver saver;
     QVERIFY(saver.saveToFile(QStringLiteral("layout_tst_restoreAfterResize.json")));
     m->resize(1000, 1000);
     QVERIFY(saver.restoreFromFile(QStringLiteral("layout_tst_restoreAfterResize.json")));
-    QCOMPARE(oldContentsSize, layout->size());
+    QCOMPARE(oldContentsSize, layout->layoutSize());
     QCOMPARE(oldWindowSize, m->size());
 }
 
@@ -4385,8 +4385,8 @@ void TestDocks::tst_availableSizeWithPlaceholders()
     docks2.at(2).createdDock->close();
     QVERIFY(Testing::waitForDeleted(f20));
 
-    QCOMPARE(layout1->size(), layout2->size());
-    QCOMPARE(layout1->size(), layout3->size());
+    QCOMPARE(layout1->layoutSize(), layout2->layoutSize());
+    QCOMPARE(layout1->layoutSize(), layout3->layoutSize());
 
     QCOMPARE(layout1->availableSize(), layout2->availableSize());
     QCOMPARE(layout1->availableSize(), layout3->availableSize());
@@ -4395,7 +4395,7 @@ void TestDocks::tst_availableSizeWithPlaceholders()
     docks1.at(0).createdDock->show();
     m3->addDockWidget(docks2.at(0).createdDock, Location_OnBottom); // just steal from m2
 
-    QCOMPARE(layout1->size(), layout3->size());
+    QCOMPARE(layout1->layoutSize(), layout3->layoutSize());
 
     Frame *f10 = docks1.at(0).createdDock->dptr()->frame();
     Item *item10 = layout1->itemForFrame(f10);
@@ -5778,7 +5778,7 @@ void TestDocks::tst_restoreResizesLayout()
     QVERIFY(restorer.restoreFromFile("layout_tst_restoreResizesLayout.json"));
     QVERIFY(layout->checkSanity());
 
-    QCOMPARE(m->dropArea()->QWidget::size(), layout->size());
+    QCOMPARE(m->dropArea()->QWidget::size(), layout->layoutSize());
     QVERIFY(layout->checkSanity());
 }
 
@@ -6429,7 +6429,7 @@ void TestDocks::tst_invalidLayoutAfterRestore()
     m->addDockWidget(dock2, Location_OnRight);
     m->addDockWidget(dock3, Location_OnRight);
 
-    const int oldContentsWidth = layout->width();
+    const int oldContentsWidth = layout->layoutWidth();
 
     auto f1 = dock1->dptr()->frame();
     dock3->close();
@@ -6461,7 +6461,7 @@ void TestDocks::tst_invalidLayoutAfterRestore()
     layout->addWidget(fw2->dropArea(), Location_OnLeft, dock3->dptr()->frame());
 
     QVERIFY(Testing::waitForDeleted(fw2));
-    QCOMPARE(layout->width(), oldContentsWidth);
+    QCOMPARE(layout->layoutWidth(), oldContentsWidth);
     layout->checkSanity();
 }
 
@@ -6589,8 +6589,8 @@ void TestDocks::tst_dontCloseDockWidgetBeforeRestore4()
     FloatingWindow *fw = dock2->floatingWindow();
     DropArea *da = fw->dropArea();
     QVERIFY(da->checkSanity());
-    QCOMPARE(da->size(), da->rootItem()->size());
-    QVERIFY(qAbs(fw->width() - da->width()) < 30);
+    QCOMPARE(da->layoutSize(), da->rootItem()->size());
+    QVERIFY(qAbs(fw->width() - da->layoutWidth()) < 30);
 }
 
 void TestDocks::tst_closeOnlyCurrentTab()

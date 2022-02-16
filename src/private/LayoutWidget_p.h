@@ -93,24 +93,24 @@ public:
      * @brief returns the contents width.
      * Usually it's the same width as the respective parent MultiSplitter.
      */
-    int width() const
+    int layoutWidth() const
     {
-        return size().width();
+        return layoutSize().width();
     }
 
     /**
      * @brief returns the contents height.
      * Usually it's the same height as the respective parent MultiSplitter.
      */
-    int height() const
+    int layoutHeight() const
     {
-        return size().height();
+        return layoutSize().height();
     }
 
     /**
-     * @brief getter for the size
+     * @brief Returns the size of the contents
      */
-    QSize size() const;
+    QSize layoutSize() const;
 
     /// @brief Runs some sanity checks. Returns true if everything is OK
     bool checkSanity() const;

@@ -96,12 +96,12 @@ QSize LayoutWidget::layoutMaximumSizeHint() const
 void LayoutWidget::setLayoutMinimumSize(QSize sz)
 {
     if (sz != m_rootItem->minSize()) {
-        setLayoutSize(size().expandedTo(m_rootItem->minSize())); // Increase size in case we need to
+        setLayoutSize(layoutSize().expandedTo(m_rootItem->minSize())); // Increase size in case we need to
         m_rootItem->setMinSize(sz);
     }
 }
 
-QSize LayoutWidget::size() const
+QSize LayoutWidget::layoutSize() const
 {
     return m_rootItem->size();
 }
@@ -151,7 +151,7 @@ void LayoutWidget::unrefOldPlaceholders(const Frame::List &framesBeingAdded) con
 
 void LayoutWidget::setLayoutSize(QSize size)
 {
-    if (size != this->size()) {
+    if (size != layoutSize()) {
         m_rootItem->setSize_recursive(size);
         if (!m_inResizeEvent && !LayoutSaver::restoreInProgress())
             QWidget::resize(size); // TODO: Remove widget references
