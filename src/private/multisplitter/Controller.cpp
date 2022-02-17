@@ -12,7 +12,14 @@
 #include "Controller.h"
 #include "View.h"
 
+#include <QDebug>
+
 using namespace KDDockWidgets;
+
+Controller::Controller(View *view)
+    : m_view(view)
+{
+}
 
 Controller::~Controller()
 {
@@ -23,4 +30,40 @@ Controller::~Controller()
 View *Controller::view() const
 {
     return m_view;
+}
+
+bool Controller::isVisible() const
+{
+    return m_view && m_view->isVisible();
+}
+
+void Controller::setVisible(bool is)
+{
+    if (m_view)
+        m_view->setVisible(is);
+    else
+        qWarning() << Q_FUNC_INFO << "No view";
+}
+
+QRect Controller::rect() const
+{
+    if (m_view)
+        return m_view->rect();
+
+    return {};
+}
+
+QPoint Controller::mapToGlobal(QPoint localPt) const
+{
+    return m_view->mapToGlobal(localPt);
+}
+
+int Controller::height() const
+{
+    return m_view->height();
+}
+
+int Controller::width() const
+{
+    return m_view->width();
 }

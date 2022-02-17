@@ -18,7 +18,6 @@
 #include <kddockwidgets/private/widgets/FrameWidget_p.h>
 #include <kddockwidgets/private/widgets/TabBarWidget_p.h>
 #include <kddockwidgets/private/widgets/TabWidgetWidget_p.h>
-#include <kddockwidgets/private/widgets/TitleBarWidget_p.h>
 #include "../../src/private/multisplitter/views_qtwidgets/Separator_qtwidgets.h" // TODO
 
 #include <QApplication>

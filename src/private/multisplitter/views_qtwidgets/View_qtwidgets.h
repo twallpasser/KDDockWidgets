@@ -20,7 +20,12 @@ namespace KDDockWidgets::Views {
 
 class DOCKS_EXPORT View_qtwidgets : public QWidget, public View
 {
+    Q_OBJECT
 public:
+    using View::height;
+    using View::rect;
+    using View::width;
+
     explicit View_qtwidgets(KDDockWidgets::Controller *, QWidget *parent = nullptr);
     ~View_qtwidgets() override;
 
@@ -42,6 +47,7 @@ public:
     void setParent(View *) override;
     void raiseAndActivate() override;
     QPoint mapToGlobal(QPoint) const override;
+    void setSizePolicy(QSizePolicy) override;
 
 protected:
     bool event(QEvent *) override;

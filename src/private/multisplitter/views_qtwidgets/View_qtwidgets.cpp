@@ -4,8 +4,10 @@
 #include <QDebug>
 #include <QEvent>
 #include <QResizeEvent>
+#include <QSizePolicy>
 
 #include <memory>
+#include <qwidget.h>
 
 using namespace KDDockWidgets;
 using namespace KDDockWidgets::Views;
@@ -134,4 +136,9 @@ void View_qtwidgets::raiseAndActivate()
 QPoint View_qtwidgets::mapToGlobal(QPoint localPt) const
 {
     return QWidget::mapToGlobal(localPt);
+}
+
+void View_qtwidgets::setSizePolicy(QSizePolicy policy)
+{
+    QWidget::setSizePolicy(policy);
 }

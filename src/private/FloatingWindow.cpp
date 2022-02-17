@@ -13,7 +13,7 @@
 #include "MainWindowBase.h"
 #include "Logging_p.h"
 #include "Frame_p.h"
-#include "TitleBar_p.h"
+#include "multisplitter/controllers/TitleBar.h"
 #include "WindowBeingDragged_p.h"
 #include "Utils_p.h"
 #include "WidgetResizeHandler_p.h"
@@ -25,6 +25,7 @@
 #include "DockWidgetBase_p.h"
 
 #include "multisplitter/Item_p.h"
+#include "multisplitter/controllers/TitleBar.h"
 
 #include <QCloseEvent>
 #include <QScopedValueRollback>
@@ -33,8 +34,8 @@
 
 #if defined(Q_OS_WIN)
 #if defined(Q_CC_MSVC)
-//NOMINMAX tells windows.h not to define the max and min macros
-//which will interfere with the max() from std::numeric_limits
+// NOMINMAX tells windows.h not to define the max and min macros
+// which will interfere with the max() from std::numeric_limits
 #define NOMINMAX
 #endif
 #include <windows.h>
@@ -107,7 +108,7 @@ FloatingWindow::FloatingWindow(QRect suggestedGeometry, MainWindowBase *parent)
     : QWidgetAdapter(actualParent(parent), windowFlagsToUse())
     , Draggable(this, KDDockWidgets::usesNativeDraggingAndResizing()) // FloatingWindow is only draggable when using a native title bar. Otherwise the KDDockWidgets::TitleBar is the draggable
     , m_dropArea(new DropArea(this))
-    , m_titleBar(Config::self().frameworkWidgetFactory()->createTitleBar(this))
+    , m_titleBar(new Controllers::TitleBar(this))
 {
     if (!suggestedGeometry.isNull())
         setGeometry(suggestedGeometry);
@@ -301,7 +302,7 @@ void FloatingWindow::setSuggestedGeometry(QRect suggestedRect, SuggestedGeometry
         if ((hint & SuggestedGeometryHint_GeometryIsFromDocked)
             && (Config::self().flags() & Config::Flag_NativeTitleBar)) {
             const QMargins margins = contentMargins();
-            suggestedRect.setHeight(suggestedRect.height() - m_titleBar->height() + margins.top()
+            suggestedRect.setHeight(suggestedRect.height() - m_titleBar->view()->height() + margins.top()
                                     + margins.bottom());
         }
 
@@ -548,7 +549,7 @@ QRect FloatingWindow::dragRect() const
     QRect rect;
     if (m_titleBar->isVisible()) {
         rect = m_titleBar->rect();
-        rect.moveTopLeft(m_titleBar->mapToGlobal(QPoint(0, 0)));
+        rect.moveTopLeft(m_titleBar->view()->mapToGlobal(QPoint(0, 0)));
     } else if (hasSingleFrame()) {
         rect = frames().constFirst()->dragRect();
     } else {

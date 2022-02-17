@@ -27,6 +27,10 @@ QT_END_NAMESPACE
 
 namespace KDDockWidgets {
 
+namespace Controllers {
+class TitleBar;
+}
+
 class MainWindowBase;
 class DropArea;
 class Frame;
@@ -38,7 +42,7 @@ class DOCKS_EXPORT FloatingWindow
       public Draggable
 {
     Q_OBJECT
-    Q_PROPERTY(KDDockWidgets::TitleBar *titleBar READ titleBar CONSTANT)
+    Q_PROPERTY(KDDockWidgets::Controllers::TitleBar *titleBar READ titleBar CONSTANT)
     Q_PROPERTY(KDDockWidgets::DropArea *dropArea READ dropArea CONSTANT)
 public:
     explicit FloatingWindow(QRect suggestedGeometry, MainWindowBase *parent = nullptr);
@@ -75,7 +79,7 @@ public:
      *
      * This TitleBar is hidden if we're using a native title bar.
      */
-    TitleBar *titleBar() const
+    Controllers::TitleBar *titleBar() const
     {
         return m_titleBar;
     }
@@ -213,8 +217,8 @@ public:
     virtual QRect normalGeometry() const;
 
     ///@brief Allows the user app to specify which window flags to use, instead of KDDWs default ones
-    ///Bugs caused by this won't be supported, as the amount of combinations that could go wrong can
-    ///be open ended
+    /// Bugs caused by this won't be supported, as the amount of combinations that could go wrong can
+    /// be open ended
     static Qt::WindowFlags s_windowFlagsOverride;
 
 Q_SIGNALS:
@@ -233,7 +237,7 @@ protected:
     void onCloseEvent(QCloseEvent *) override;
 
     QPointer<DropArea> m_dropArea;
-    TitleBar *const m_titleBar;
+    Controllers::TitleBar *const m_titleBar;
 
 private:
     Q_DISABLE_COPY(FloatingWindow)

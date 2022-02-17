@@ -17,7 +17,7 @@
  */
 
 #include "FrameWidget_p.h"
-#include "../TitleBar_p.h"
+#include "../private/multisplitter/controllers/TitleBar.h"
 #include "../TabWidget_p.h"
 #include "Config.h"
 #include "FrameworkWidgetFactory.h"
@@ -57,7 +57,7 @@ FrameWidget::FrameWidget(QWidget *parent, FrameOptions options, int userType)
     auto vlayout = new VBoxLayout(this);
     vlayout->setContentsMargins(0, 0, 0, 0);
     vlayout->setSpacing(0);
-    vlayout->addWidget(titleBar());
+    vlayout->addWidget(titleBar()->view()->asQWidget());
     vlayout->addWidget(m_tabWidget->asWidget());
 
     m_tabWidget->setTabBarAutoHide(!alwaysShowsTabs());
@@ -178,7 +178,7 @@ void FrameWidget::changeTabIcon(int index, const QIcon &icon)
 
 int FrameWidget::nonContentsHeight() const
 {
-    TitleBar *tb = titleBar();
+    Controllers::TitleBar *tb = titleBar();
     QWidget *tabBar = this->tabBar();
 
     return (tb->isVisible() ? tb->height() : 0) + (tabBar->isVisible() ? tabBar->height() : 0);

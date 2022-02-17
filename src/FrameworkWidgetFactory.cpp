@@ -13,7 +13,6 @@
 #include "Config.h"
 
 #include "private/Frame_p.h"
-#include "private/TitleBar_p.h"
 #include "private/FloatingWindow_p.h"
 #include "private/indicators/ClassicIndicators_p.h"
 #include "private/indicators/NullIndicators_p.h"
@@ -23,7 +22,6 @@
 
 #ifdef KDDOCKWIDGETS_QTWIDGETS
 #include "private/widgets/FrameWidget_p.h"
-#include "private/widgets/TitleBarWidget_p.h"
 #include "private/widgets/TabBarWidget_p.h"
 #include "private/widgets/SideBarWidget_p.h"
 #include "private/widgets/TabWidgetWidget_p.h"
@@ -31,6 +29,7 @@
 #include "private/indicators/SegmentedIndicators_p.h"
 
 #include "private/multisplitter/views_qtwidgets/Separator_qtwidgets.h"
+#include "private/multisplitter/views_qtwidgets/TitleBar_qtwidgets.h"
 
 #include <QRubberBand>
 #include <QToolButton>
@@ -61,14 +60,14 @@ Frame *DefaultWidgetFactory::createFrame(QWidgetOrQuick *parent, FrameOptions op
     return new FrameWidget(parent, options);
 }
 
-TitleBar *DefaultWidgetFactory::createTitleBar(Frame *frame) const
+View *DefaultWidgetFactory::createTitleBar(Controllers::TitleBar *titleBar, Frame *frame) const
 {
-    return new TitleBarWidget(frame);
+    return new Views::TitleBar_qtwidgets(titleBar, frame);
 }
 
-TitleBar *DefaultWidgetFactory::createTitleBar(FloatingWindow *fw) const
+View *DefaultWidgetFactory::createTitleBar(Controllers::TitleBar *titleBar, FloatingWindow *fw) const
 {
-    return new TitleBarWidget(fw);
+    return new Views::TitleBar_qtwidgets(titleBar, fw);
 }
 
 TabBar *DefaultWidgetFactory::createTabBar(TabWidget *parent) const
@@ -132,7 +131,7 @@ QAbstractButton *DefaultWidgetFactory::createTitleBarButton(QWidget *parent, Tit
         return nullptr;
     }
 
-    auto button = new Button(parent);
+    auto button = new Views::Button(parent);
     button->setIcon(iconForButtonType(type, parent->devicePixelRatioF()));
 
     return button;

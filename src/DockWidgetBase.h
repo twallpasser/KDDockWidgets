@@ -33,13 +33,16 @@ class TestDocks;
 
 namespace KDDockWidgets {
 
+namespace Controllers {
+class TitleBar;
+}
+
 class Frame;
 class FloatingWindow;
 class DragController;
 class DockRegistry;
 class LayoutSaver;
 class TabWidget;
-class TitleBar;
 class MainWindowBase;
 class StateDragging;
 class FrameQuick;
@@ -53,7 +56,7 @@ class LayoutWidget;
  *
  * Do not use instantiate directly in user code. Use DockWidget instead.
  */
-#ifndef PYTHON_BINDINGS //Pyside bug: https://bugreports.qt.io/projects/PYSIDE/issues/PYSIDE-1327
+#ifndef PYTHON_BINDINGS // Pyside bug: https://bugreports.qt.io/projects/PYSIDE/issues/PYSIDE-1327
 class DOCKS_EXPORT DockWidgetBase : public QWidgetAdapter
 #else
 class DOCKS_EXPORT DockWidgetBase : public QWidget
@@ -71,8 +74,7 @@ public:
     typedef QVector<DockWidgetBase *> List;
 
     ///@brief DockWidget options to pass at construction time
-    enum Option
-    {
+    enum Option {
         Option_None = 0, ///< No option, the default
         Option_NotClosable = 1, ///< The DockWidget can't be closed on the [x], only programmatically
         Option_NotDockable = 2, ///< The DockWidget can't be docked, it's always floating
@@ -303,7 +305,7 @@ public:
      * Note that several dock widgets can have the same title bar, in case they are tabbed together.
      * Hidden dock widgets have no associated title bar.
      */
-    TitleBar *titleBar() const;
+    Controllers::TitleBar *titleBar() const;
 
     /**
      * @brief Returns whether this dock widget is open.
@@ -377,8 +379,8 @@ public:
     MainWindowBase *mainWindow() const;
 
     ///@brief Returns whether This or any child of this dock widget is focused
-    ///Not to be confused with QWidget::hasFocus(), which just refers to 1 widget. This includes
-    ///variant includes children.
+    /// Not to be confused with QWidget::hasFocus(), which just refers to 1 widget. This includes
+    /// variant includes children.
     ///@sa isFocusedChanged()
     bool isFocused() const;
 
@@ -438,9 +440,9 @@ public:
     void setFloatingGeometry(QRect geo);
 
     ///@brief Allows the user to set a type on this dock widget
-    ///The type is opaque and will not be interpreted by KDDockWidgets.
-    ///This type is passed to FrameWorkWidgetFactory::createTitleBar(), which the user can override
-    ///and return different TitleBar subclasses, depending on the type.
+    /// The type is opaque and will not be interpreted by KDDockWidgets.
+    /// This type is passed to FrameWorkWidgetFactory::createTitleBar(), which the user can override
+    /// and return different TitleBar subclasses, depending on the type.
     void setUserType(int userType);
     int userType() const;
 
@@ -454,7 +456,7 @@ public:
     void setMDIZ(int z);
 
     ///@brief Returns whether this dock widget is the main window persistent central widget
-    ///This only applies when using MainWindowOption_HasCentralWidget
+    /// This only applies when using MainWindowOption_HasCentralWidget
     bool isPersistentCentralDockWidget() const;
 
 Q_SIGNALS:
@@ -496,12 +498,12 @@ Q_SIGNALS:
     void isFloatingChanged(bool);
 
     ///@brief emitted when this dock widget is removed from a side-bar.
-    ///Only relevant for the auto-hide/sidebar feature
+    /// Only relevant for the auto-hide/sidebar feature
     void removedFromSideBar();
 
     ///@brief Emitted when the top-level window this dock widget is in is activated or deactivated
-    ///This is convenience to replace tracking dockWidget->window(), since the window changes when
-    ///docking and undocking
+    /// This is convenience to replace tracking dockWidget->window(), since the window changes when
+    /// docking and undocking
     ///
     /// It's called 'aboutTo' because it's done in an event filter and the target window doesn't
     /// have it's 'activeWindow' property updated yet at this point.
@@ -518,7 +520,7 @@ protected:
     void onShown(bool spontaneous);
     void onHidden(bool spontaneous);
 
-#ifndef PYTHON_BINDINGS //Pyside bug: https://bugreports.qt.io/projects/PYSIDE/issues/PYSIDE-1327
+#ifndef PYTHON_BINDINGS // Pyside bug: https://bugreports.qt.io/projects/PYSIDE/issues/PYSIDE-1327
     void onCloseEvent(QCloseEvent *e) override;
     bool onResize(QSize newSize) override;
 #endif
@@ -538,7 +540,7 @@ private:
     friend class ::TestDocks;
     friend class StateDragging;
     friend class KDDockWidgets::TabWidget;
-    friend class KDDockWidgets::TitleBar;
+    friend class KDDockWidgets::Controllers::TitleBar;
     friend class KDDockWidgets::DragController;
     friend class KDDockWidgets::DockRegistry;
     friend class KDDockWidgets::LayoutSaver;

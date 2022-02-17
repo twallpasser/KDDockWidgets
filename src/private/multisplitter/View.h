@@ -25,6 +25,9 @@ namespace Layouting {
 class Item;
 }
 
+class QFocusEvent;
+class QSizePolicy;
+
 
 namespace KDDockWidgets {
 
@@ -76,12 +79,19 @@ public:
     virtual void update() = 0;
     virtual void raiseAndActivate() = 0;
     virtual QPoint mapToGlobal(QPoint) const = 0;
+    virtual void setSizePolicy(QSizePolicy) = 0;
 
     // TODO: Check if these two should be in the controller or on view
     virtual void onLayoutRequest()
     {
     }
+
     virtual bool onResize(QSize /*newSize*/)
+    {
+        return false;
+    }
+
+    virtual bool onFocusInEvent(QFocusEvent *)
     {
         return false;
     }

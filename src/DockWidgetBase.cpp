@@ -18,7 +18,7 @@
 #include "private/Logging_p.h"
 #include "private/MDILayoutWidget_p.h"
 #include "private/SideBar_p.h"
-#include "private/TitleBar_p.h"
+#include "private/multisplitter/controllers/TitleBar.h"
 #include "private/Utils_p.h"
 #include "private/WindowBeingDragged_p.h"
 #include "private/Position_p.h"
@@ -361,7 +361,7 @@ void DockWidgetBase::forceClose()
     d->forceClose();
 }
 
-TitleBar *DockWidgetBase::titleBar() const
+Controllers::TitleBar *DockWidgetBase::titleBar() const
 {
     if (Frame *f = d->frame())
         return f->actualTitleBar();

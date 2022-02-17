@@ -58,8 +58,6 @@ set(DOCKSLIBS_SRCS
     private/Logging_p.h
     private/TabWidget.cpp
     private/TabWidget_p.h
-    private/TitleBar.cpp
-    private/TitleBar_p.h
     private/SideBar.cpp
     private/SideBar_p.h
     private/DockRegistry.cpp
@@ -99,6 +97,8 @@ set(DOCKSLIBS_SRCS
 
     private/multisplitter/controllers/Separator.cpp
     private/multisplitter/controllers/Separator.h
+    private/multisplitter/controllers/TitleBar.cpp
+    private/multisplitter/controllers/TitleBar.h
     private/multisplitter/View.cpp
     private/multisplitter/View.h
     private/multisplitter/Controller.cpp
@@ -108,6 +108,8 @@ set(DOCKSLIBS_SRCS
     private/multisplitter/views_qtwidgets/View_qtwidgets.h
     private/multisplitter/views_qtwidgets/Separator_qtwidgets.cpp
     private/multisplitter/views_qtwidgets/Separator_qtwidgets.h
+    private/multisplitter/views_qtwidgets/TitleBar_qtwidgets.cpp
+    private/multisplitter/views_qtwidgets/TitleBar_qtwidgets.h
 
 )
 
@@ -148,6 +150,8 @@ set(KDDW_BACKEND_SRCS
   # private/multisplitter/controllers/Frame.h
   private/multisplitter/controllers/Separator.cpp
   private/multisplitter/controllers/Separator.h
+  private/multisplitter/controllers/TitleBar.cpp
+  private/multisplitter/controllers/TitleBar.h
   # private/multisplitter/controllers/TabBar.cpp
   # private/multisplitter/controllers/TabBar.h
   # private/multisplitter/controllers/TitleBar.cpp
@@ -157,6 +161,8 @@ set(KDDW_BACKEND_SRCS
   private/multisplitter/views_qtwidgets/View_qtwidgets.h
   private/multisplitter/views_qtwidgets/Separator_qtwidgets.cpp
   private/multisplitter/views_qtwidgets/Separator_qtwidgets.h
+  private/multisplitter/views_qtwidgets/TitleBar_qtwidgets.cpp
+  private/multisplitter/views_qtwidgets/TitleBar_qtwidgets.h
 )
 
 # add_library(kddockwidgets_backend STATIC ${KDDW_BACKEND_SRCS})
@@ -205,7 +211,6 @@ set(DOCKS_INSTALLABLE_PRIVATE_INCLUDES
 
 set(DOCKS_INSTALLABLE_PRIVATE_WIDGET_INCLUDES
     private/widgets/QWidgetAdapter_widgets_p.h
-    private/widgets/TitleBarWidget_p.h
     private/widgets/SideBarWidget_p.h
     private/widgets/FloatingWindowWidget_p.h
     private/widgets/FrameWidget_p.h
@@ -278,8 +283,6 @@ else()
       private/widgets/SideBarWidget_p.h
       private/widgets/TabWidgetWidget.cpp
       private/widgets/TabWidgetWidget_p.h
-      private/widgets/TitleBarWidget.cpp
-      private/widgets/TitleBarWidget_p.h
       private/widgets/DockWidget.cpp
       private/widgets/QWidgetAdapter_widgets.cpp
       private/widgets/QWidgetAdapter_widgets_p.h

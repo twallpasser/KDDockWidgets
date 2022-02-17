@@ -34,7 +34,10 @@ class TestDocks;
 
 namespace KDDockWidgets {
 
+namespace Controllers {
 class TitleBar;
+}
+
 class TabWidget;
 class DockWidgetBase;
 class FloatingWindow;
@@ -57,8 +60,8 @@ class DOCKS_EXPORT Frame
       public FocusScope
 {
     Q_OBJECT
-    Q_PROPERTY(KDDockWidgets::TitleBar *titleBar READ titleBar CONSTANT)
-    Q_PROPERTY(KDDockWidgets::TitleBar *actualTitleBar READ actualTitleBar NOTIFY actualTitleBarChanged)
+    Q_PROPERTY(KDDockWidgets::Controllers::TitleBar *titleBar READ titleBar CONSTANT)
+    Q_PROPERTY(KDDockWidgets::Controllers::TitleBar *actualTitleBar READ actualTitleBar NOTIFY actualTitleBarChanged)
     Q_PROPERTY(int currentIndex READ currentIndex NOTIFY currentDockWidgetChanged)
     Q_PROPERTY(int userType READ userType CONSTANT)
     Q_PROPERTY(bool isMDI READ isMDI NOTIFY isMDIChanged)
@@ -120,8 +123,8 @@ public:
     void updateTitleBarVisibility();
     void updateFloatingActions();
     bool containsMouse(QPoint globalPos) const;
-    TitleBar *titleBar() const;
-    TitleBar *actualTitleBar() const;
+    Controllers::TitleBar *titleBar() const;
+    Controllers::TitleBar *actualTitleBar() const;
     QString title() const;
     QIcon icon() const;
     const QVector<DockWidgetBase *> dockWidgets() const;
@@ -371,7 +374,7 @@ protected:
     bool m_inDtor = false;
 
     TabWidget *const m_tabWidget;
-    TitleBar *const m_titleBar;
+    Controllers::TitleBar *const m_titleBar;
 
 private:
     Q_DISABLE_COPY(Frame)

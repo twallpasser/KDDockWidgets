@@ -13,7 +13,8 @@
 #include "../DockRegistry_p.h"
 #include "../DropArea_p.h"
 #include "../Logging_p.h"
-#include "../TitleBar_p.h"
+#include "../multisplitter/controllers/TitleBar.h"
+#include "../multisplitter/views_qtwidgets/TitleBar_qtwidgets.h"
 #include "../Utils_p.h"
 
 #include <QApplication>
@@ -90,7 +91,7 @@ void FloatingWindowWidget::init()
 {
     m_vlayout->setSpacing(0);
     updateMargins();
-    m_vlayout->addWidget(m_titleBar);
+    m_vlayout->addWidget(m_titleBar->view()->asQWidget());
     m_vlayout->addWidget(m_dropArea);
 
     connect(DockRegistry::self(), &DockRegistry::windowChangedScreen, this, [this](QWindow *w) {

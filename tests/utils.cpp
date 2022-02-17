@@ -12,7 +12,6 @@
 #include "utils.h"
 #include "DropArea_p.h"
 #include "Config.h"
-#include "TitleBar_p.h"
 #include "FloatingWindow_p.h"
 #include "FrameworkWidgetFactory.h"
 
@@ -22,13 +21,13 @@
 #include <QtTest/QtTest>
 
 #ifdef KDDOCKWIDGETS_QTQUICK
-# include "DockWidgetQuick.h"
-# include "private/quick/MainWindowQuick_p.h"
-# include <QQuickView>
+#include "DockWidgetQuick.h"
+#include "private/quick/MainWindowQuick_p.h"
+#include <QQuickView>
 #else
-# include "DockWidget.h"
-# include "MainWindow.h"
-# include <QPushButton>
+#include "DockWidget.h"
+#include "MainWindow.h"
+#include <QPushButton>
 #endif
 
 using namespace KDDockWidgets;
@@ -187,12 +186,7 @@ bool KDDockWidgets::Tests::shouldBlacklistWarning(const QString &msg, const QStr
     if (category == QLatin1String("qt.qpa.xcb"))
         return true;
 
-    return msg.contains(QLatin1String("QSocketNotifier: Invalid socket")) ||
-           msg.contains(QLatin1String("QWindowsWindow::setGeometry")) ||
-           msg.contains(QLatin1String("This plugin does not support")) ||
-           msg.contains(QLatin1String("Note that Qt no longer ships fonts")) ||
-           msg.contains(QLatin1String("Another dock KDDockWidgets::DockWidget")) ||
-           msg.contains(QLatin1String("There's multiple MainWindows, not sure what to do about parenting"));
+    return msg.contains(QLatin1String("QSocketNotifier: Invalid socket")) || msg.contains(QLatin1String("QWindowsWindow::setGeometry")) || msg.contains(QLatin1String("This plugin does not support")) || msg.contains(QLatin1String("Note that Qt no longer ships fonts")) || msg.contains(QLatin1String("Another dock KDDockWidgets::DockWidget")) || msg.contains(QLatin1String("There's multiple MainWindows, not sure what to do about parenting"));
 }
 
 void KDDockWidgets::Tests::doubleClickOn(QPoint globalPos, WidgetType *receiver)
@@ -203,7 +197,7 @@ void KDDockWidgets::Tests::doubleClickOn(QPoint globalPos, WidgetType *receiver)
     QMouseEvent ev(QEvent::MouseButtonDblClick, receiver->mapFromGlobal(globalPos), receiver->window()->mapFromGlobal(globalPos), globalPos,
                    Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
 
-    if (auto actualReceiver = receiver->property("titleBarMouseArea").value<QObject*>()) {
+    if (auto actualReceiver = receiver->property("titleBarMouseArea").value<QObject *>()) {
         // QtQuick case, we need to send the event to the mouse area
         qApp->sendEvent(actualReceiver, &ev);
     } else {
@@ -295,9 +289,9 @@ void KDDockWidgets::Tests::nestDockWidget(DockWidgetBase *dock, DropArea *dropAr
 EmbeddedWindow::~EmbeddedWindow() = default;
 
 #ifdef KDDOCKWIDGETS_QTQUICK
-    MyWidget2::~MyWidget2() = default;
-    NonClosableWidget::~NonClosableWidget() = default;
-    QTextEdit::~QTextEdit() = default;
-    FocusableWidget::~FocusableWidget() = default;
-    QPushButton::~QPushButton() = default;
+MyWidget2::~MyWidget2() = default;
+NonClosableWidget::~NonClosableWidget() = default;
+QTextEdit::~QTextEdit() = default;
+FocusableWidget::~FocusableWidget() = default;
+QPushButton::~QPushButton() = default;
 #endif

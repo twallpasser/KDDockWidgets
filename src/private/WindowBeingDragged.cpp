@@ -9,12 +9,15 @@
   Contact KDAB at <info@kdab.com> for commercial licensing options.
 */
 
+#include "KDDockWidgets.h"
 #include "WindowBeingDragged_p.h"
 #include "DragController_p.h"
 #include "Frame_p.h"
 #include "LayoutWidget_p.h"
 #include "Logging_p.h"
 #include "Utils_p.h"
+#include "multisplitter/controllers/TitleBar.h"
+#include "private/multisplitter/views_qtwidgets/TitleBar_qtwidgets.h"
 
 #ifdef KDDOCKWIDGETS_QTWIDGETS
 #include "widgets/TabBarWidget_p.h"
@@ -34,11 +37,12 @@ static Draggable *bestDraggable(Draggable *draggable)
     // When de detach a title bar it will get hidden and we only the title bar of the FloatingWindow is visible
     /// Apparently that causes problems with grabbing the mouse, so instead use a visible draggable.
     // grabbing mouse on an hidden window works usually, it's some edge case on Windows with MFC.
-    if (auto titleBar = qobject_cast<TitleBar *>(draggable->asWidget())) {
+    if (auto tbView = qobject_cast<Views::TitleBar_qtwidgets *>(draggable->asWidget())) {
+        auto titleBar = tbView->titleBar();
         if (titleBar->isVisible())
             return draggable;
 
-        auto fw = qobject_cast<FloatingWindow *>(titleBar->window());
+        auto fw = qobject_cast<FloatingWindow *>(tbView->QWidget::window());
         if (!fw) // defensive, doesn't happen
             return draggable;
 
@@ -192,7 +196,8 @@ WindowBeingDraggedWayland::WindowBeingDraggedWayland(Draggable *draggable)
         return;
     }
 
-    if (auto tb = qobject_cast<TitleBar *>(draggable->asWidget())) {
+    if (auto tbView = qobject_cast<Views::TitleBar_qtwidgets *>(draggable->asWidget())) {
+        auto tb = tbView->titleBar();
         if (auto fw = tb->floatingWindow()) {
             // case #1: we're dragging the whole floating window by its titlebar
             m_floatingWindow = fw;

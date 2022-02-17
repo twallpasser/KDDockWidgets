@@ -20,7 +20,7 @@
 #include "Config.h"
 #include "FrameworkWidgetFactory.h"
 #include "../Frame_p.h"
-#include "../TitleBar_p.h"
+#include "../multisplitter/controllers/TitleBar.h"
 #include "../DockRegistry_p.h"
 
 #include <QMouseEvent>
@@ -185,12 +185,12 @@ void TabWidgetWidget::setupTabBarButtons()
     m_cornerWidgetLayout->addWidget(m_closeButton);
 
     connect(m_floatButton, &QAbstractButton::clicked, this, [this] {
-        TitleBar *tb = frame()->titleBar();
+        Controllers::TitleBar *tb = frame()->titleBar();
         tb->onFloatClicked();
     });
 
     connect(m_closeButton, &QAbstractButton::clicked, this, [this] {
-        TitleBar *tb = frame()->titleBar();
+        Controllers::TitleBar *tb = frame()->titleBar();
         tb->onCloseClicked();
     });
 

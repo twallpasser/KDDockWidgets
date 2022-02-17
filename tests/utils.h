@@ -22,7 +22,7 @@
 #include "DropIndicatorOverlayInterface_p.h"
 #include "FloatingWindow_p.h"
 #include "KDDockWidgets.h"
-#include "TitleBar_p.h"
+#include "multisplitter/controllers/TitleBar.h"
 #include "Utils_p.h"
 
 #ifdef KDDOCKWIDGETS_QTWIDGETS
@@ -351,7 +351,7 @@ inline WidgetType *draggableFor(WidgetType *w)
     WidgetType *draggable = nullptr;
     if (auto dock = qobject_cast<DockWidgetBase *>(w)) {
         if (auto frame = dock->d->frame())
-            draggable = frame->titleBar();
+            draggable = frame->titleBar()->view()->asQWidget();
     } else if (auto fw = qobject_cast<FloatingWindow *>(w)) {
         Frame *frame = fw->hasSingleFrame() ? static_cast<Frame *>(fw->frames().first())
                                             : nullptr;
@@ -359,7 +359,7 @@ inline WidgetType *draggableFor(WidgetType *w)
         if ((KDDockWidgets::Config::self().flags() & KDDockWidgets::Config::Flag_HideTitleBarWhenTabsVisible) && frame && frame->hasTabsVisible()) {
             draggable = frame->tabWidget()->asWidget();
         } else {
-            draggable = fw->titleBar();
+            draggable = fw->titleBar()->view()->asQWidget();
         }
 #ifdef KDDOCKWIDGETS_QTWIDGETS
     } else if (qobject_cast<TabWidgetWidget *>(w)) {
@@ -368,7 +368,7 @@ inline WidgetType *draggableFor(WidgetType *w)
     } else if (qobject_cast<TabWidgetQuick *>(w)) {
         draggable = w;
 #endif
-    } else if (qobject_cast<TitleBar *>(w)) {
+    } else if (qobject_cast<Controllers::TitleBar *>(w)) {
         draggable = w;
     }
 

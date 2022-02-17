@@ -16,6 +16,7 @@
 #include "KDDockWidgets.h"
 #include "QWidgetAdapter.h"
 #include "private/multisplitter/View.h" // TODO
+#include "private/multisplitter/controllers/TitleBar.h"
 
 // clazy:excludeall=ctor-missing-parent-argument
 
@@ -40,7 +41,6 @@ class MainWindowBase;
 class DropIndicatorOverlayInterface;
 class FloatingWindow;
 class TabWidget;
-class TitleBar;
 class Frame;
 class DropArea;
 class SideBar;
@@ -49,6 +49,7 @@ class TabWidgetQuick;
 
 namespace Views {
 class Separator;
+class TitleBar;
 }
 
 namespace Controllers {
@@ -94,13 +95,13 @@ public:
     ///       Override to provide your own TitleBar sub-class. If overridden then
     ///       you also need to override the overload below.
     ///@param frame Just forward to TitleBar's constructor.
-    virtual TitleBar *createTitleBar(Frame *frame) const = 0;
+    virtual View *createTitleBar(Controllers::TitleBar *, Frame *frame) const = 0;
 
     ///@brief Called internally by the framework to create a TitleBar
     ///       Override to provide your own TitleBar sub-class. If overridden then
     ///       you also need to override the overload above.
     ///@param floatingWindow Just forward to TitleBar's constructor.
-    virtual TitleBar *createTitleBar(FloatingWindow *floatingWindow) const = 0;
+    virtual View *createTitleBar(Controllers::TitleBar *, FloatingWindow *floatingWindow) const = 0;
 
     ///@brief Called internally by the framework to create a TabWidget
     ///       Override to provide your own TabWidget sub-class.
@@ -173,8 +174,8 @@ class DOCKS_EXPORT DefaultWidgetFactory : public FrameworkWidgetFactory
 public:
     DefaultWidgetFactory() = default;
     Frame *createFrame(QWidgetOrQuick *parent, FrameOptions) const override;
-    TitleBar *createTitleBar(Frame *) const override;
-    TitleBar *createTitleBar(FloatingWindow *) const override;
+    View *createTitleBar(Controllers::TitleBar *, Frame *) const override;
+    View *createTitleBar(Controllers::TitleBar *, FloatingWindow *) const override;
     TabWidget *createTabWidget(Frame *parent, TabWidgetOptions = TabWidgetOption_None) const override;
     TabBar *createTabBar(TabWidget *parent) const override;
     View *createSeparator(Controllers::Separator *, View *parent = nullptr) const override;

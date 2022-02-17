@@ -27,7 +27,7 @@
 #include "Logging_p.h"
 #include "Position_p.h"
 #include "TabWidget_p.h"
-#include "TitleBar_p.h"
+#include "multisplitter/controllers/TitleBar.h"
 #include "Utils_p.h"
 #include "WidgetResizeHandler_p.h"
 #include "MDILayoutWidget_p.h"
@@ -67,7 +67,7 @@ Frame::Frame(QWidgetOrQuick *parent, FrameOptions options, int userType)
     : Views::View_qtwidgets(nullptr, parent)
     , FocusScope(this)
     , m_tabWidget(Config::self().frameworkWidgetFactory()->createTabWidget(this, tabWidgetOptions(options)))
-    , m_titleBar(Config::self().frameworkWidgetFactory()->createTitleBar(this))
+    , m_titleBar(new Controllers::TitleBar(this))
     , m_options(actualOptions(options))
     , m_userType(userType)
 {
@@ -348,8 +348,8 @@ void Frame::updateTitleBarVisibility()
         visible = true;
     }
 
-    const bool wasVisible = m_titleBar->isVisible();
-    m_titleBar->setVisible(visible);
+    const bool wasVisible = m_titleBar->view()->isVisible();
+    m_titleBar->view()->setVisible(visible);
 
     if (wasVisible != visible) {
         Q_EMIT actualTitleBarChanged();
@@ -376,12 +376,12 @@ bool Frame::containsMouse(QPoint globalPos) const
     return QWidget::rect().contains(QWidget::mapFromGlobal(globalPos));
 }
 
-TitleBar *Frame::titleBar() const
+Controllers::TitleBar *Frame::titleBar() const
 {
     return m_titleBar;
 }
 
-TitleBar *Frame::actualTitleBar() const
+Controllers::TitleBar *Frame::actualTitleBar() const
 {
     if (FloatingWindow *fw = floatingWindow()) {
         // If there's nested frames then show each Frame's title bar
@@ -785,9 +785,9 @@ QSize Frame::biggestDockWidgetMaxSize() const
 QRect Frame::dragRect() const
 {
     QRect rect;
-    if (m_titleBar->isVisible()) {
-        rect = m_titleBar->rect();
-        rect.moveTopLeft(m_titleBar->mapToGlobal(QPoint(0, 0)));
+    if (m_titleBar->view()->isVisible()) {
+        rect = m_titleBar->view()->rect();
+        rect.moveTopLeft(m_titleBar->view()->mapToGlobal(QPoint(0, 0)));
     }
 
     return rect;

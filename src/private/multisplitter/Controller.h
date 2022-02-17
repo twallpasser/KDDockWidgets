@@ -13,20 +13,30 @@
 
 #include "kddockwidgets/docks_export.h"
 
+#include <QObject>
+
 namespace KDDockWidgets {
 
 class View;
 
-class DOCKS_EXPORT Controller
+class DOCKS_EXPORT Controller : public QObject // TODO remove QObject
 {
+    Q_OBJECT
 public:
+    explicit Controller(View *);
     virtual ~Controller();
 
     /// @brief Returns the view associated with this controller, if any.
     View *view() const;
 
-protected:
-    virtual void createView(View *parent) = 0;
+    bool isVisible() const;
+    void setVisible(bool);
+    QRect rect() const;
+    QPoint mapToGlobal(QPoint) const;
+    int height() const;
+    int width() const;
+
+private:
     View *m_view = nullptr;
 };
 

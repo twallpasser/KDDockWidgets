@@ -15,7 +15,6 @@
 
 #include <QVector>
 #include <QPoint>
-#include <qnamespace.h>
 
 class QRect;
 
@@ -66,8 +65,6 @@ private:
     void setLazyPosition(int);
     bool isBeingDragged() const;
     bool usesLazyResize() const;
-
-    void createView(View *parent) override;
 
     struct Private;
     Private *const d;

@@ -15,6 +15,7 @@
 #include "../View.h"
 #include "../Logging_p.h"
 #include "Config.h"
+#include "private/multisplitter/Controller.h"
 
 #include <QApplication> // TODO remove, add Platform instead
 #include <qnamespace.h>
@@ -63,21 +64,15 @@ struct Separator::Private
 };
 
 Separator::Separator(View *host)
-    : d(new Private())
+    : Controller(Layouting::Config::self().createSeparator(this, host))
+    , d(new Private())
 {
-    createView(host);
+    view()->show();
 }
 
 Separator::~Separator()
 {
     delete d;
-}
-
-void Separator::createView(View *parent)
-{
-    Q_ASSERT(!m_view);
-    m_view = Layouting::Config::self().createSeparator(this, parent);
-    m_view->show();
 }
 
 void Separator::init(Layouting::ItemBoxContainer *parentContainer, Qt::Orientation orientation)

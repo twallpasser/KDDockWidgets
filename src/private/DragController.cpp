@@ -22,6 +22,8 @@
 #include "Config.h"
 #include "MDILayoutWidget_p.h"
 #include "WindowZOrder_x11_p.h"
+#include "multisplitter/controllers/TitleBar.h"
+#include "multisplitter/views_qtwidgets/TitleBar_qtwidgets.h"
 
 #include <QMouseEvent>
 #include <QGuiApplication>
@@ -431,7 +433,7 @@ void StateInternalMDIDragging::onEntry()
                    << q->m_draggable->asWidget();
 
     // Raise the dock widget being dragged
-    if (auto tb = qobject_cast<TitleBar *>(q->m_draggable->asWidget())) {
+    if (auto tb = qobject_cast<Controllers::TitleBar *>(q->m_draggable->asWidget())) { // TODO
         if (Frame *f = tb->frame())
             f->raise();
     }
@@ -448,7 +450,7 @@ bool StateInternalMDIDragging::handleMouseButtonRelease(QPoint)
 bool StateInternalMDIDragging::handleMouseMove(QPoint globalPos)
 {
     // for MDI we only support dragging via the title bar, other cases don't make sense conceptually
-    auto tb = qobject_cast<TitleBar *>(q->m_draggable->asWidget());
+    auto tb = qobject_cast<Controllers::TitleBar *>(q->m_draggable->asWidget()); // TODO
     if (!tb) {
         qWarning() << Q_FUNC_INFO << "expected a title bar, not" << q->m_draggable->asWidget();
         Q_EMIT q->dragCanceled();

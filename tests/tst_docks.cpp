@@ -22,11 +22,10 @@
 #include "MainWindowMDI.h"
 #include "Position_p.h"
 #include "SideBar_p.h"
-#include "TabWidget_p.h"
-#include "TitleBar_p.h"
 #include "WindowBeingDragged_p.h"
 #include "MDIArea.h"
 #include "multisplitter/Item_p.h"
+#include "multisplitter/views_qtwidgets/TitleBar_qtwidgets.h"
 #include "private/MultiSplitter_p.h"
 #include "multisplitter/controllers/Separator.h"
 
@@ -303,7 +302,7 @@ void TestDocks::tst_detachFromMainWindow()
 
     QVERIFY(m->layoutWidget()->mainWindow() != nullptr);
     QVERIFY(!dock1->isFloating());
-    TitleBar *tb = dock1->titleBar();
+    Controllers::TitleBar *tb = dock1->titleBar();
     QVERIFY(tb == dock1->dptr()->frame()->titleBar());
     QVERIFY(tb->isVisible());
     QVERIFY(!tb->isFloating());
@@ -689,9 +688,9 @@ void TestDocks::tst_nonDockable()
         auto dock = new DockWidgetType("1");
         dock->show();
 
-        TitleBar *tb = dock->titleBar();
+        Controllers::TitleBar *tb = dock->titleBar();
         QVERIFY(tb->isVisible());
-        QVERIFY(tb->isFloatButtonVisible());
+        QVERIFY(static_cast<Views::TitleBar_qtwidgets *>(tb->view())->isFloatButtonVisible());
 
         delete dock->window();
     }
@@ -701,9 +700,9 @@ void TestDocks::tst_nonDockable()
         auto dock = new DockWidgetType("1", DockWidgetBase::Option_NotDockable);
         dock->show();
 
-        TitleBar *tb = dock->titleBar();
+        Controllers::TitleBar *tb = dock->titleBar();
         QVERIFY(tb->isVisible());
-        QVERIFY(!tb->isFloatButtonVisible());
+        QVERIFY(!static_cast<Views::TitleBar_qtwidgets *>(tb->view())->isFloatButtonVisible());
 
         delete dock->window();
     }
@@ -3457,7 +3456,7 @@ void TestDocks::tst_restoreNonClosable()
         dock2->setFloating(true);
         QCOMPARE(dock2->options(), DockWidgetBase::Option_NotClosable);
 
-        TitleBar *tb = dock2->dptr()->frame()->actualTitleBar();
+        Controllers::TitleBar *tb = dock2->dptr()->frame()->actualTitleBar();
         QVERIFY(tb->isVisible());
         QVERIFY(!tb->closeButtonEnabled());
 
@@ -4073,24 +4072,24 @@ void TestDocks::tst_notClosable()
 
         auto fw = dock1->floatingWindow();
         QVERIFY(fw);
-        TitleBar *titlebarFW = fw->titleBar();
-        TitleBar *titleBarFrame = fw->frames().at(0)->titleBar();
-        QVERIFY(titlebarFW->isCloseButtonVisible());
-        QVERIFY(!titlebarFW->isCloseButtonEnabled());
-        QVERIFY(!titleBarFrame->isCloseButtonVisible());
-        QVERIFY(!titleBarFrame->isCloseButtonEnabled());
+        Controllers::TitleBar *titlebarFW = fw->titleBar();
+        Controllers::TitleBar *titleBarFrame = fw->frames().at(0)->titleBar();
+        QVERIFY(static_cast<Views::TitleBar_qtwidgets *>(titlebarFW->view())->isCloseButtonVisible());
+        QVERIFY(!static_cast<Views::TitleBar_qtwidgets *>(titlebarFW->view())->isCloseButtonEnabled());
+        QVERIFY(!static_cast<Views::TitleBar_qtwidgets *>(titleBarFrame->view())->isCloseButtonVisible());
+        QVERIFY(!static_cast<Views::TitleBar_qtwidgets *>(titleBarFrame->view())->isCloseButtonEnabled());
 
         dock1->setOptions(DockWidgetBase::Option_None);
-        QVERIFY(titlebarFW->isCloseButtonVisible());
-        QVERIFY(titlebarFW->isCloseButtonEnabled());
-        QVERIFY(!titleBarFrame->isCloseButtonVisible());
-        QVERIFY(!titleBarFrame->isCloseButtonEnabled());
+        QVERIFY(static_cast<Views::TitleBar_qtwidgets *>(titlebarFW->view())->isCloseButtonVisible());
+        QVERIFY(static_cast<Views::TitleBar_qtwidgets *>(titlebarFW->view())->isCloseButtonEnabled());
+        QVERIFY(!static_cast<Views::TitleBar_qtwidgets *>(titleBarFrame->view())->isCloseButtonVisible());
+        QVERIFY(!static_cast<Views::TitleBar_qtwidgets *>(titleBarFrame->view())->isCloseButtonEnabled());
 
         dock1->setOptions(DockWidgetBase::Option_NotClosable);
-        QVERIFY(titlebarFW->isCloseButtonVisible());
-        QVERIFY(!titlebarFW->isCloseButtonEnabled());
-        QVERIFY(!titleBarFrame->isCloseButtonVisible());
-        QVERIFY(!titleBarFrame->isCloseButtonEnabled());
+        QVERIFY(static_cast<Views::TitleBar_qtwidgets *>(titlebarFW->view())->isCloseButtonVisible());
+        QVERIFY(!static_cast<Views::TitleBar_qtwidgets *>(titlebarFW->view())->isCloseButtonEnabled());
+        QVERIFY(!static_cast<Views::TitleBar_qtwidgets *>(titleBarFrame->view())->isCloseButtonVisible());
+        QVERIFY(!static_cast<Views::TitleBar_qtwidgets *>(titleBarFrame->view())->isCloseButtonEnabled());
 
         auto window = dock1->window();
         window->deleteLater();
@@ -4108,12 +4107,12 @@ void TestDocks::tst_notClosable()
 
         auto fw = dock1->floatingWindow();
         QVERIFY(fw);
-        TitleBar *titlebarFW = fw->titleBar();
-        TitleBar *titleBarFrame = fw->frames().at(0)->titleBar();
+        Controllers::TitleBar *titlebarFW = fw->titleBar();
+        Controllers::TitleBar *titleBarFrame = fw->frames().at(0)->titleBar();
 
-        QVERIFY(titlebarFW->isCloseButtonVisible());
-        QVERIFY(!titleBarFrame->isCloseButtonVisible());
-        QVERIFY(!titleBarFrame->isCloseButtonEnabled());
+        QVERIFY(static_cast<Views::TitleBar_qtwidgets *>(titlebarFW->view())->isCloseButtonVisible());
+        QVERIFY(!static_cast<Views::TitleBar_qtwidgets *>(titleBarFrame->view())->isCloseButtonVisible());
+        QVERIFY(!static_cast<Views::TitleBar_qtwidgets *>(titleBarFrame->view())->isCloseButtonEnabled());
 
         auto window = dock2->window();
         window->deleteLater();
@@ -4883,7 +4882,7 @@ void TestDocks::tst_titleBarFocusedWhenTabsChange()
     dock2->addDockWidgetAsTab(dock3);
     delete oldFw3;
 
-    TitleBar *titleBar1 = dock1->titleBar();
+    Controllers::TitleBar *titleBar1 = dock1->titleBar();
     dock1->widget()->setFocus(Qt::MouseFocusReason);
 
     QVERIFY(dock1->isFocused() || Testing::waitForEvent(dock1->widget(), QEvent::FocusIn));
@@ -5009,7 +5008,7 @@ void TestDocks::tst_dockableMainWindows()
     m2->addDockWidget(dock22, Location_OnRight);
 
     auto fw = m2Container->floatingWindow();
-    TitleBar *fwTitleBar = fw->titleBar();
+    Controllers::TitleBar *fwTitleBar = fw->titleBar();
 
     QVERIFY(fw->hasSingleFrame());
     QVERIFY(fw->hasSingleDockWidget());
@@ -5024,7 +5023,7 @@ void TestDocks::tst_dockableMainWindows()
     const QPoint destination = startPoint + QPoint(20, 20);
 
     // Check that we don't get the "Refusing to itself" warning. not actually dropping anywhere
-    drag(fwTitleBar, startPoint, destination);
+    drag(fwTitleBar->view()->asQWidget(), startPoint, destination);
 
     // The FloatingWindow has a single DockWidget, so it shows the title bar, while the Frame doesn't
     QVERIFY(fwTitleBar->isVisible());
@@ -5664,7 +5663,7 @@ void TestDocks::tst_overlayCrash()
     auto tb = dw2->titleBar();
     QVERIFY(tb->isVisible());
 
-    pressOn(tb->mapToGlobal(QPoint(5, 5)), tb);
+    pressOn(tb->mapToGlobal(QPoint(5, 5)), tb->view()->asQWidget());
 }
 
 void TestDocks::tst_embeddedMainWindow()
@@ -6608,7 +6607,7 @@ void TestDocks::tst_closeOnlyCurrentTab()
         dock1->addDockWidgetAsTab(dock2);
         dock1->addDockWidgetAsTab(dock3);
 
-        TitleBar *tb = dock1->titleBar();
+        Controllers::TitleBar *tb = dock1->titleBar();
         QVERIFY(tb->isVisible());
         dock1->setAsCurrentTab();
         Frame *frame = dock1->dptr()->frame();
@@ -6637,7 +6636,7 @@ void TestDocks::tst_closeOnlyCurrentTab()
         dock2->addDockWidgetAsTab(dock3);
         Frame *frame = dock2->dptr()->frame();
         QCOMPARE(frame->currentIndex(), 1);
-        TitleBar *tb = frame->titleBar();
+        Controllers::TitleBar *tb = frame->titleBar();
         QVERIFY(tb->isVisible());
         tb->onCloseClicked();
 
@@ -6744,16 +6743,16 @@ void TestDocks::tst_flagDoubleClick()
 
         FloatingWindow *fw2 = dock2->floatingWindow();
         QVERIFY(!fw2->isMaximized());
-        TitleBar *t2 = dock2->titleBar();
+        Controllers::TitleBar *t2 = dock2->titleBar();
         QPoint pos = t2->mapToGlobal(QPoint(5, 5));
-        Tests::doubleClickOn(pos, t2);
+        Tests::doubleClickOn(pos, t2->view()->asQWidget());
         QVERIFY(fw2->isMaximized());
         delete fw2;
 
-        TitleBar *t1 = dock1->titleBar();
+        Controllers::TitleBar *t1 = dock1->titleBar();
         QVERIFY(!t1->isFloating());
         pos = t1->mapToGlobal(QPoint(5, 5));
-        Tests::doubleClickOn(pos, t1);
+        Tests::doubleClickOn(pos, t1->view()->asQWidget());
         QVERIFY(t1->isFloating());
         QVERIFY(!dock1->window()->isMaximized());
         delete dock1->window();
@@ -6766,16 +6765,16 @@ void TestDocks::tst_flagDoubleClick()
 
         m->addDockWidget(dock1, Location_OnTop);
 
-        TitleBar *t1 = dock1->titleBar();
+        Controllers::TitleBar *t1 = dock1->titleBar();
         QVERIFY(!t1->isFloating());
         QPoint pos = t1->mapToGlobal(QPoint(5, 5));
-        Tests::doubleClickOn(pos, t1);
+        Tests::doubleClickOn(pos, t1->view()->asQWidget());
         QVERIFY(t1->isFloating());
         QVERIFY(dock1->isFloating());
         QVERIFY(!dock1->window()->isMaximized());
 
         pos = t1->mapToGlobal(QPoint(5, 5));
-        Tests::doubleClickOn(pos, t1);
+        Tests::doubleClickOn(pos, t1->view()->asQWidget());
         QVERIFY(!dock1->isFloating());
     }
 }
@@ -7200,7 +7199,7 @@ void TestDocks::tst_constraintsPropagateUp()
     // Add dock2 side-by side, so the Frame now has a title bar.
     auto oldFw2 = dock2->window();
     dock1->addDockWidgetToContainingWindow(dock2, Location_OnLeft);
-    TitleBar *tb = dock1->titleBar();
+    Controllers::TitleBar *tb = dock1->titleBar();
     QVERIFY(tb->isVisible());
     QVERIFY(qAbs(widgetMinLength(frame1, Qt::Vertical) - (minHeight + frame1->nonContentsHeight())) < 10);
     delete dock1->window();
@@ -7336,7 +7335,7 @@ void TestDocks::tst_dock2FloatingWidgetsTabbed()
     QVERIFY(dock2->isFloating());
 
     QPoint finalPoint = dock2->window()->geometry().center() + QPoint(7, 7);
-    drag(titlebar1, titlebar1->mapToGlobal(QPoint(5, 5)), finalPoint, ButtonAction_Press);
+    drag(titlebar1->view()->asQWidget(), titlebar1->mapToGlobal(QPoint(5, 5)), finalPoint, ButtonAction_Press);
 
     // It morphed into a FloatingWindow
     QPointer<Frame> frame2 = dock2->dptr()->frame();
@@ -7347,7 +7346,7 @@ void TestDocks::tst_dock2FloatingWidgetsTabbed()
     QVERIFY(frame2);
     QCOMPARE(frame2->dockWidgetCount(), 1);
 
-    releaseOn(finalPoint, titlebar1);
+    releaseOn(finalPoint, titlebar1->view()->asQWidget());
     QCOMPARE(frame2->dockWidgetCount(), 2); // 2.2 Frame has 2 widgets when one is dropped
     QVERIFY(Testing::waitForDeleted(frame1));
 
@@ -7366,7 +7365,7 @@ void TestDocks::tst_dock2FloatingWidgetsTabbed()
     fw1 = dock1->floatingWindow();
     globalPressPos = fw1->titleBar()->mapToGlobal(QPoint(100, 5));
     finalPoint = dock2->window()->geometry().center() + QPoint(7, 7);
-    drag(fw1->titleBar(), globalPressPos, finalPoint);
+    drag(fw1->titleBar()->view()->asQWidget(), globalPressPos, finalPoint);
 
     QCOMPARE(frame2->dockWidgetCount(), 2);
 
@@ -7384,7 +7383,7 @@ void TestDocks::tst_dock2FloatingWidgetsTabbed()
 
     auto fw2 = dock2->floatingWindow();
     finalPoint = dock3->window()->geometry().center() + QPoint(7, 7);
-    drag(fw2->titleBar(), frame2->mapToGlobal(QPoint(10, 10)), finalPoint);
+    drag(fw2->titleBar()->view()->asQWidget(), frame2->mapToGlobal(QPoint(10, 10)), finalPoint);
 
     QVERIFY(Testing::waitForDeleted(frame1));
     QVERIFY(Testing::waitForDeleted(frame2));
@@ -7402,7 +7401,7 @@ void TestDocks::tst_dock2FloatingWidgetsTabbed()
         m->setGeometry(QRect(500, 300, 300, 300));
         QVERIFY(!dock3->isFloating());
         auto fw3 = dock3->floatingWindow();
-        drag(fw3->titleBar(), dock3->window()->mapToGlobal(QPoint(10, 10)), m->geometry().center());
+        drag(fw3->titleBar()->view()->asQWidget(), dock3->window()->mapToGlobal(QPoint(10, 10)), m->geometry().center());
         QVERIFY(!dock3->isFloating());
         QVERIFY(dock3->window() == m.get());
         QCOMPARE(dock3->dptr()->frame()->dockWidgetCount(), 3);
