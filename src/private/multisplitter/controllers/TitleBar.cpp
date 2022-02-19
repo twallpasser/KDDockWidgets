@@ -37,11 +37,10 @@ TitleBar::TitleBar(Frame *parent)
     , m_floatingWindow(nullptr)
     , m_supportsAutoHide(Config::self().flags() & Config::Flag_AutoHideSupport)
 {
+    init();
     connect(m_frame, &Frame::numDockWidgetsChanged, this, &TitleBar::updateCloseButton);
     connect(m_frame, &Frame::isFocusedChanged, this, &TitleBar::isFocusedChanged);
     connect(m_frame, &Frame::isInMainWindowChanged, this, &TitleBar::updateAutoHideButton);
-
-    init();
 }
 
 TitleBar::TitleBar(FloatingWindow *parent)
@@ -51,15 +50,15 @@ TitleBar::TitleBar(FloatingWindow *parent)
     , m_floatingWindow(parent)
     , m_supportsAutoHide(Config::self().flags() & Config::Flag_AutoHideSupport)
 {
+    init();
     connect(m_floatingWindow, &FloatingWindow::numFramesChanged, this, &TitleBar::updateButtons);
     connect(m_floatingWindow, &FloatingWindow::windowStateChanged, static_cast<Views::TitleBar_qtwidgets *>(view()), &Views::TitleBar_qtwidgets::updateMaximizeButton); // TODO
     connect(m_floatingWindow, &FloatingWindow::activatedChanged, this, &TitleBar::isFocusedChanged);
-
-    init();
 }
 
 void TitleBar::init()
 {
+    qobject_cast<Views::TitleBar_qtwidgets *>(view()->asQWidget())->init(); // TODO
     view()->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
 
     connect(this, &TitleBar::isFocusedChanged, this, [this] {

@@ -54,6 +54,7 @@ protected:
     void focusInEvent(QFocusEvent *) override;
 
 private:
+    friend class KDDockWidgets::Controllers::TitleBar;
     void init();
     int buttonAreaWidth() const;
     QRect iconRect() const;
