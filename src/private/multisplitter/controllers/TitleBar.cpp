@@ -16,11 +16,14 @@
 #include "private/multisplitter/views_qtwidgets/View_qtwidgets.h"
 #include "private/multisplitter/views_qtwidgets/TitleBar_qtwidgets.h"
 #include "private/WindowBeingDragged_p.h"
+#include "private/Utils_p.h"
+#include "private/Logging_p.h"
 
 #include "kddockwidgets/private/FloatingWindow_p.h"
 #include "kddockwidgets/private/Frame_p.h"
 #include "kddockwidgets/FrameworkWidgetFactory.h"
 #include "kddockwidgets/private/MDILayoutWidget_p.h"
+#include "kddockwidgets/MainWindowBase.h"
 
 #include <QTimer>
 
@@ -286,50 +289,217 @@ void TitleBar::setIcon(const QIcon &icon)
 
 void TitleBar::onCloseClicked()
 {
+    const bool closeOnlyCurrentTab = Config::self().flags() & Config::Flag_CloseOnlyCurrentTab;
+
+    if (m_frame) {
+        if (closeOnlyCurrentTab) {
+            if (DockWidgetBase *dw = m_frame->currentDockWidget()) {
+                dw->close();
+            } else {
+                // Doesn't happen
+                qWarning() << Q_FUNC_INFO << "Frame with no dock widgets";
+            }
+        } else {
+            if (m_frame->isTheOnlyFrame() && !m_frame->isInMainWindow()) {
+                m_frame->QWidget::window()->close();
+            } else {
+                m_frame->close();
+            }
+        }
+    } else if (m_floatingWindow) {
+
+        if (closeOnlyCurrentTab) {
+            if (Frame *f = m_floatingWindow->singleFrame()) {
+                if (DockWidgetBase *dw = f->currentDockWidget()) {
+                    dw->close();
+                } else {
+                    // Doesn't happen
+                    qWarning() << Q_FUNC_INFO << "Frame with no dock widgets";
+                }
+            } else {
+                m_floatingWindow->close();
+            }
+        } else {
+            m_floatingWindow->close();
+        }
+    }
 }
+
 void TitleBar::onFloatClicked()
 {
+    const DockWidgetBase::List dockWidgets = this->dockWidgets();
+    if (isFloating()) {
+        // Let's dock it
+
+        if (dockWidgets.isEmpty()) {
+            qWarning() << "TitleBar::onFloatClicked: empty list. Shouldn't happen";
+            return;
+        }
+
+        if (dockWidgets.size() == 1) {
+            // Case 1: Single dockwidget floating
+            dockWidgets[0]->setFloating(false);
+        } else {
+            // Case 2: Multiple dockwidgets are tabbed together and floating
+            // TODO: Just reuse the whole frame and put it back. The frame currently doesn't remember the position in the main window
+            // so use an hack for now
+            for (auto dock : qAsConst(dockWidgets)) {
+                dock->setFloating(true);
+                dock->setFloating(false);
+            }
+        }
+    } else {
+        // Let's float it
+        if (dockWidgets.size() == 1) {
+            // If there's a single dock widget, just call DockWidget::setFloating(true). The only difference
+            // is that it has logic for using the last used geometry for the floating window
+            dockWidgets[0]->setFloating(true);
+        } else {
+            makeWindow();
+        }
+    }
 }
+
 void TitleBar::onMaximizeClicked()
 {
+    toggleMaximized();
 }
+
 void TitleBar::onMinimizeClicked()
 {
+    if (!m_floatingWindow)
+        return;
+
+    if (KDDockWidgets::usesUtilityWindows()) {
+        // Qt::Tool windows don't appear in the task bar.
+        // Unless someone tells me a good reason to allow this situation.
+        return;
+    }
+
+    m_floatingWindow->showMinimized();
 }
+
 void TitleBar::onAutoHideClicked()
 {
+    if (!m_frame) {
+        // Doesn't happen
+        qWarning() << Q_FUNC_INFO << "Minimize not supported on floating windows";
+        return;
+    }
+
+    const auto &dockwidgets = m_frame->dockWidgets();
+    for (DockWidgetBase *dw : dockwidgets) {
+        if (dw->isOverlayed()) {
+            // restore
+            MainWindowBase *mainWindow = dw->mainWindow();
+            mainWindow->restoreFromSideBar(dw);
+        } else {
+            dw->moveToSideBar();
+        }
+    }
 }
 
 bool TitleBar::closeButtonEnabled() const
 {
-    return false;
+    return m_closeButtonEnabled;
 }
 
 std::unique_ptr<KDDockWidgets::WindowBeingDragged> TitleBar::makeWindow()
 {
-    return {};
+    if (!isVisible() && view()->asQWidget()->QWidget::window()->isVisible() && !(Config::self().flags() & Config::Flag_ShowButtonsOnTabBarIfTitleBarHidden)) {
+
+        // When using Flag_ShowButtonsOnTabBarIfTitleBarHidden we forward the call from the tab bar's
+        // buttons to the title bar's buttons, just to reuse logic
+
+        qWarning() << "TitleBar::makeWindow shouldn't be called on invisible title bar"
+                   << this << view()->asQWidget()->QWidget::window()->isVisible();
+        if (m_frame) {
+            qWarning() << "this=" << this << "; actual=" << m_frame->actualTitleBar();
+        } else if (m_floatingWindow) {
+            qWarning() << "Has floating window with titlebar=" << m_floatingWindow->titleBar()
+                       << "; fw->isVisible=" << m_floatingWindow->isVisible();
+        }
+
+        Q_ASSERT(false);
+        return {};
+    }
+
+    if (m_floatingWindow) {
+        // We're already a floating window, no detach needed
+        return std::unique_ptr<WindowBeingDragged>(new WindowBeingDragged(m_floatingWindow, this));
+    }
+
+    if (FloatingWindow *fw = floatingWindow()) { // Already floating
+        if (m_frame->isTheOnlyFrame()) { // We don't detach. This one drags the entire window instead.
+            qCDebug(hovering) << "TitleBar::makeWindow no detach needed";
+            return std::unique_ptr<WindowBeingDragged>(new WindowBeingDragged(fw, this));
+        }
+    }
+
+    QRect r = m_frame->QWidget::geometry();
+    r.moveTopLeft(m_frame->mapToGlobal(QPoint(0, 0)));
+
+    auto floatingWindow = Config::self().frameworkWidgetFactory()->createFloatingWindow(m_frame);
+    floatingWindow->setSuggestedGeometry(r, SuggestedGeometryHint_GeometryIsFromDocked);
+    floatingWindow->show();
+
+    auto draggable = KDDockWidgets::usesNativeTitleBar() ? static_cast<Draggable *>(floatingWindow)
+                                                         : static_cast<Draggable *>(this);
+    return std::unique_ptr<WindowBeingDragged>(new WindowBeingDragged(floatingWindow, draggable));
 }
 
 bool TitleBar::isWindow() const
 {
-    return false;
+    return m_floatingWindow != nullptr;
+}
+
+KDDockWidgets::DockWidgetBase::List TitleBar::dockWidgets() const
+{
+    if (m_floatingWindow) {
+        DockWidgetBase::List result;
+        for (Frame *f : m_floatingWindow->frames()) {
+            result << f->dockWidgets();
+        }
+        return result;
+    }
+
+    if (m_frame)
+        return m_frame->dockWidgets();
+
+    qWarning() << "TitleBar::dockWidget: shouldn't happen";
+    return {};
 }
 
 KDDockWidgets::DockWidgetBase *TitleBar::singleDockWidget() const
 {
-    return {};
+    const DockWidgetBase::List dockWidgets = this->dockWidgets();
+    return dockWidgets.isEmpty() ? nullptr : dockWidgets.first();
 }
 
 bool TitleBar::isFloating() const
 {
+    if (m_floatingWindow)
+        return m_floatingWindow->hasSingleDockWidget(); // Debatable! Maybe it's always floating.
+
+    if (m_frame)
+        return m_frame->isFloating();
+
+    qWarning() << "TitleBar::isFloating: shouldn't happen";
     return false;
 }
 
 bool TitleBar::isFocused() const
 {
+    if (m_frame)
+        return m_frame->isFocused();
+    else if (m_floatingWindow)
+        return m_floatingWindow->isActiveWindow();
+
     return false;
 }
 
 void TitleBar::updateFloatButton()
 {
+    setFloatButtonToolTip(floatingWindow() ? tr("Dock window") : tr("Undock window"));
+    setFloatButtonVisible(supportsFloatingButton());
 }
