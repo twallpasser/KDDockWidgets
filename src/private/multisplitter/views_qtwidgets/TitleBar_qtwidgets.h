@@ -54,6 +54,7 @@ protected:
     void focusInEvent(QFocusEvent *) override;
 
 private:
+    void init();
     int buttonAreaWidth() const;
     QRect iconRect() const;
     void updateMargins();

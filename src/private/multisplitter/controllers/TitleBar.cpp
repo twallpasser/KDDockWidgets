@@ -142,6 +142,11 @@ bool TitleBar::onDoubleClicked()
     return false;
 }
 
+bool TitleBar::floatButtonVisible() const
+{
+    return m_floatButtonVisible;
+}
+
 bool TitleBar::supportsFloatingButton() const
 {
     if (Config::self().flags() & Config::Flag_TitleBarHasMaximizeButton) {
@@ -502,4 +507,9 @@ void TitleBar::updateFloatButton()
 {
     setFloatButtonToolTip(floatingWindow() ? tr("Dock window") : tr("Undock window"));
     setFloatButtonVisible(supportsFloatingButton());
+}
+
+QString TitleBar::floatButtonToolTip() const
+{
+    return m_floatButtonToolTip;
 }

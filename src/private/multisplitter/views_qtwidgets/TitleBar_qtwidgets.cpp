@@ -12,7 +12,9 @@
 #include "TitleBar_qtwidgets.h"
 #include "../controllers/TitleBar.h"
 #include "private/Utils_p.h"
+#include "private/Logging_p.h"
 #include "kddockwidgets/FrameworkWidgetFactory.h"
+#include "kddockwidgets/private/DockRegistry_p.h"
 
 #include <QPainter>
 #include <QStyle>
@@ -95,6 +97,71 @@ TitleBar_qtwidgets::TitleBar_qtwidgets(Controllers::TitleBar *controller, QWidge
 {
     if (m_controller->titleBarIsFocusable())
         setFocusPolicy(Qt::StrongFocus);
+}
+
+void TitleBar_qtwidgets::init()
+{
+    qCDebug(creation) << "TitleBarWidget" << this;
+    m_dockWidgetIcon = new QLabel(this);
+    m_layout->addWidget(m_dockWidgetIcon);
+
+    m_layout->addStretch();
+    updateMargins();
+
+    auto factory = Config::self().frameworkWidgetFactory();
+
+    m_maximizeButton = factory->createTitleBarButton(this, TitleBarButtonType::Maximize);
+    m_minimizeButton = factory->createTitleBarButton(this, TitleBarButtonType::Minimize);
+    m_floatButton = factory->createTitleBarButton(this, TitleBarButtonType::Float);
+    m_closeButton = factory->createTitleBarButton(this, TitleBarButtonType::Close);
+    m_autoHideButton = factory->createTitleBarButton(this, TitleBarButtonType::AutoHide);
+
+    m_layout->addWidget(m_autoHideButton);
+    m_layout->addWidget(m_minimizeButton);
+    m_layout->addWidget(m_maximizeButton);
+    m_layout->addWidget(m_floatButton);
+    m_layout->addWidget(m_closeButton);
+
+    m_autoHideButton->setVisible(false);
+
+    connect(m_floatButton, &QAbstractButton::clicked, m_controller, &Controllers::TitleBar::onFloatClicked);
+    connect(m_closeButton, &QAbstractButton::clicked, m_controller, &Controllers::TitleBar::onCloseClicked);
+    connect(m_maximizeButton, &QAbstractButton::clicked, m_controller, &Controllers::TitleBar::onMaximizeClicked);
+    connect(m_minimizeButton, &QAbstractButton::clicked, m_controller, &Controllers::TitleBar::onMinimizeClicked);
+    connect(m_autoHideButton, &QAbstractButton::clicked, m_controller, &Controllers::TitleBar::onAutoHideClicked);
+
+    updateMaximizeButton();
+    updateMinimizeButton();
+
+    m_minimizeButton->setToolTip(tr("Minimize"));
+    m_closeButton->setToolTip(tr("Close"));
+
+    connect(m_controller, &Controllers::TitleBar::titleChanged, this, [this] {
+        update();
+    });
+
+    connect(m_controller, &Controllers::TitleBar::iconChanged, this, [this] {
+        if (m_controller->icon().isNull()) {
+            m_dockWidgetIcon->setPixmap(QPixmap());
+        } else {
+            const QPixmap pix = m_controller->icon().pixmap(QSize(28, 28));
+            m_dockWidgetIcon->setPixmap(pix);
+        }
+        update();
+    });
+
+    m_closeButton->setEnabled(m_controller->closeButtonEnabled());
+    connect(m_controller, &Controllers::TitleBar::closeButtonEnabledChanged, m_closeButton, &QAbstractButton::setEnabled);
+
+    connect(m_controller, &Controllers::TitleBar::floatButtonToolTipChanged, m_floatButton, &QWidget::setToolTip);
+    connect(m_controller, &Controllers::TitleBar::floatButtonVisibleChanged, m_floatButton, &QWidget::setVisible);
+    m_floatButton->setVisible(m_controller->floatButtonVisible());
+    m_floatButton->setToolTip(m_controller->floatButtonToolTip());
+
+    connect(DockRegistry::self(), &DockRegistry::windowChangedScreen, this, [this](QWindow *w) {
+        if (w == window()->windowHandle())
+            updateMargins();
+    });
 }
 
 void TitleBar_qtwidgets::paintEvent(QPaintEvent *)

@@ -95,6 +95,17 @@ public:
     /// @brief updates the close button enabled state
     void updateButtons();
 
+    Q_INVOKABLE void onCloseClicked();
+    Q_INVOKABLE void onFloatClicked();
+    QString floatButtonToolTip() const;
+    Q_INVOKABLE void onMaximizeClicked();
+    Q_INVOKABLE void onMinimizeClicked();
+    Q_INVOKABLE void onAutoHideClicked();
+    Q_INVOKABLE void toggleMaximized();
+
+    bool closeButtonEnabled() const;
+    bool floatButtonVisible() const;
+
 Q_SIGNALS:
     void titleChanged();
     void iconChanged();
@@ -104,17 +115,6 @@ Q_SIGNALS:
     void floatButtonToolTipChanged(const QString &);
 
 protected:
-    Q_INVOKABLE void onCloseClicked();
-    Q_INVOKABLE void onFloatClicked();
-    Q_INVOKABLE void onMaximizeClicked();
-    Q_INVOKABLE void onMinimizeClicked();
-    Q_INVOKABLE void onAutoHideClicked();
-    Q_INVOKABLE void toggleMaximized();
-
-    bool closeButtonEnabled() const;
-    bool floatButtonVisible() const;
-    QString floatButtonToolTip() const;
-
     virtual void updateMaximizeButton()
     {
     }
