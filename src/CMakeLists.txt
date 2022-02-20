@@ -106,7 +106,6 @@ set(DOCKSLIBS_SRCS
     private/multisplitter/Controller.cpp
     private/multisplitter/Controller.h
 
-    private/multisplitter/views_qtwidgets/View_qtwidgets.cpp
     private/multisplitter/views_qtwidgets/View_qtwidgets.h
     private/multisplitter/views_qtwidgets/Separator_qtwidgets.cpp
     private/multisplitter/views_qtwidgets/Separator_qtwidgets.h

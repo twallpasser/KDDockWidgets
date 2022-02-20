@@ -48,7 +48,7 @@ public:
 
     QSize sizeHint() const override
     {
-        return QWidget::sizeHint();
+        return Base::sizeHint();
     }
 
     QSize minSize() const override
@@ -63,32 +63,32 @@ public:
 
     QRect geometry() const override
     {
-        return QWidget::geometry();
+        return Base::geometry();
     }
 
     void setGeometry(QRect geo) override
     {
-        QWidget::setGeometry(geo);
+        Base::setGeometry(geo);
     }
 
     bool isVisible() const override
     {
-        return QWidget::isVisible();
+        return Base::isVisible();
     }
 
     void setVisible(bool is) override
     {
-        QWidget::setVisible(is);
+        Base::setVisible(is);
     }
 
     void move(int x, int y) override
     {
-        QWidget::move(x, y);
+        Base::move(x, y);
     }
 
     void setSize(int width, int height) override
     {
-        QWidget::resize(width, height);
+        Base::resize(width, height);
     }
 
     void setWidth(int width) override
@@ -103,28 +103,28 @@ public:
 
     void show() override
     {
-        QWidget::show();
+        Base::show();
     }
 
     void hide() override
     {
-        QWidget::hide();
+        Base::hide();
     }
 
     void update() override
     {
-        QWidget::update();
+        Base::update();
     }
 
     void setParent(View *parent) override
     {
         if (!parent) {
-            QWidget::setParent(nullptr);
+            Base::setParent(nullptr);
             return;
         }
 
         if (auto qwidget = qobject_cast<QWidget *>(parent->asQObject())) {
-            QWidget::setParent(qwidget);
+            Base::setParent(qwidget);
         } else {
             qWarning() << Q_FUNC_INFO << "parent is not a widget, you have a bug" << parent->asQObject();
             Q_ASSERT(false);
@@ -133,19 +133,19 @@ public:
 
     void raiseAndActivate() override
     {
-        QWidget::window()->raise();
+        Base::window()->raise();
         if (!isWayland())
-            QWidget::window()->activateWindow();
+            Base::window()->activateWindow();
     }
 
     QPoint mapToGlobal(QPoint localPt) const override
     {
-        return QWidget::mapToGlobal(localPt);
+        return Base::mapToGlobal(localPt);
     }
 
     void setSizePolicy(QSizePolicy policy) override
     {
-        QWidget::setSizePolicy(policy);
+        Base::setSizePolicy(policy);
     }
 
 protected:
@@ -154,13 +154,13 @@ protected:
         if (e->type() == QEvent::LayoutRequest)
             onLayoutRequest();
 
-        return QWidget::event(e);
+        return Base::event(e);
     }
 
     void resizeEvent(QResizeEvent *ev) override
     {
         if (!onResize(ev->size()))
-            QWidget::resizeEvent(ev);
+            Base::resizeEvent(ev);
     }
 
 private:

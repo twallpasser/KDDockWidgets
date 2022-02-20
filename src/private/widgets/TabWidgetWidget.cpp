@@ -20,8 +20,8 @@
 #include "Config.h"
 #include "FrameworkWidgetFactory.h"
 #include "../Frame_p.h"
-#include "../multisplitter/controllers/TitleBar.h"
 #include "../DockRegistry_p.h"
+#include "private/multisplitter/controllers/TitleBar.h"
 #include "private/multisplitter/controllers/TabBar.h"
 
 #include <QMouseEvent>
@@ -37,7 +37,7 @@ TabWidgetWidget::TabWidgetWidget(Frame *parent, TabWidgetOptions options)
     , TabWidget(this, parent)
     , m_tabBar(new Controllers::TabBar(this))
 {
-    setTabBar(static_cast<QTabBar *>(m_tabBar->asWidget()));
+    setTabBar(static_cast<QTabBar *>(m_tabBar->view()->asQWidget()));
     setTabsClosable(Config::self().flags() & Config::Flag_TabsHaveCloseButton);
 
     setContextMenuPolicy(Qt::CustomContextMenu);
