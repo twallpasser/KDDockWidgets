@@ -13,45 +13,155 @@
 
 #include "../View.h"
 #include "../Controller.h"
+#include "../../Utils_p.h"
 
+#include <QDebug>
+#include <QEvent>
+#include <QResizeEvent>
+#include <QSizePolicy>
 #include <QWidget>
+
+#include <memory>
 
 namespace KDDockWidgets::Views {
 
-class DOCKS_EXPORT View_qtwidgets : public QWidget, public View
+template<typename Base>
+class DOCKS_EXPORT View_qtwidgets : public Base, public View
 {
-    Q_OBJECT
 public:
     using View::height;
     using View::rect;
     using View::width;
 
-    explicit View_qtwidgets(KDDockWidgets::Controller *, QWidget *parent = nullptr);
-    ~View_qtwidgets() override;
+    explicit View_qtwidgets(KDDockWidgets::Controller *controller, QWidget *parent = nullptr)
+        : Base(parent)
+        , View(controller, this)
+    {
+    }
 
-    void free_impl() override;
-    QSize sizeHint() const override;
-    QSize minSize() const override;
-    QSize maxSizeHint() const override;
-    QRect geometry() const override;
-    void setGeometry(QRect) override;
-    bool isVisible() const override;
-    void setVisible(bool) override;
-    void move(int x, int y) override;
-    void setSize(int width, int height) override;
-    void setWidth(int width) override;
-    void setHeight(int height) override;
-    void show() override;
-    void hide() override;
-    void update() override;
-    void setParent(View *) override;
-    void raiseAndActivate() override;
-    QPoint mapToGlobal(QPoint) const override;
-    void setSizePolicy(QSizePolicy) override;
+    ~View_qtwidgets() override = default;
+
+    void free_impl() override
+    {
+        QObject::deleteLater();
+    }
+
+    QSize sizeHint() const override
+    {
+        return QWidget::sizeHint();
+    }
+
+    QSize minSize() const override
+    {
+        return widgetMinSize(this);
+    }
+
+    QSize maxSizeHint() const override
+    {
+        return widgetMaxSize(this);
+    }
+
+    QRect geometry() const override
+    {
+        return QWidget::geometry();
+    }
+
+    void setGeometry(QRect geo) override
+    {
+        QWidget::setGeometry(geo);
+    }
+
+    bool isVisible() const override
+    {
+        return QWidget::isVisible();
+    }
+
+    void setVisible(bool is) override
+    {
+        QWidget::setVisible(is);
+    }
+
+    void move(int x, int y) override
+    {
+        QWidget::move(x, y);
+    }
+
+    void setSize(int width, int height) override
+    {
+        QWidget::resize(width, height);
+    }
+
+    void setWidth(int width) override
+    {
+        setSize(width, QWidget::height());
+    }
+
+    void setHeight(int height) override
+    {
+        setSize(QWidget::width(), height);
+    }
+
+    void show() override
+    {
+        QWidget::show();
+    }
+
+    void hide() override
+    {
+        QWidget::hide();
+    }
+
+    void update() override
+    {
+        QWidget::update();
+    }
+
+    void setParent(View *parent) override
+    {
+        if (!parent) {
+            QWidget::setParent(nullptr);
+            return;
+        }
+
+        if (auto qwidget = qobject_cast<QWidget *>(parent->asQObject())) {
+            QWidget::setParent(qwidget);
+        } else {
+            qWarning() << Q_FUNC_INFO << "parent is not a widget, you have a bug" << parent->asQObject();
+            Q_ASSERT(false);
+        }
+    }
+
+    void raiseAndActivate() override
+    {
+        QWidget::window()->raise();
+        if (!isWayland())
+            QWidget::window()->activateWindow();
+    }
+
+    QPoint mapToGlobal(QPoint localPt) const override
+    {
+        return QWidget::mapToGlobal(localPt);
+    }
+
+    void setSizePolicy(QSizePolicy policy) override
+    {
+        QWidget::setSizePolicy(policy);
+    }
 
 protected:
-    bool event(QEvent *) override;
-    void resizeEvent(QResizeEvent *) override;
+    bool event(QEvent *e) override
+    {
+        if (e->type() == QEvent::LayoutRequest)
+            onLayoutRequest();
+
+        return QWidget::event(e);
+    }
+
+    void resizeEvent(QResizeEvent *ev) override
+    {
+        if (!onResize(ev->size()))
+            QWidget::resizeEvent(ev);
+    }
 
 private:
     Q_DISABLE_COPY(View_qtwidgets)

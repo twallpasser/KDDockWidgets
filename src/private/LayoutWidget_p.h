@@ -62,7 +62,7 @@ class DockWidgetBase;
  * It's suitable to be set as a main window central widget for instance. The actual layouting is
  * then done by the root Item.
  */
-class DOCKS_EXPORT LayoutWidget : public Views::View_qtwidgets
+class DOCKS_EXPORT LayoutWidget : public Views::View_qtwidgets<QWidget>
 {
     Q_OBJECT
 public:

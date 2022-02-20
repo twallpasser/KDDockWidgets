@@ -152,17 +152,23 @@ set(KDDW_BACKEND_SRCS
   private/multisplitter/controllers/Separator.h
   private/multisplitter/controllers/TitleBar.cpp
   private/multisplitter/controllers/TitleBar.h
+  private/multisplitter/controllers/TabBar.cpp
+  private/multisplitter/controllers/TabBar.h
+
+
   # private/multisplitter/controllers/TabBar.cpp
   # private/multisplitter/controllers/TabBar.h
   # private/multisplitter/controllers/TitleBar.cpp
   # private/multisplitter/controllers/TitleBar.h
 
-  private/multisplitter/views_qtwidgets/View_qtwidgets.cpp
+  # private/multisplitter/views_qtwidgets/View_qtwidgets.cpp
   private/multisplitter/views_qtwidgets/View_qtwidgets.h
   private/multisplitter/views_qtwidgets/Separator_qtwidgets.cpp
   private/multisplitter/views_qtwidgets/Separator_qtwidgets.h
   private/multisplitter/views_qtwidgets/TitleBar_qtwidgets.cpp
   private/multisplitter/views_qtwidgets/TitleBar_qtwidgets.h
+  private/multisplitter/views_qtwidgets/TabBar_qtwidgets.cpp
+  private/multisplitter/views_qtwidgets/TabBar_qtwidgets.h
 )
 
 # add_library(kddockwidgets_backend STATIC ${KDDW_BACKEND_SRCS})

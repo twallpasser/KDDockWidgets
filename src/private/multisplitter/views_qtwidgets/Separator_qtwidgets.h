@@ -13,6 +13,7 @@
 
 #include "View_qtwidgets.h"
 #include "kddockwidgets/Qt5Qt6Compat_p.h"
+#include <qwidget.h>
 
 
 namespace KDDockWidgets::Controllers {
@@ -21,7 +22,7 @@ class Separator;
 
 namespace KDDockWidgets::Views {
 
-class DOCKS_EXPORT Separator_qtwidgets : public View_qtwidgets
+class DOCKS_EXPORT Separator_qtwidgets : public View_qtwidgets<QWidget>
 {
 public:
     explicit Separator_qtwidgets(Controllers::Separator *controller, QWidget *parent = nullptr);

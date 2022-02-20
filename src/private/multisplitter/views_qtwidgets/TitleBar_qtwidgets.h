@@ -26,7 +26,7 @@ class TitleBar;
 
 namespace KDDockWidgets::Views {
 
-class DOCKS_EXPORT TitleBar_qtwidgets : public View_qtwidgets
+class DOCKS_EXPORT TitleBar_qtwidgets : public View_qtwidgets<QWidget>
 {
     Q_OBJECT
 public:

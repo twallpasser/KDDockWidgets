@@ -56,7 +56,7 @@ class WidgetResizeHandler;
  * FloatingWindow.
  */
 class DOCKS_EXPORT Frame
-    : public Views::View_qtwidgets, // TODO make generic
+    : public Views::View_qtwidgets<QWidget>, // TODO make generic
       public FocusScope
 {
     Q_OBJECT

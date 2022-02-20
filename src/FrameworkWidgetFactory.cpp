@@ -82,7 +82,7 @@ TabWidget *DefaultWidgetFactory::createTabWidget(Frame *parent, TabWidgetOptions
 
 View *DefaultWidgetFactory::createSeparator(Controllers::Separator *controller, View *parent) const
 {
-    return new Views::Separator_qtwidgets(controller, parent ? static_cast<Views::View_qtwidgets *>(parent) : nullptr);
+    return new Views::Separator_qtwidgets(controller, parent ? static_cast<Views::View_qtwidgets<QWidget> *>(parent) : nullptr);
 }
 
 FloatingWindow *DefaultWidgetFactory::createFloatingWindow(MainWindowBase *parent) const

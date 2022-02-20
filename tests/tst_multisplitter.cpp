@@ -20,6 +20,7 @@
 #include <QtTest/QtTest>
 
 #include <memory.h>
+#include <qwidget.h>
 
 
 // TODO: namespace
@@ -35,12 +36,12 @@ static QString s_expectedWarning;
 class TestMultiSplitter;
 static TestMultiSplitter *s_testObject = nullptr;
 
-class MyGuestWidget : public Views::View_qtwidgets
+class MyGuestWidget : public Views::View_qtwidgets<QWidget>
 {
     Q_OBJECT
 public:
     MyGuestWidget()
-        : Views::View_qtwidgets(nullptr)
+        : Views::View_qtwidgets<QWidget>(nullptr)
     {
     }
 
@@ -198,11 +199,11 @@ private Q_SLOTS:
     void tst_adjacentLayoutBorders();
 };
 
-class MyHostWidget : public Views::View_qtwidgets
+class MyHostWidget : public Views::View_qtwidgets<QWidget>
 {
 public:
     MyHostWidget()
-        : Views::View_qtwidgets(nullptr)
+        : Views::View_qtwidgets<QWidget>(nullptr)
     {
         s_testObject->m_hostWidgets << this;
     }

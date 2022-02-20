@@ -34,7 +34,7 @@ using namespace KDDockWidgets;
 class FocusScope::Private : public QObject // clazy:exclude=missing-qobject-macro (breaks unity build with earlier cmake due to including .moc here.)
 {
 public:
-    Private(FocusScope *qq, Views::View_qtwidgets *thisWidget)
+    Private(FocusScope *qq, Views::View_qtwidgets<QWidget> *thisWidget)
         : q(qq)
         , m_thisWidget(thisWidget)
     {
@@ -68,7 +68,7 @@ public:
     bool isInFocusScope(WidgetType *) const;
 
     FocusScope *const q;
-    Views::View_qtwidgets *const m_thisWidget;
+    Views::View_qtwidgets<QWidget> *const m_thisWidget;
     bool m_isFocused = false;
     bool m_inCtor = true;
     QPointer<WidgetType> m_lastFocusedInScope;
@@ -78,7 +78,7 @@ FocusScope::Private::~Private()
 {
 }
 
-FocusScope::FocusScope(Views::View_qtwidgets *thisWidget)
+FocusScope::FocusScope(Views::View_qtwidgets<QWidget> *thisWidget)
     : d(new Private(this, thisWidget))
 {
 }

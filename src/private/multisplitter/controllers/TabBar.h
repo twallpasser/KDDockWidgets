@@ -11,11 +11,11 @@
 
 #pragma once
 
-#include "Controller.h"
+#include "../Controller.h"
 
 namespace KDDockWidgets::Controllers {
 
-class TabBar : Controller
+class DOCKS_EXPORT TabBar : public Controller
 {
 public:
     virtual ~TabBar() override;
