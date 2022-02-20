@@ -26,8 +26,10 @@
 #include "MDIArea.h"
 #include "multisplitter/Item_p.h"
 #include "multisplitter/views_qtwidgets/TitleBar_qtwidgets.h"
+#include "multisplitter/views_qtwidgets/TabBar_qtwidgets.h"
 #include "private/MultiSplitter_p.h"
 #include "multisplitter/controllers/Separator.h"
+#include "multisplitter/controllers/TabBar.h"
 
 #include <QAction>
 
@@ -2679,7 +2681,7 @@ void TestDocks::tst_tabTitleChanges()
 
     dw1->addDockWidgetAsTab(dw2);
 
-    TabBar *tb = dw1->dptr()->frame()->tabWidget()->tabBar();
+    Controllers::TabBar *tb = dw1->dptr()->frame()->tabWidget()->tabBar();
     QCOMPARE(tb->text(0), QStringLiteral("1"));
     dw1->setTitle(QStringLiteral("other"));
     QCOMPARE(tb->text(0), QStringLiteral("other"));
@@ -7256,7 +7258,7 @@ void TestDocks::tst_dragBySingleTab()
     auto frame1 = dock1->dptr()->frame();
 
     QPoint globalPressPos = dragPointForWidget(frame1, 0);
-    TabBar *tabBar = frame1->tabWidget()->tabBar();
+    Controllers::TabBar *tabBar = frame1->tabWidget()->tabBar();
     QVERIFY(tabBar);
     SetExpectedWarning sew("No window being dragged for"); // because dragging by tab does nothing in this case
     drag(tabBar->asWidget(), globalPressPos, QPoint(0, 0));
@@ -7352,7 +7354,7 @@ void TestDocks::tst_dock2FloatingWidgetsTabbed()
 
     // 2.3 Detach tab1 to empty space
     QPoint globalPressPos = dragPointForWidget(frame2.data(), 0);
-    TabBar *tabBar = frame2->tabWidget()->tabBar();
+    Controllers::TabBar *tabBar = frame2->tabWidget()->tabBar();
     QVERIFY(tabBar);
     drag(tabBar->asWidget(), globalPressPos, frame2->window()->geometry().bottomRight() + QPoint(10, 10));
 

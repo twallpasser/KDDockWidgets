@@ -44,6 +44,7 @@ static int s_dbg_numFrames = 0;
 using namespace KDDockWidgets;
 
 namespace KDDockWidgets {
+
 static FrameOptions actualOptions(FrameOptions options)
 {
     if (Config::self().flags() & Config::Flag_AlwaysShowTabs)
@@ -61,6 +62,7 @@ static TabWidgetOptions tabWidgetOptions(FrameOptions options)
 
     return TabWidgetOption_None;
 }
+
 }
 
 Frame::Frame(QWidgetOrQuick *parent, FrameOptions options, int userType)

@@ -22,6 +22,7 @@
 #include "../Frame_p.h"
 #include "../multisplitter/controllers/TitleBar.h"
 #include "../DockRegistry_p.h"
+#include "private/multisplitter/controllers/TabBar.h"
 
 #include <QMouseEvent>
 #include <QTabBar>
@@ -34,7 +35,7 @@ using namespace KDDockWidgets;
 TabWidgetWidget::TabWidgetWidget(Frame *parent, TabWidgetOptions options)
     : QTabWidget(parent)
     , TabWidget(this, parent)
-    , m_tabBar(Config::self().frameworkWidgetFactory()->createTabBar(this))
+    , m_tabBar(new Controllers::TabBar(this))
 {
     setTabBar(static_cast<QTabBar *>(m_tabBar->asWidget()));
     setTabsClosable(Config::self().flags() & Config::Flag_TabsHaveCloseButton);
@@ -69,7 +70,7 @@ TabWidgetWidget::TabWidgetWidget(Frame *parent, TabWidgetOptions options)
     setDocumentMode(options & TabWidgetOption_DocumentMode);
 }
 
-TabBar *TabWidgetWidget::tabBar() const
+Controllers::TabBar *TabWidgetWidget::tabBar() const
 {
     return m_tabBar;
 }

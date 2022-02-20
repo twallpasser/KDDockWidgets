@@ -27,6 +27,7 @@
 #include "Logging_p.h"
 #include "Utils_p.h"
 #include "WindowBeingDragged_p.h"
+#include "private/multisplitter/controllers/TabBar.h"
 
 #ifdef QT_WIDGETS_LIB
 #include <QTabWidget>
@@ -36,6 +37,7 @@
 
 using namespace KDDockWidgets;
 
+/*
 TabBar::TabBar(QWidgetOrQuick *thisWidget, TabWidget *tabWidget)
     : Draggable(thisWidget)
     , m_tabWidget(tabWidget)
@@ -147,7 +149,7 @@ Frame *TabBar::frame() const
 {
     return m_tabWidget->frame();
 }
-
+*/
 TabWidget::TabWidget(QWidgetOrQuick *thisWidget, Frame *frame)
     : Draggable(thisWidget, Config::self().flags() & (Config::Flag_HideTitleBarWhenTabsVisible | Config::Flag_AlwaysShowTabs))
     , m_frame(frame)

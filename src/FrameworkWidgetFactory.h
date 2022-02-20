@@ -50,10 +50,12 @@ class TabWidgetQuick;
 namespace Views {
 class Separator;
 class TitleBar;
+class TabBar;
 }
 
 namespace Controllers {
 class Separator;
+class TabBar;
 }
 
 /**
@@ -111,7 +113,7 @@ public:
     ///@brief Called internally by the framework to create a TabBar
     ///       Override to provide your own TabBar sub-class.
     ///@param parent Just forward to TabBar's's constructor.
-    virtual TabBar *createTabBar(TabWidget *parent = nullptr) const = 0;
+    virtual View *createTabBar(Controllers::TabBar *tabBar, TabWidget *parent = nullptr) const = 0;
 
     ///@brief Called internally by the framework to create a Separator
     ///       Override to provide your own Separator sub-class. The Separator allows
@@ -177,7 +179,7 @@ public:
     View *createTitleBar(Controllers::TitleBar *, Frame *) const override;
     View *createTitleBar(Controllers::TitleBar *, FloatingWindow *) const override;
     TabWidget *createTabWidget(Frame *parent, TabWidgetOptions = TabWidgetOption_None) const override;
-    TabBar *createTabBar(TabWidget *parent) const override;
+    View *createTabBar(Controllers::TabBar *tabBar, TabWidget *parent) const override;
     View *createSeparator(Controllers::Separator *, View *parent = nullptr) const override;
     FloatingWindow *createFloatingWindow(MainWindowBase *parent = nullptr) const override;
     FloatingWindow *createFloatingWindow(Frame *frame, MainWindowBase *parent = nullptr, QRect suggestedGeometry = {}) const override;

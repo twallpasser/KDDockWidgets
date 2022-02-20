@@ -17,10 +17,10 @@
 #include "Logging_p.h"
 #include "Utils_p.h"
 #include "multisplitter/controllers/TitleBar.h"
-#include "private/multisplitter/views_qtwidgets/TitleBar_qtwidgets.h"
 
 #ifdef KDDOCKWIDGETS_QTWIDGETS
-#include "widgets/TabBarWidget_p.h"
+#include "private/multisplitter/views_qtwidgets/TitleBar_qtwidgets.h"
+#include "private/multisplitter/views_qtwidgets/TabBar_qtwidgets.h"
 #include "widgets/TabWidgetWidget_p.h"
 #endif
 
@@ -211,7 +211,7 @@ WindowBeingDraggedWayland::WindowBeingDraggedWayland(Draggable *draggable)
         // native dragging. Not the case for Wayland. But adding this case for completeness.
         m_floatingWindow = fw;
 #ifdef KDDOCKWIDGETS_QTWIDGETS
-    } else if (auto tbw = qobject_cast<TabBarWidget *>(draggable->asWidget())) {
+    } else if (auto tbw = qobject_cast<Views::TabBar_qtwidgets *>(draggable->asWidget())) {
         m_dockWidget = tbw->currentDockWidget();
     } else if (auto tw = qobject_cast<TabWidgetWidget *>(draggable->asWidget())) {
         m_frame = tw->frame();

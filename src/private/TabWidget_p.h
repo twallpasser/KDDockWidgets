@@ -32,68 +32,12 @@
 
 namespace KDDockWidgets {
 
+namespace Controllers {
+class TabBar;
+}
+
 class DockWidgetBase;
 class TabWidget;
-
-///@brief a QTabBar derived class to be used by KDDockWidgets::TabWidget
-class DOCKS_EXPORT TabBar : public Draggable
-{
-public:
-    /**
-     * @brief Constructs a new TabBar
-     * @param parent The parent TabWidget
-     */
-    explicit TabBar(QWidgetOrQuick *thisWidget, TabWidget *parent = nullptr);
-
-    /**
-     * @brief returns the dock widgets at tab number @p index
-     * @param index the tab number from which we want the dock widget
-     * @return the dock widget at tab number @p index
-     */
-    DockWidgetBase *dockWidgetAt(int index) const;
-
-    ///@overload
-    DockWidgetBase *dockWidgetAt(QPoint localPos) const;
-
-    // Draggable
-    std::unique_ptr<WindowBeingDragged> makeWindow() override;
-    bool isWindow() const override;
-
-    void onMousePress(QPoint localPos);
-    void onMouseDoubleClick(QPoint localPos);
-
-    ///@brief returns whether there's only 1 tab
-    bool hasSingleDockWidget() const;
-
-    int numDockWidgets() const;
-    virtual int tabAt(QPoint localPos) const = 0;
-
-    /// @brief returns the tab text at the specified index
-    virtual QString text(int index) const = 0;
-
-    /**
-     * @brief Returns this class as a QWidget (if using QtWidgets) or QQuickItem
-     */
-    QWidgetOrQuick *asWidget() const;
-
-    /// @brief Returns the rect of the tab at the specified index
-    virtual QRect rectForTab(int index) const = 0;
-
-    DockWidgetBase *singleDockWidget() const override;
-
-    /// @reimp
-    bool isMDI() const override;
-
-    Frame *frame() const;
-
-    /// Like QTabBar::moveTab(from, to)
-    virtual void moveTabTo(int from, int to) = 0;
-
-private:
-    TabWidget *const m_tabWidget;
-    QPointer<DockWidgetBase> m_lastPressedDockWidget = nullptr;
-    QWidgetOrQuick *const m_thisWidget;
-};
 
 class DOCKS_EXPORT TabWidget : public Draggable
 {
@@ -166,7 +110,7 @@ public:
     /**
      * @brief Returns the tab bar
      */
-    virtual TabBar *tabBar() const = 0;
+    virtual Controllers::TabBar *tabBar() const = 0;
 
     /**
      * @brief Returns this class as a QWidget (if using QtWidgets) or QQuickItem
@@ -184,7 +128,7 @@ public:
     /// @reimp
     bool isMDI() const override;
 
-    //Q_SIGNALS: // Not a OQbject
+    // Q_SIGNALS: // Not a OQbject
     virtual void currentTabChanged(int index) = 0;
     virtual void currentDockWidgetChanged(KDDockWidgets::DockWidgetBase *) = 0;
     virtual void countChanged() {};

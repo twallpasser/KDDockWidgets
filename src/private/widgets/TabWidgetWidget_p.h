@@ -30,8 +30,11 @@ QT_END_NAMESPACE
 
 namespace KDDockWidgets {
 
-class Frame;
+namespace Controllers {
 class TabBar;
+}
+
+class Frame;
 
 class DOCKS_EXPORT TabWidgetWidget
     : public QTabWidget,
@@ -41,7 +44,7 @@ class DOCKS_EXPORT TabWidgetWidget
 public:
     explicit TabWidgetWidget(Frame *parent, TabWidgetOptions = TabWidgetOption_None);
 
-    TabBar *tabBar() const override;
+    Controllers::TabBar *tabBar() const override;
 
     int numDockWidgets() const override;
     void removeDockWidget(DockWidgetBase *) override;
@@ -73,7 +76,7 @@ private:
     void updateMargins();
     void setupTabBarButtons();
     Q_DISABLE_COPY(TabWidgetWidget)
-    TabBar *const m_tabBar;
+    Controllers::TabBar *const m_tabBar;
     QHBoxLayout *m_cornerWidgetLayout = nullptr;
     QAbstractButton *m_floatButton = nullptr;
     QAbstractButton *m_closeButton = nullptr;

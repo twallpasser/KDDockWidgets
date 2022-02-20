@@ -12,13 +12,65 @@
 #pragma once
 
 #include "../Controller.h"
+#include "private/Draggable_p.h"
+#include "kddockwidgets/DockWidgetBase.h"
+
+#include <QPointer>
+
+namespace KDDockWidgets {
+class Frame;
+}
 
 namespace KDDockWidgets::Controllers {
 
-class DOCKS_EXPORT TabBar : public Controller
+class DOCKS_EXPORT TabBar : public Controller, public Draggable
 {
 public:
+    explicit TabBar(TabWidget *tabWidget = nullptr);
     virtual ~TabBar() override;
+
+    /**
+     * @brief returns the dock widgets at tab number @p index
+     * @param index the tab number from which we want the dock widget
+     * @return the dock widget at tab number @p index
+     */
+    DockWidgetBase *dockWidgetAt(int index) const;
+
+    ///@overload
+    DockWidgetBase *dockWidgetAt(QPoint localPos) const;
+
+    // Draggable
+    bool dragCanStart(QPoint pressPos, QPoint pos) const override;
+    std::unique_ptr<WindowBeingDragged> makeWindow() override;
+    bool isWindow() const override;
+
+    void onMousePress(QPoint localPos);
+    void onMouseDoubleClick(QPoint localPos);
+
+    ///@brief returns whether there's only 1 tab
+    bool hasSingleDockWidget() const;
+
+    int numDockWidgets() const;
+
+    /**
+     * @brief Returns this class as a QWidget (if using QtWidgets) or QQuickItem
+     */
+    // QWidgetOrQuick *asWidget() const;
+
+    DockWidgetBase *singleDockWidget() const override;
+
+    /// @reimp
+    bool isMDI() const override;
+
+    KDDockWidgets::Frame *frame() const;
+
+    void moveTabTo(int from, int to);
+    QString text(int index) const;
+    QRect rectForTab(int index) const;
+
+private:
+    TabWidget *const m_tabWidget;
+    QPointer<DockWidgetBase> m_lastPressedDockWidget = nullptr;
 };
 
 }

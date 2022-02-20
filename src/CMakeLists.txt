@@ -99,6 +99,8 @@ set(DOCKSLIBS_SRCS
     private/multisplitter/controllers/Separator.h
     private/multisplitter/controllers/TitleBar.cpp
     private/multisplitter/controllers/TitleBar.h
+    private/multisplitter/controllers/TabBar.cpp
+    private/multisplitter/controllers/TabBar.h
     private/multisplitter/View.cpp
     private/multisplitter/View.h
     private/multisplitter/Controller.cpp
@@ -110,65 +112,9 @@ set(DOCKSLIBS_SRCS
     private/multisplitter/views_qtwidgets/Separator_qtwidgets.h
     private/multisplitter/views_qtwidgets/TitleBar_qtwidgets.cpp
     private/multisplitter/views_qtwidgets/TitleBar_qtwidgets.h
+    private/multisplitter/views_qtwidgets/TabBar_qtwidgets.cpp
+    private/multisplitter/views_qtwidgets/TabBar_qtwidgets.h
 
-)
-
-#--------------------------------
-# Temporary just to make sure the backend builds without Qt
-
-set(KDDW_BACKEND_SRCS
-  private/multisplitter/Item.cpp
-  private/multisplitter/Item_p.h
-  private/multisplitter/ItemFreeContainer.cpp
-  private/multisplitter/ItemFreeContainer_p.h
-  private/multisplitter/Logging.cpp
-  private/multisplitter/Logging_p.h
-  private/multisplitter/MultiSplitterConfig.cpp
-  private/multisplitter/MultiSplitterConfig.h
-  private/multisplitter/View.cpp
-  private/multisplitter/View.h
-  private/multisplitter/Controller.cpp
-  private/multisplitter/Controller.h
-  # private/multisplitter/views_qtwidgets/DockWidget.cpp
-  # private/multisplitter/views_qtwidgets/DockWidget.h
-  # private/multisplitter/views_qtwidgets/FloatingWindow.cpp
-  # private/multisplitter/views_qtwidgets/FloatingWindow.h
-  # private/multisplitter/views_qtwidgets/Frame.cpp
-  # private/multisplitter/views_qtwidgets/Frame.h
-  # private/multisplitter/views_qtwidgets/Separator.cpp
-  # private/multisplitter/views_qtwidgets/Separator.h
-  # private/multisplitter/views_qtwidgets/TabBar.cpp
-  # private/multisplitter/views_qtwidgets/TabBar.h
-  # private/multisplitter/views_qtwidgets/TitleBar.cpp
-  # private/multisplitter/views_qtwidgets/TitleBar.h
-
-  # private/multisplitter/controllers/DockWidget.cpp
-  # private/multisplitter/controllers/DockWidget.h
-  # private/multisplitter/controllers/FloatingWindow.cpp
-  # private/multisplitter/controllers/FloatingWindow.h
-  # private/multisplitter/controllers/Frame.cpp
-  # private/multisplitter/controllers/Frame.h
-  private/multisplitter/controllers/Separator.cpp
-  private/multisplitter/controllers/Separator.h
-  private/multisplitter/controllers/TitleBar.cpp
-  private/multisplitter/controllers/TitleBar.h
-  private/multisplitter/controllers/TabBar.cpp
-  private/multisplitter/controllers/TabBar.h
-
-
-  # private/multisplitter/controllers/TabBar.cpp
-  # private/multisplitter/controllers/TabBar.h
-  # private/multisplitter/controllers/TitleBar.cpp
-  # private/multisplitter/controllers/TitleBar.h
-
-  # private/multisplitter/views_qtwidgets/View_qtwidgets.cpp
-  private/multisplitter/views_qtwidgets/View_qtwidgets.h
-  private/multisplitter/views_qtwidgets/Separator_qtwidgets.cpp
-  private/multisplitter/views_qtwidgets/Separator_qtwidgets.h
-  private/multisplitter/views_qtwidgets/TitleBar_qtwidgets.cpp
-  private/multisplitter/views_qtwidgets/TitleBar_qtwidgets.h
-  private/multisplitter/views_qtwidgets/TabBar_qtwidgets.cpp
-  private/multisplitter/views_qtwidgets/TabBar_qtwidgets.h
 )
 
 # add_library(kddockwidgets_backend STATIC ${KDDW_BACKEND_SRCS})
@@ -220,8 +166,8 @@ set(DOCKS_INSTALLABLE_PRIVATE_WIDGET_INCLUDES
     private/widgets/SideBarWidget_p.h
     private/widgets/FloatingWindowWidget_p.h
     private/widgets/FrameWidget_p.h
-    private/widgets/TabBarWidget_p.h
-    private/widgets/TabWidgetWidget_p.h
+    # private/widgets/TabBarWidget_p.h
+    # private/widgets/TabWidgetWidget_p.h
 )
 
 set(DOCKS_INSTALLABLE_PRIVATE_QUICK_INCLUDES
@@ -279,8 +225,8 @@ else()
       DockWidget.h
       private/multisplitter/Widget_qwidget.cpp
       private/multisplitter/Widget_qwidget.h
-      private/widgets/TabBarWidget.cpp
-      private/widgets/TabBarWidget_p.h
+      # private/widgets/TabBarWidget.cpp
+      # private/widgets/TabBarWidget_p.h
       private/widgets/FloatingWindowWidget.cpp
       private/widgets/FloatingWindowWidget_p.h
       private/widgets/FrameWidget.cpp
