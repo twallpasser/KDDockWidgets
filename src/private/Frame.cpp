@@ -97,6 +97,7 @@ Frame::~Frame()
 
     // Run some disconnects() too, so we don't receive signals during destruction:
     setLayoutWidget(nullptr);
+    delete m_titleBar;
 }
 
 void Frame::updateTitleAndIcon()

@@ -5082,7 +5082,7 @@ void TestDocks::tst_mdi_mixed_with_docking()
 
     auto tb1 = mdiWidget1->titleBar();
     QVERIFY(tb1->isMDI());
-    QVERIFY(Testing::waitForEvent(tb1, QEvent::Show));
+    QVERIFY(Testing::waitForEvent(tb1->view()->asQWidget(), QEvent::Show));
     QVERIFY(tb1->isVisible());
 
     // Press the float button

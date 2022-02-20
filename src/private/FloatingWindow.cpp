@@ -203,6 +203,7 @@ FloatingWindow::~FloatingWindow()
     delete m_nchittestFilter;
 
     DockRegistry::self()->unregisterFloatingWindow(this);
+    delete m_titleBar;
 }
 
 #if defined(Q_OS_WIN) && defined(KDDOCKWIDGETS_QTWIDGETS)

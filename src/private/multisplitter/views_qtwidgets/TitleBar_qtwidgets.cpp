@@ -95,13 +95,14 @@ TitleBar_qtwidgets::TitleBar_qtwidgets(Controllers::TitleBar *controller, QWidge
     , m_controller(controller)
     , m_layout(new QHBoxLayout(this))
 {
-    if (m_controller->titleBarIsFocusable())
-        setFocusPolicy(Qt::StrongFocus);
 }
 
 void TitleBar_qtwidgets::init()
 {
     qCDebug(creation) << "TitleBarWidget" << this;
+    if (m_controller->titleBarIsFocusable())
+        setFocusPolicy(Qt::StrongFocus);
+
     m_dockWidgetIcon = new QLabel(this);
     m_layout->addWidget(m_dockWidgetIcon);
 
