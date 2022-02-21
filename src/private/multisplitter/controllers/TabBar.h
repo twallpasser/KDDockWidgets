@@ -12,7 +12,8 @@
 #pragma once
 
 #include "../Controller.h"
-#include "private/Draggable_p.h"
+#include "../private/Frame_p.h"
+#include "../private/Draggable_p.h"
 #include "kddockwidgets/DockWidgetBase.h"
 
 #include <QPointer>
@@ -23,10 +24,12 @@ class Frame;
 
 namespace KDDockWidgets::Controllers {
 
+class Stack;
+
 class DOCKS_EXPORT TabBar : public Controller, public Draggable
 {
 public:
-    explicit TabBar(TabWidget *tabWidget = nullptr);
+    explicit TabBar(Stack *tabWidget = nullptr);
     virtual ~TabBar() override;
 
     /**
@@ -69,7 +72,7 @@ public:
     QRect rectForTab(int index) const;
 
 private:
-    TabWidget *const m_tabWidget;
+    Controllers::Stack *const m_tabWidget;
     QPointer<DockWidgetBase> m_lastPressedDockWidget = nullptr;
 };
 

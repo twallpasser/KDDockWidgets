@@ -23,10 +23,11 @@
 #include "FloatingWindow_p.h"
 #include "KDDockWidgets.h"
 #include "multisplitter/controllers/TitleBar.h"
+#include "multisplitter/controllers/Stack.h"
 #include "Utils_p.h"
 
 #ifdef KDDOCKWIDGETS_QTWIDGETS
-#include "widgets/TabWidgetWidget_p.h"
+#include "private/multisplitter/views_qtwidgets/Stack_qtwidgets.h"
 #include "widgets/FrameWidget_p.h"
 #include "MainWindow.h"
 
@@ -362,7 +363,7 @@ inline WidgetType *draggableFor(WidgetType *w)
             draggable = fw->titleBar()->view()->asQWidget();
         }
 #ifdef KDDOCKWIDGETS_QTWIDGETS
-    } else if (qobject_cast<TabWidgetWidget *>(w)) {
+    } else if (qobject_cast<Views::Stack_qtwidgets *>(w)) {
         draggable = w;
 #else
     } else if (qobject_cast<TabWidgetQuick *>(w)) {

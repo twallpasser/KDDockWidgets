@@ -56,8 +56,8 @@ set(DOCKSLIBS_SRCS
     private/FloatingWindow_p.h
     private/Logging.cpp
     private/Logging_p.h
-    private/TabWidget.cpp
-    private/TabWidget_p.h
+    # private/TabWidget.cpp
+    # private/TabWidget_p.h
     private/SideBar.cpp
     private/SideBar_p.h
     private/DockRegistry.cpp
@@ -97,6 +97,8 @@ set(DOCKSLIBS_SRCS
 
     private/multisplitter/controllers/Separator.cpp
     private/multisplitter/controllers/Separator.h
+    private/multisplitter/controllers/Stack.cpp
+    private/multisplitter/controllers/Stack.h
     private/multisplitter/controllers/TitleBar.cpp
     private/multisplitter/controllers/TitleBar.h
     private/multisplitter/controllers/TabBar.cpp
@@ -113,7 +115,8 @@ set(DOCKSLIBS_SRCS
     private/multisplitter/views_qtwidgets/TitleBar_qtwidgets.h
     private/multisplitter/views_qtwidgets/TabBar_qtwidgets.cpp
     private/multisplitter/views_qtwidgets/TabBar_qtwidgets.h
-
+    private/multisplitter/views_qtwidgets/Stack_qtwidgets.cpp
+    private/multisplitter/views_qtwidgets/Stack_qtwidgets.h
 )
 
 # add_library(kddockwidgets_backend STATIC ${KDDW_BACKEND_SRCS})
@@ -156,7 +159,7 @@ set(DOCKS_INSTALLABLE_PRIVATE_INCLUDES
     private/WindowBeingDragged_p.h
     private/WidgetResizeHandler_p.h
     private/DockRegistry_p.h
-    private/TabWidget_p.h
+    # private/TabWidget_p.h
     private/MDILayoutWidget_p.h
 )
 
@@ -183,8 +186,8 @@ if(${PROJECT_NAME}_QTQUICK)
       private/quick/QWidgetAdapter_quick_p.h
       private/quick/FloatingWindowQuick.cpp
       private/quick/FloatingWindowQuick_p.h
-      private/quick/TabWidgetQuick.cpp
-      private/quick/TabWidgetQuick_p.h
+      # private/quick/TabWidgetQuick.cpp
+      # private/quick/TabWidgetQuick_p.h
       private/quick/TabBarQuick.cpp
       private/quick/TabBarQuick_p.h
       private/quick/TitleBarQuick.cpp
@@ -232,8 +235,8 @@ else()
       private/widgets/FrameWidget_p.h
       private/widgets/SideBarWidget.cpp
       private/widgets/SideBarWidget_p.h
-      private/widgets/TabWidgetWidget.cpp
-      private/widgets/TabWidgetWidget_p.h
+      # private/widgets/TabWidgetWidget.cpp
+      # private/widgets/TabWidgetWidget_p.h
       private/widgets/DockWidget.cpp
       private/widgets/QWidgetAdapter_widgets.cpp
       private/widgets/QWidgetAdapter_widgets_p.h

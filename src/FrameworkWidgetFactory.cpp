@@ -17,13 +17,13 @@
 #include "private/indicators/ClassicIndicators_p.h"
 #include "private/indicators/NullIndicators_p.h"
 #include "private/Utils_p.h"
-#include "private/TabWidget_p.h"
+
 #include "private/multisplitter/controllers/TabBar.h"
+#include "private/multisplitter/controllers/Stack.h"
 
 #ifdef KDDOCKWIDGETS_QTWIDGETS
 #include "private/widgets/FrameWidget_p.h"
 #include "private/widgets/SideBarWidget_p.h"
-#include "private/widgets/TabWidgetWidget_p.h"
 #include "private/widgets/FloatingWindowWidget_p.h"
 #include "private/indicators/SegmentedIndicators_p.h"
 
@@ -31,6 +31,7 @@
 #include "private/multisplitter/views_qtwidgets/Separator_qtwidgets.h"
 #include "private/multisplitter/views_qtwidgets/TitleBar_qtwidgets.h"
 #include "private/multisplitter/views_qtwidgets/TabBar_qtwidgets.h"
+#include "private/multisplitter/views_qtwidgets/Stack_qtwidgets.h"
 
 #include <QRubberBand>
 #include <QToolButton>
@@ -71,14 +72,14 @@ View *DefaultWidgetFactory::createTitleBar(Controllers::TitleBar *titleBar, Floa
     return new Views::TitleBar_qtwidgets(titleBar, fw);
 }
 
-View *DefaultWidgetFactory::createTabBar(Controllers::TabBar *tabBar, TabWidget *parent) const
+View *DefaultWidgetFactory::createTabBar(Controllers::TabBar *tabBar, View *parent) const
 {
-    return new Views::TabBar_qtwidgets(tabBar, parent->asWidget());
+    return new Views::TabBar_qtwidgets(tabBar, parent->asQWidget());
 }
 
-TabWidget *DefaultWidgetFactory::createTabWidget(Frame *parent, TabWidgetOptions options) const
+View *DefaultWidgetFactory::createTabWidget(Controllers::Stack *controller, Frame *parent) const
 {
-    return new TabWidgetWidget(parent, options);
+    return new Views::Stack_qtwidgets(controller, parent);
 }
 
 View *DefaultWidgetFactory::createSeparator(Controllers::Separator *controller, View *parent) const

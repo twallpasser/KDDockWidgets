@@ -18,7 +18,7 @@
 
 #include "FrameWidget_p.h"
 #include "../private/multisplitter/controllers/TitleBar.h"
-#include "../TabWidget_p.h"
+#include "../private/multisplitter/controllers/Stack.h"
 #include "Config.h"
 #include "FrameworkWidgetFactory.h"
 
@@ -58,7 +58,7 @@ FrameWidget::FrameWidget(QWidget *parent, FrameOptions options, int userType)
     vlayout->setContentsMargins(0, 0, 0, 0);
     vlayout->setSpacing(0);
     vlayout->addWidget(titleBar()->view()->asQWidget());
-    vlayout->addWidget(m_tabWidget->asWidget());
+    vlayout->addWidget(m_tabWidget->view()->asQWidget());
 
     m_tabWidget->setTabBarAutoHide(!alwaysShowsTabs());
 

@@ -27,9 +27,11 @@
 #include "multisplitter/Item_p.h"
 #include "multisplitter/views_qtwidgets/TitleBar_qtwidgets.h"
 #include "multisplitter/views_qtwidgets/TabBar_qtwidgets.h"
+#include "multisplitter/views_qtwidgets/Stack_qtwidgets.h"
 #include "private/MultiSplitter_p.h"
 #include "multisplitter/controllers/Separator.h"
 #include "multisplitter/controllers/TabBar.h"
+#include "multisplitter/controllers/Stack.h"
 
 #include <QAction>
 
@@ -4892,7 +4894,7 @@ void TestDocks::tst_titleBarFocusedWhenTabsChange()
 
     auto frame2 = dock2->dptr()->frame();
 
-    TabWidget *tb2 = frame2->tabWidget();
+    Controllers::Stack *tb2 = frame2->tabWidget();
     QCOMPARE(tb2->currentIndex(), 1); // Was the last to be added
 
     auto tabBar2 = tb2->tabBar();
@@ -7573,7 +7575,7 @@ void TestDocks::tst_toggleTabbed()
     QVERIFY(dock1->toggleAction()->isChecked());
     QVERIFY(dock1->isCurrentTab());
     Frame *frame = dock1->dptr()->frame();
-    TabWidget *tw = frame->tabWidget();
+    Controllers::Stack *tw = frame->tabWidget();
     QCOMPARE(tw->currentIndex(), 0);
     QCOMPARE(tw->numDockWidgets(), 1);
     QCOMPARE(tw->currentDockWidget(), dock1);

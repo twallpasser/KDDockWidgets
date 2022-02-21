@@ -15,7 +15,6 @@
 #include "private/FloatingWindow_p.h"
 
 #include <QToolButton>
-#include <qobjectdefs.h>
 
 class QHBoxLayout;
 class QLabel;

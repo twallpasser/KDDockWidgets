@@ -16,6 +16,7 @@
 #include "KDDockWidgets.h"
 #include "QWidgetAdapter.h"
 #include "private/multisplitter/View.h" // TODO
+#include "private/multisplitter/controllers/Stack.h"
 #include "private/multisplitter/controllers/TitleBar.h"
 
 // clazy:excludeall=ctor-missing-parent-argument
@@ -108,12 +109,12 @@ public:
     ///@brief Called internally by the framework to create a TabWidget
     ///       Override to provide your own TabWidget sub-class.
     ///@param parent Just forward to TabWidget's constructor.
-    virtual TabWidget *createTabWidget(Frame *parent, TabWidgetOptions options = TabWidgetOption_None) const = 0;
+    virtual View *createTabWidget(Controllers::Stack *stack, Frame *parent) const = 0;
 
     ///@brief Called internally by the framework to create a TabBar
     ///       Override to provide your own TabBar sub-class.
     ///@param parent Just forward to TabBar's's constructor.
-    virtual View *createTabBar(Controllers::TabBar *tabBar, TabWidget *parent = nullptr) const = 0;
+    virtual View *createTabBar(Controllers::TabBar *tabBar, View *parent = nullptr) const = 0;
 
     ///@brief Called internally by the framework to create a Separator
     ///       Override to provide your own Separator sub-class. The Separator allows
@@ -178,8 +179,8 @@ public:
     Frame *createFrame(QWidgetOrQuick *parent, FrameOptions) const override;
     View *createTitleBar(Controllers::TitleBar *, Frame *) const override;
     View *createTitleBar(Controllers::TitleBar *, FloatingWindow *) const override;
-    TabWidget *createTabWidget(Frame *parent, TabWidgetOptions = TabWidgetOption_None) const override;
-    View *createTabBar(Controllers::TabBar *tabBar, TabWidget *parent) const override;
+    View *createTabWidget(Controllers::Stack *, Frame *parent) const override;
+    View *createTabBar(Controllers::TabBar *tabBar, View *parent) const override;
     View *createSeparator(Controllers::Separator *, View *parent = nullptr) const override;
     FloatingWindow *createFloatingWindow(MainWindowBase *parent = nullptr) const override;
     FloatingWindow *createFloatingWindow(Frame *frame, MainWindowBase *parent = nullptr, QRect suggestedGeometry = {}) const override;

@@ -36,9 +36,9 @@ namespace KDDockWidgets {
 
 namespace Controllers {
 class TitleBar;
+class Stack;
 }
 
-class TabWidget;
 class DockWidgetBase;
 class FloatingWindow;
 class MainWindowBase;
@@ -116,7 +116,7 @@ public:
     int dockWidgetCount() const;
 
     /// @brief returns the tab widget
-    TabWidget *tabWidget() const;
+    Controllers::Stack *tabWidget() const;
 
     void updateTitleAndIcon();
     void onDockWidgetTitleChanged();
@@ -373,13 +373,13 @@ private:
 protected:
     bool m_inDtor = false;
 
-    TabWidget *const m_tabWidget;
+    Controllers::Stack *const m_tabWidget;
     Controllers::TitleBar *const m_titleBar;
 
 private:
     Q_DISABLE_COPY(Frame)
     friend class ::TestDocks;
-    friend class TabWidget;
+    friend class KDDockWidgets::Controllers::Stack;
 
     void scheduleDeleteLater();
     bool event(QEvent *) override;

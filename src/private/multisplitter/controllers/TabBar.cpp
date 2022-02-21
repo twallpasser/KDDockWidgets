@@ -12,8 +12,8 @@
 #include "TabBar.h"
 #include "private/Draggable_p.h"
 #include "private/multisplitter/Controller.h"
+#include "private/multisplitter/controllers/Stack.h"
 #include "private/multisplitter/views_qtwidgets/TabBar_qtwidgets.h"
-#include "private/TabWidget_p.h"
 #include "private/DragController_p.h"
 #include "private/FloatingWindow_p.h"
 #include "private/Frame_p.h"
@@ -22,7 +22,7 @@
 using namespace KDDockWidgets;
 using namespace KDDockWidgets::Controllers;
 
-Controllers::TabBar::TabBar(TabWidget *tabWidget)
+Controllers::TabBar::TabBar(Stack *tabWidget)
     : Controller(new Views::TabBar_qtwidgets(this, tabWidget->asWidget())) // TODO: Config::self().frameworkWidgetFactory()->createTabBar(this)
     , Draggable(view()->asQWidget())
     , m_tabWidget(tabWidget)

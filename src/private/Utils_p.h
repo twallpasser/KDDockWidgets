@@ -12,7 +12,7 @@
 #ifndef KD_UTILS_P_H
 #define KD_UTILS_P_H
 
-#include "Config.h"
+#include "kddockwidgets/Config.h"
 
 #include <QScreen>
 #include <QWindow>

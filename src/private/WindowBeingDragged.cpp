@@ -17,11 +17,12 @@
 #include "Logging_p.h"
 #include "Utils_p.h"
 #include "multisplitter/controllers/TitleBar.h"
+#include "multisplitter/controllers/Stack.h"
 
 #ifdef KDDOCKWIDGETS_QTWIDGETS
 #include "private/multisplitter/views_qtwidgets/TitleBar_qtwidgets.h"
 #include "private/multisplitter/views_qtwidgets/TabBar_qtwidgets.h"
-#include "widgets/TabWidgetWidget_p.h"
+#include "private/multisplitter/views_qtwidgets/Stack_qtwidgets.h"
 #endif
 
 #include <QPixmap>
@@ -213,8 +214,8 @@ WindowBeingDraggedWayland::WindowBeingDraggedWayland(Draggable *draggable)
 #ifdef KDDOCKWIDGETS_QTWIDGETS
     } else if (auto tbw = qobject_cast<Views::TabBar_qtwidgets *>(draggable->asWidget())) {
         m_dockWidget = tbw->currentDockWidget();
-    } else if (auto tw = qobject_cast<TabWidgetWidget *>(draggable->asWidget())) {
-        m_frame = tw->frame();
+    } else if (auto tw = qobject_cast<Views::Stack_qtwidgets *>(draggable->asWidget())) {
+        m_frame = tw->stack()->frame();
 #endif
     } else {
         qWarning() << "Unknown draggable" << draggable->asWidget()

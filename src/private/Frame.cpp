@@ -17,7 +17,7 @@
  */
 
 #include "Frame_p.h"
-#include "Config.h"
+#include "kddockwidgets/Config.h"
 #include "DockRegistry_p.h"
 #include "DockWidgetBase_p.h"
 #include "FloatingWindow_p.h"
@@ -26,8 +26,8 @@
 #include "LayoutWidget_p.h"
 #include "Logging_p.h"
 #include "Position_p.h"
-#include "TabWidget_p.h"
 #include "multisplitter/controllers/TitleBar.h"
+#include "multisplitter/controllers/Stack.h"
 #include "Utils_p.h"
 #include "WidgetResizeHandler_p.h"
 #include "MDILayoutWidget_p.h"
@@ -68,7 +68,7 @@ static TabWidgetOptions tabWidgetOptions(FrameOptions options)
 Frame::Frame(QWidgetOrQuick *parent, FrameOptions options, int userType)
     : Views::View_qtwidgets<QWidget>(nullptr, parent)
     , FocusScope(this)
-    , m_tabWidget(Config::self().frameworkWidgetFactory()->createTabWidget(this, tabWidgetOptions(options)))
+    , m_tabWidget(new Controllers::Stack(this, tabWidgetOptions(options)))
     , m_titleBar(new Controllers::TitleBar(this))
     , m_options(actualOptions(options))
     , m_userType(userType)
@@ -77,9 +77,8 @@ Frame::Frame(QWidgetOrQuick *parent, FrameOptions options, int userType)
     DockRegistry::self()->registerFrame(this);
 
     connect(this, &Frame::currentDockWidgetChanged, this, &Frame::updateTitleAndIcon);
-
-    connect(m_tabWidget->asWidget(), SIGNAL(currentTabChanged(int)), // clazy:exclude=old-style-connect
-            this, SLOT(onCurrentTabChanged(int)));
+    connect(m_tabWidget, &Controllers::Stack::currentTabChanged,
+            this, &Frame::onCurrentTabChanged);
 
     setLayoutWidget(qobject_cast<LayoutWidget *>(QWidget::parentWidget()));
     m_inCtor = false;
@@ -100,6 +99,7 @@ Frame::~Frame()
     // Run some disconnects() too, so we don't receive signals during destruction:
     setLayoutWidget(nullptr);
     delete m_titleBar;
+    delete m_tabWidget;
 }
 
 void Frame::updateTitleAndIcon()
@@ -801,7 +801,7 @@ MainWindowBase *Frame::mainWindow() const
     return m_layoutWidget ? m_layoutWidget->mainWindow() : nullptr;
 }
 
-TabWidget *Frame::tabWidget() const
+Controllers::Stack *Frame::tabWidget() const
 {
     return m_tabWidget;
 }
