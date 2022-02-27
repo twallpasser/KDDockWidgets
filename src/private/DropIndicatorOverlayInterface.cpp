@@ -11,11 +11,12 @@
 
 #include "DropIndicatorOverlayInterface_p.h"
 
-#include "Frame_p.h"
 #include "DropArea_p.h"
 #include "DockRegistry_p.h"
 #include "DragController_p.h"
 #include "Config.h"
+
+#include "private/multisplitter/controllers/Frame.h"
 
 using namespace KDDockWidgets;
 
@@ -60,7 +61,7 @@ QRect DropIndicatorOverlayInterface::hoveredFrameRect() const
     return m_hoveredFrameRect;
 }
 
-void DropIndicatorOverlayInterface::setHoveredFrame(Frame *frame)
+void DropIndicatorOverlayInterface::setHoveredFrame(Controllers::Frame *frame)
 {
     if (frame == m_hoveredFrame)
         return;
@@ -71,7 +72,7 @@ void DropIndicatorOverlayInterface::setHoveredFrame(Frame *frame)
     m_hoveredFrame = frame;
     if (m_hoveredFrame) {
         connect(frame, &QObject::destroyed, this, &DropIndicatorOverlayInterface::onFrameDestroyed);
-        setHoveredFrameRect(m_hoveredFrame->QWidget::geometry());
+        setHoveredFrameRect(m_hoveredFrame->view()->geometry());
     } else {
         setHoveredFrameRect(QRect());
     }
@@ -173,7 +174,7 @@ void DropIndicatorOverlayInterface::onFrameDestroyed()
     setHoveredFrame(nullptr);
 }
 
-void DropIndicatorOverlayInterface::onHoveredFrameChanged(Frame *)
+void DropIndicatorOverlayInterface::onHoveredFrameChanged(Controllers::Frame *)
 {
 }
 

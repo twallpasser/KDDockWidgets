@@ -35,6 +35,8 @@ public:
     QPoint mapToGlobal(QPoint) const;
     int height() const;
     int width() const;
+    QSize size() const;
+    QRect geometry() const;
 
 private:
     View *m_view = nullptr;

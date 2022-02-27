@@ -13,12 +13,12 @@
 #include "private/DockWidgetBase_p.h"
 #include "private/DockRegistry_p.h"
 #include "private/FloatingWindow_p.h"
-#include "private/Frame_p.h"
 #include "private/LayoutSaver_p.h"
 #include "private/Logging_p.h"
 #include "private/MDILayoutWidget_p.h"
 #include "private/SideBar_p.h"
 #include "private/multisplitter/controllers/TitleBar.h"
+#include "private/multisplitter/controllers/Frame.h"
 #include "private/Utils_p.h"
 #include "private/WindowBeingDragged_p.h"
 #include "private/Position_p.h"
@@ -90,7 +90,7 @@ void DockWidgetBase::addDockWidgetAsTab(DockWidgetBase *other, InitialOption opt
         return;
     }
 
-    Frame *frame = d->frame();
+    Controllers::Frame *frame = d->frame();
 
     if (frame) {
         if (frame->containsDockWidget(other)) {
@@ -262,8 +262,8 @@ void DockWidgetBase::setTitle(const QString &title)
 
 QRect DockWidgetBase::frameGeometry() const
 {
-    if (Frame *f = d->frame())
-        return f->QWidget::geometry();
+    if (Controllers::Frame *f = d->frame())
+        return f->view()->geometry();
 
     // Means the dock widget isn't visible. Just fallback to its own geometry
     return QWidgetAdapter::geometry();
@@ -296,7 +296,7 @@ void DockWidgetBase::setOptions(Options options)
 
 bool DockWidgetBase::isTabbed() const
 {
-    if (Frame *frame = d->frame()) {
+    if (Controllers::Frame *frame = d->frame()) {
         return frame->alwaysShowsTabs() || frame->dockWidgetCount() > 1;
     } else {
         if (!isFloating())
@@ -307,7 +307,7 @@ bool DockWidgetBase::isTabbed() const
 
 bool DockWidgetBase::isCurrentTab() const
 {
-    if (Frame *frame = d->frame()) {
+    if (Controllers::Frame *frame = d->frame()) {
         return frame->currentIndex() == frame->indexOfDockWidget(const_cast<DockWidgetBase *>(this));
     } else {
         return true;
@@ -316,13 +316,13 @@ bool DockWidgetBase::isCurrentTab() const
 
 void DockWidgetBase::setAsCurrentTab()
 {
-    if (Frame *frame = d->frame())
+    if (Controllers::Frame *frame = d->frame())
         frame->setCurrentDockWidget(this);
 }
 
 int DockWidgetBase::tabIndex() const
 {
-    if (Frame *frame = d->frame())
+    if (Controllers::Frame *frame = d->frame())
         return frame->indexOfDockWidget(this);
 
     return 0;
@@ -363,7 +363,7 @@ void DockWidgetBase::forceClose()
 
 Controllers::TitleBar *DockWidgetBase::titleBar() const
 {
-    if (Frame *f = d->frame())
+    if (Controllers::Frame *f = d->frame())
         return f->actualTitleBar();
 
     return nullptr;
@@ -400,9 +400,9 @@ void DockWidgetBase::raise()
     if (auto fw = floatingWindow()) {
         fw->raise();
         fw->activateWindow();
-    } else if (Frame *frame = d->frame()) {
+    } else if (Controllers::Frame *frame = d->frame()) {
         if (frame->isMDI())
-            frame->raise();
+            frame->view()->raise();
     }
 }
 
@@ -521,7 +521,7 @@ FloatingWindow *DockWidgetBase::Private::morphIntoFloatingWindow()
             }
         }
 
-        auto frame = Config::self().frameworkWidgetFactory()->createFrame();
+        auto frame = new Controllers::Frame();
         frame->addWidget(q);
         geo.setSize(geo.size().boundedTo(frame->maxSizeHint()));
         FloatingWindow::ensureRectIsOnScreen(geo);
@@ -729,7 +729,7 @@ void DockWidgetBase::Private::close()
     saveTabIndex();
 
     // Do some cleaning. Widget is hidden, but we must hide the tab containing it.
-    if (Frame *frame = this->frame()) {
+    if (Controllers::Frame *frame = this->frame()) {
         q->setParent(nullptr);
         frame->removeWidget(q);
 
@@ -771,7 +771,7 @@ void DockWidgetBase::Private::maybeRestoreToPreviousPosition()
     if (m_lastPosition->wasFloating())
         return; // Nothing to do, it was floating before, now it'll just get visible
 
-    Frame *frame = this->frame();
+    Controllers::Frame *frame = this->frame();
 
     if (frame && frame->QWidget::parentWidget() == DockRegistry::self()->layoutForItem(layoutItem)) {
         // There's a frame already. Means the DockWidget was hidden instead of closed.
@@ -792,7 +792,7 @@ void DockWidgetBase::Private::maybeRestoreToPreviousPosition()
 
 int DockWidgetBase::Private::currentTabIndex() const
 {
-    Frame *frame = this->frame();
+    Controllers::Frame *frame = this->frame();
     return frame ? frame->indexOfDockWidget(q) : 0;
 }
 
@@ -825,7 +825,7 @@ void DockWidgetBase::onShown(bool spontaneous)
     d->onDockWidgetShown();
     Q_EMIT shown();
 
-    if (Frame *f = d->frame()) {
+    if (Controllers::Frame *f = d->frame()) {
         if (!spontaneous) {
             f->onDockWidgetShown(this);
         }
@@ -842,7 +842,7 @@ void DockWidgetBase::onHidden(bool spontaneous)
     d->onDockWidgetHidden();
     Q_EMIT hidden();
 
-    if (Frame *f = d->frame()) {
+    if (Controllers::Frame *f = d->frame()) {
         if (!spontaneous) {
             f->onDockWidgetHidden(this);
         }
@@ -853,7 +853,7 @@ bool DockWidgetBase::onResize(QSize newSize)
 {
     if (isOverlayed()) {
         if (auto frame = d->frame()) {
-            d->m_lastOverlayedSize = frame->QWidget::size();
+            d->m_lastOverlayedSize = frame->view()->size();
         } else {
             qWarning() << Q_FUNC_INFO << "Overlayed dock widget without frame shouldn't happen";
         }
@@ -1014,11 +1014,11 @@ Position::Ptr &DockWidgetBase::Private::lastPosition()
     return m_lastPosition;
 }
 
-Frame *DockWidgetBase::Private::frame() const
+Controllers::Frame *DockWidgetBase::Private::frame() const
 {
     QWidgetOrQuick *p = q->parentWidget();
     while (p) {
-        if (auto frame = qobject_cast<Frame *>(p))
+        if (auto frame = qobject_cast<Controllers::Frame *>(p))
             return frame;
         p = p->parentWidget();
     }

@@ -11,11 +11,14 @@
 
 #pragma once
 
-#include "Controller.h"
+#include "../Controller.h"
+
+#include "kddockwidgets/docks_export.h"
+
 
 namespace KDDockWidgets::Controllers {
 
-class FloatingWindow : Controller
+class DOCKS_EXPORT FloatingWindow : public Controller
 {
 public:
     virtual ~FloatingWindow() override;

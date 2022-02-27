@@ -32,7 +32,8 @@ FloatingWindowWidget::FloatingWindowWidget(QRect suggestedGeometry, MainWindowBa
     init();
 }
 
-FloatingWindowWidget::FloatingWindowWidget(Frame *frame, QRect suggestedGeometry, MainWindowBase *parent)
+FloatingWindowWidget::FloatingWindowWidget(Controllers::Frame *frame, QRect suggestedGeometry,
+                                           MainWindowBase *parent)
     : FloatingWindow(frame, suggestedGeometry, parent)
     , m_vlayout(new QVBoxLayout(this))
 {

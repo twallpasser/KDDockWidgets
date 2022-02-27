@@ -11,11 +11,11 @@
 
 #pragma once
 
-#include "Controller.h"
+#include "../Controller.h"
 
 namespace KDDockWidgets::Controllers {
 
-class DockWidget : Controller
+class DockWidget : public Controller
 {
 public:
     virtual ~DockWidget() override;

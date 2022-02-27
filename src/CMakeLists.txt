@@ -68,8 +68,8 @@ set(DOCKSLIBS_SRCS
     private/WindowBeingDragged_p.h
     private/DragController.cpp
     private/DragController_p.h
-    private/Frame.cpp
-    private/Frame_p.h
+    # private/Frame.cpp
+    # private/Frame_p.h
     private/DropAreaWithCentralFrame.cpp
     private/DropAreaWithCentralFrame_p.h
     private/WidgetResizeHandler.cpp
@@ -95,6 +95,8 @@ set(DOCKSLIBS_SRCS
     private/multisplitter/Widget.cpp
     private/multisplitter/Widget.h
 
+    private/multisplitter/controllers/Frame.cpp
+    private/multisplitter/controllers/Frame.h
     private/multisplitter/controllers/Separator.cpp
     private/multisplitter/controllers/Separator.h
     private/multisplitter/controllers/Stack.cpp
@@ -109,6 +111,8 @@ set(DOCKSLIBS_SRCS
     private/multisplitter/Controller.h
 
     private/multisplitter/views_qtwidgets/View_qtwidgets.h
+    private/multisplitter/views_qtwidgets/Frame_qtwidgets.cpp
+    private/multisplitter/views_qtwidgets/Frame_qtwidgets.h
     private/multisplitter/views_qtwidgets/Separator_qtwidgets.cpp
     private/multisplitter/views_qtwidgets/Separator_qtwidgets.h
     private/multisplitter/views_qtwidgets/TitleBar_qtwidgets.cpp
@@ -150,7 +154,7 @@ set(DOCKS_INSTALLABLE_PRIVATE_INCLUDES
     private/DropArea_p.h
     private/DropIndicatorOverlayInterface_p.h
     private/FloatingWindow_p.h
-    private/Frame_p.h
+    # private/Frame_p.h
     private/LayoutSaver_p.h
     private/MultiSplitter_p.h
     private/LayoutWidget_p.h
@@ -167,7 +171,7 @@ set(DOCKS_INSTALLABLE_PRIVATE_WIDGET_INCLUDES
     private/widgets/QWidgetAdapter_widgets_p.h
     private/widgets/SideBarWidget_p.h
     private/widgets/FloatingWindowWidget_p.h
-    private/widgets/FrameWidget_p.h
+    # private/widgets/FrameWidget_p.h
     # private/widgets/TabBarWidget_p.h
     # private/widgets/TabWidgetWidget_p.h
 )
@@ -231,8 +235,8 @@ else()
       # private/widgets/TabBarWidget_p.h
       private/widgets/FloatingWindowWidget.cpp
       private/widgets/FloatingWindowWidget_p.h
-      private/widgets/FrameWidget.cpp
-      private/widgets/FrameWidget_p.h
+      # private/widgets/FrameWidget.cpp
+      # private/widgets/FrameWidget_p.h
       private/widgets/SideBarWidget.cpp
       private/widgets/SideBarWidget_p.h
       # private/widgets/TabWidgetWidget.cpp

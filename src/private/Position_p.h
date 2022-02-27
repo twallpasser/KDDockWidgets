@@ -36,6 +36,10 @@ class Item;
 
 namespace KDDockWidgets {
 
+namespace Controllers {
+class Frame;
+}
+
 class LayoutWidget;
 
 // Just a RAII class so we don't forget to unref
@@ -56,7 +60,6 @@ private:
 
 
 class DockWidgetBase;
-class Frame;
 
 /**
  * @internal

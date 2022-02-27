@@ -17,7 +17,6 @@
 #include "Draggable_p.h"
 #include "DropIndicatorOverlayInterface_p.h"
 #include "FloatingWindow_p.h"
-#include "Frame_p.h"
 #include "FrameworkWidgetFactory.h"
 #include "Logging_p.h"
 #include "MainWindowBase.h"

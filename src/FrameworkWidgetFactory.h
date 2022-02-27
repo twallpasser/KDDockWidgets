@@ -42,7 +42,6 @@ class MainWindowBase;
 class DropIndicatorOverlayInterface;
 class FloatingWindow;
 class TabWidget;
-class Frame;
 class DropArea;
 class SideBar;
 class TabBar;
@@ -92,13 +91,14 @@ public:
     ///       DockWidgets.
     ///@param parent just forward to Frame's constructor
     ///@param options just forward to Frame's constructor
-    virtual Frame *createFrame(QWidgetOrQuick *parent = nullptr, FrameOptions options = FrameOption_None) const = 0;
+    virtual View *createFrame(Controllers::Frame *, View *parent = nullptr,
+                              FrameOptions options = FrameOption_None) const = 0;
 
     ///@brief Called internally by the framework to create a TitleBar
     ///       Override to provide your own TitleBar sub-class. If overridden then
     ///       you also need to override the overload below.
     ///@param frame Just forward to TitleBar's constructor.
-    virtual View *createTitleBar(Controllers::TitleBar *, Frame *frame) const = 0;
+    virtual View *createTitleBar(Controllers::TitleBar *, Controllers::Frame *frame) const = 0;
 
     ///@brief Called internally by the framework to create a TitleBar
     ///       Override to provide your own TitleBar sub-class. If overridden then
@@ -109,7 +109,7 @@ public:
     ///@brief Called internally by the framework to create a TabWidget
     ///       Override to provide your own TabWidget sub-class.
     ///@param parent Just forward to TabWidget's constructor.
-    virtual View *createTabWidget(Controllers::Stack *stack, Frame *parent) const = 0;
+    virtual View *createTabWidget(Controllers::Stack *stack, Controllers::Frame *parent) const = 0;
 
     ///@brief Called internally by the framework to create a TabBar
     ///       Override to provide your own TabBar sub-class.
@@ -133,7 +133,7 @@ public:
     ///       you also need to override the overloads above.
     ///@param frame Just forward to FloatingWindow's constructor.
     ///@param parent Just forward to FloatingWindow's constructor.
-    virtual FloatingWindow *createFloatingWindow(Frame *frame, MainWindowBase *parent = nullptr, QRect suggestedGeometry = {}) const = 0;
+    virtual FloatingWindow *createFloatingWindow(Controllers::Frame *frame, MainWindowBase *parent = nullptr, QRect suggestedGeometry = {}) const = 0;
 
     ///@brief Called internally by the framework to create a DropIndicatorOverlayInterface
     ///       Override to provide your own DropIndicatorOverlayInterface sub-class.
@@ -176,14 +176,16 @@ class DOCKS_EXPORT DefaultWidgetFactory : public FrameworkWidgetFactory
     Q_OBJECT
 public:
     DefaultWidgetFactory() = default;
-    Frame *createFrame(QWidgetOrQuick *parent, FrameOptions) const override;
-    View *createTitleBar(Controllers::TitleBar *, Frame *) const override;
+    View *createFrame(Controllers::Frame *, View *parent, FrameOptions options = FrameOption_None) const override;
+    View *createTitleBar(Controllers::TitleBar *, Controllers::Frame *) const override;
     View *createTitleBar(Controllers::TitleBar *, FloatingWindow *) const override;
-    View *createTabWidget(Controllers::Stack *, Frame *parent) const override;
+    View *createTabWidget(Controllers::Stack *, Controllers::Frame *parent) const override;
     View *createTabBar(Controllers::TabBar *tabBar, View *parent) const override;
     View *createSeparator(Controllers::Separator *, View *parent = nullptr) const override;
     FloatingWindow *createFloatingWindow(MainWindowBase *parent = nullptr) const override;
-    FloatingWindow *createFloatingWindow(Frame *frame, MainWindowBase *parent = nullptr, QRect suggestedGeometry = {}) const override;
+    FloatingWindow *createFloatingWindow(Controllers::Frame *frame,
+                                         MainWindowBase *parent = nullptr,
+                                         QRect suggestedGeometry = {}) const override;
     DropIndicatorOverlayInterface *createDropIndicatorOverlay(DropArea *) const override;
     QWidgetOrQuick *createRubberBand(QWidgetOrQuick *parent) const override;
     SideBar *createSideBar(SideBarLocation loc, MainWindowBase *parent) const override;

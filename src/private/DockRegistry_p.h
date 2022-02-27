@@ -15,7 +15,7 @@
 #include "kddockwidgets/DockWidgetBase.h"
 #include "kddockwidgets/MainWindowBase.h"
 
-#include "kddockwidgets/private/Frame_p.h"
+#include "private/multisplitter/controllers/Frame.h"
 
 #include <QVector>
 #include <QObject>
@@ -29,7 +29,6 @@
 namespace KDDockWidgets {
 
 class FloatingWindow;
-class Frame;
 class LayoutWidget;
 class MainWindowMDI;
 class SideBar;
@@ -63,8 +62,8 @@ public:
     void registerLayout(LayoutWidget *);
     void unregisterLayout(LayoutWidget *);
 
-    void registerFrame(Frame *);
-    void unregisterFrame(Frame *);
+    void registerFrame(Controllers::Frame *);
+    void unregisterFrame(Controllers::Frame *);
 
     Q_INVOKABLE KDDockWidgets::DockWidgetBase *focusedDockWidget() const;
 
@@ -100,7 +99,7 @@ public:
     const QVector<LayoutWidget *> layouts() const;
 
     ///@brief returns a list of all Frame instances
-    const QList<Frame *> frames() const;
+    const QList<Controllers::Frame *> frames() const;
 
     ///@brief returns all FloatingWindow instances. Not necessarily all floating dock widgets,
     /// As there might be DockWidgets which weren't morphed yet.
@@ -125,8 +124,8 @@ public:
     MainWindowBase *mainWindowForHandle(QWindow *windowHandle) const;
 
     ///@brief returns the top level widget associated with the specified QWindow.
-    ///For QtWidgets, it returns a QWidget which is either a KDDockWidgets::MainWindow or a FloatingWindow.
-    ///For QtQuick ir returns the same, but the type is a QWidgetAdapter (a QQuickItem), not QWidget obviously.
+    /// For QtWidgets, it returns a QWidget which is either a KDDockWidgets::MainWindow or a FloatingWindow.
+    /// For QtQuick ir returns the same, but the type is a QWidgetAdapter (a QQuickItem), not QWidget obviously.
     QWidgetOrQuick *topLevelForHandle(QWindow *windowHandle) const;
 
     ///@brief Returns the list with all visiblye top-level parents of our FloatingWindow and MainWindow instances.
@@ -225,7 +224,7 @@ public:
     SideBar *sideBarForDockWidget(const DockWidgetBase *) const;
 
     ///@brief Returns the Frame which is being resized in a MDI layout. nullptr if none
-    Frame *frameInMDIResize() const;
+    Controllers::Frame *frameInMDIResize() const;
 
 Q_SIGNALS:
     /// @brief emitted when a main window or a floating window change screen
@@ -251,7 +250,7 @@ private:
     bool m_isProcessingAppQuitEvent = false;
     DockWidgetBase::List m_dockWidgets;
     MainWindowBase::List m_mainWindows;
-    QList<Frame *> m_frames;
+    QList<Controllers::Frame *> m_frames;
     QVector<FloatingWindow *> m_floatingWindows;
     QVector<LayoutWidget *> m_layouts;
     QPointer<DockWidgetBase> m_focusedDockWidget;

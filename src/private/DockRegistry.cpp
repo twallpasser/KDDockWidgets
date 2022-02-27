@@ -238,15 +238,15 @@ SideBar *DockRegistry::sideBarForDockWidget(const DockWidgetBase *dw) const
     return nullptr;
 }
 
-Frame *DockRegistry::frameInMDIResize() const
+Controllers::Frame *DockRegistry::frameInMDIResize() const
 {
     for (auto mw : m_mainWindows) {
         if (!mw->isMDI())
             continue;
 
         LayoutWidget *layout = mw->layoutWidget();
-        const QList<Frame *> frames = layout->frames();
-        for (Frame *frame : frames) {
+        const QList<Controllers::Frame *> frames = layout->frames();
+        for (Controllers::Frame *frame : frames) {
             if (WidgetResizeHandler *wrh = frame->resizeHandler()) {
                 if (wrh->isResizing())
                     return frame;
@@ -285,7 +285,7 @@ LayoutWidget *DockRegistry::layoutForItem(const Layouting::Item *item) const
 bool DockRegistry::itemIsInMainWindow(const Layouting::Item *item) const
 {
     if (LayoutWidget *layout = layoutForItem(item)) {
-        return layout->isInMainWindow(/*honoursNesting=*/ true);
+        return layout->isInMainWindow(/*honoursNesting=*/true);
     }
 
     return false;
@@ -360,12 +360,12 @@ void DockRegistry::unregisterLayout(LayoutWidget *layout)
     m_layouts.removeOne(layout);
 }
 
-void DockRegistry::registerFrame(Frame *frame)
+void DockRegistry::registerFrame(Controllers::Frame *frame)
 {
     m_frames << frame;
 }
 
-void DockRegistry::unregisterFrame(Frame *frame)
+void DockRegistry::unregisterFrame(Controllers::Frame *frame)
 {
     m_frames.removeOne(frame);
 }
@@ -536,7 +536,7 @@ const QVector<LayoutWidget *> DockRegistry::layouts() const
     return m_layouts;
 }
 
-const Frame::List DockRegistry::frames() const
+const Controllers::Frame::List DockRegistry::frames() const
 {
     return m_frames;
 }

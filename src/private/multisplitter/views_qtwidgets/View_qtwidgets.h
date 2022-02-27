@@ -22,6 +22,7 @@
 #include <QWidget>
 
 #include <memory>
+#include <qwidget.h>
 
 namespace KDDockWidgets::Views {
 
@@ -29,6 +30,7 @@ template<typename Base>
 class DOCKS_EXPORT View_qtwidgets : public Base, public View
 {
 public:
+    using View::close;
     using View::height;
     using View::rect;
     using View::width;
@@ -138,6 +140,11 @@ public:
             Base::window()->activateWindow();
     }
 
+    void raise() override
+    {
+        Base::window()->raise();
+    }
+
     QPoint mapToGlobal(QPoint localPt) const override
     {
         return Base::mapToGlobal(localPt);
@@ -146,6 +153,23 @@ public:
     void setSizePolicy(QSizePolicy policy) override
     {
         Base::setSizePolicy(policy);
+    }
+
+    void closeWindow() override
+    {
+        if (QWidget *window = QWidget::window())
+            window->close();
+    }
+
+    QRect windowGeometry() const override
+    {
+        if (QWidget *window = QWidget::window())
+            return window->geometry();
+    }
+
+    void close() override
+    {
+        QWidget::close();
     }
 
 protected:

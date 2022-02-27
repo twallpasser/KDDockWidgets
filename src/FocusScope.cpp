@@ -19,8 +19,8 @@
 #include "FocusScope.h"
 #include "DockWidgetBase.h"
 
-#include "private/Frame_p.h"
 #include "private/DockRegistry_p.h"
+#include "private/multisplitter/controllers/Frame.h"
 #include "private/multisplitter/views_qtwidgets/View_qtwidgets.h"
 #include "private/multisplitter/views_qtwidgets/TitleBar_qtwidgets.h"
 
@@ -106,7 +106,7 @@ void FocusScope::focus(Qt::FocusReason reason)
         // very useful.
         d->m_lastFocusedInScope->setFocus(reason);
     } else {
-        if (auto frame = qobject_cast<Frame *>(d->m_thisWidget)) {
+        if (auto frame = qobject_cast<Controllers::Frame *>(d->m_thisWidget)) {
             if (DockWidgetBase *dw = frame->currentDockWidget()) {
                 if (auto guest = dw->widget()) {
                     if (guest->focusPolicy() != Qt::NoFocus)

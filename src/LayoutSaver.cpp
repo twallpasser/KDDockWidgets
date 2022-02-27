@@ -27,11 +27,11 @@
 #include "private/DockRegistry_p.h"
 #include "private/DockWidgetBase_p.h"
 #include "private/FloatingWindow_p.h"
-#include "private/Frame_p.h"
 #include "private/LayoutWidget_p.h"
 #include "private/Logging_p.h"
 #include "private/Position_p.h"
 #include "private/Utils_p.h"
+#include "private/multisplitter/controllers/Frame.h"
 
 #include <qmath.h>
 #include <QDebug>

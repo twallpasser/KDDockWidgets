@@ -19,8 +19,9 @@
 #include "private/Utils_p.h"
 #include "private/Logging_p.h"
 
-#include "kddockwidgets/private/FloatingWindow_p.h"
-#include "kddockwidgets/private/Frame_p.h"
+#include "private/FloatingWindow_p.h"
+#include "private/multisplitter/controllers/TabBar.h"
+
 #include "kddockwidgets/FrameworkWidgetFactory.h"
 #include "kddockwidgets/private/MDILayoutWidget_p.h"
 #include "kddockwidgets/MainWindowBase.h"
@@ -198,7 +199,7 @@ bool TitleBar::hasIcon() const
     return !m_icon.isNull();
 }
 
-KDDockWidgets::Frame *TitleBar::frame() const
+Controllers::Frame *TitleBar::frame() const
 {
     return m_frame;
 }
@@ -305,9 +306,9 @@ void TitleBar::onCloseClicked()
             }
         } else {
             if (m_frame->isTheOnlyFrame() && !m_frame->isInMainWindow()) {
-                m_frame->QWidget::window()->close();
+                m_frame->view()->closeWindow();
             } else {
-                m_frame->close();
+                m_frame->view()->close();
             }
         }
     } else if (m_floatingWindow) {
@@ -440,7 +441,7 @@ std::unique_ptr<KDDockWidgets::WindowBeingDragged> TitleBar::makeWindow()
         }
     }
 
-    QRect r = m_frame->QWidget::geometry();
+    QRect r = m_frame->view()->geometry();
     r.moveTopLeft(m_frame->mapToGlobal(QPoint(0, 0)));
 
     auto floatingWindow = Config::self().frameworkWidgetFactory()->createFloatingWindow(m_frame);

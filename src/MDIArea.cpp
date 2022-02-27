@@ -15,10 +15,10 @@
 #include "private/DropAreaWithCentralFrame_p.h"
 
 #ifdef KDDOCKWIDGETS_QTWIDGETS
-# include "DockWidget.h"
-# include <QVBoxLayout>
+#include "DockWidget.h"
+#include <QVBoxLayout>
 #else
-# include "DockWidgetQuick.h"
+#include "DockWidgetQuick.h"
 #endif
 
 using namespace KDDockWidgets;
@@ -82,7 +82,7 @@ void MDIArea::resizeDockWidget(DockWidgetBase *dw, QSize size)
     d->layoutWidget->resizeDockWidget(dw, size);
 }
 
-QList<Frame *> MDIArea::frames() const
+QList<Controllers::Frame *> MDIArea::frames() const
 {
     return d->layoutWidget->frames();
 }

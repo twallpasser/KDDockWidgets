@@ -16,7 +16,6 @@
 #include "private/multisplitter/views_qtwidgets/TabBar_qtwidgets.h"
 #include "private/DragController_p.h"
 #include "private/FloatingWindow_p.h"
-#include "private/Frame_p.h"
 #include "private/Utils_p.h"
 
 using namespace KDDockWidgets;
@@ -127,7 +126,7 @@ bool Controllers::TabBar::isWindow() const
 void Controllers::TabBar::onMousePress(QPoint localPos)
 {
     m_lastPressedDockWidget = dockWidgetAt(localPos);
-    KDDockWidgets::Frame *frame = this->frame();
+    Frame *frame = this->frame();
     if ((Config::self().flags() & Config::Flag_TitleBarIsFocusable) && !frame->isFocused()) {
         // User clicked on a tab which was already focused
         // A tab changing also counts as a change of scope
@@ -159,7 +158,7 @@ DockWidgetBase *Controllers::TabBar::singleDockWidget() const
 
 bool Controllers::TabBar::isMDI() const
 {
-    KDDockWidgets::Frame *f = frame();
+    Frame *f = frame();
     return f && f->isMDI();
 }
 

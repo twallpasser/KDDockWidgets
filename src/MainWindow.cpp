@@ -23,9 +23,10 @@
 #include "private/DockRegistry_p.h"
 #include "private/DropAreaWithCentralFrame_p.h"
 #include "private/DropArea_p.h"
-#include "private/Frame_p.h"
 #include "private/Logging_p.h"
 #include "private/SideBar_p.h"
+
+#include "private/multisplitter/controllers/Frame.h"
 
 #include <QPainter>
 #include <QScreen>

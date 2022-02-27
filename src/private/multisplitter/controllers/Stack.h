@@ -13,17 +13,14 @@
 
 #include "../Controller.h"
 #include "../private/Draggable_p.h"
-#include "../private/Frame_p.h"
+#include "../private/multisplitter/controllers/Frame.h"
 #include "../private/multisplitter/controllers/TabBar.h"
 
 #include <QPointer>
 
-namespace KDDockWidgets {
-class Frame;
-}
-
 namespace KDDockWidgets::Controllers {
 
+class Frame;
 class TabBar;
 
 class DOCKS_EXPORT Stack : public Controller, public Draggable

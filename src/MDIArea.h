@@ -22,7 +22,10 @@ namespace KDDockWidgets {
 
 class MDILayoutWidget;
 class DockWidgetBase;
+
+namespace Controllers {
 class Frame;
+}
 
 /**
  * @brief MDIArea allows to host dock widget in MDI mode.
@@ -51,7 +54,7 @@ public:
 
     /// @brief Returns the list of frames in this MDI Area
     /// Each Frame object represents a 'window' emebedded in the MDI Area
-    QList<Frame *> frames() const;
+    QList<Controllers::Frame *> frames() const;
 
 private:
     class Private;

@@ -33,6 +33,7 @@ namespace KDDockWidgets {
 
 namespace Controllers {
 class Separator;
+class Frame;
 }
 
 struct WindowBeingDragged;
@@ -58,8 +59,8 @@ public:
     /**
      * @brief Adds a widget to this MultiSplitter.
      */
-    void addWidget(QWidgetOrQuick *widget, KDDockWidgets::Location location,
-                   Frame *relativeTo = nullptr,
+    void addWidget(QWidget *widget, KDDockWidgets::Location location,
+                   Controllers::Frame *relativeTo = nullptr,
                    InitialOption option = DefaultSizeMode::Fair);
 
     /**
@@ -69,7 +70,7 @@ public:
      * of widgetBar when the whole splitter is dropped into this one.
      */
     void addMultiSplitter(MultiSplitter *splitter, KDDockWidgets::Location location,
-                          Frame *relativeTo = nullptr,
+                          Controllers::Frame *relativeTo = nullptr,
                           InitialOption option = DefaultSizeMode::Fair);
 
     /**
@@ -99,7 +100,7 @@ private:
 
     // For debug/hardening
     bool validateInputs(QWidgetOrQuick *widget, KDDockWidgets::Location location,
-                        const Frame *relativeToFrame, InitialOption option) const;
+                        const Controllers::Frame *relativeToFrame, InitialOption option) const;
 
 
     void setRootItem(Layouting::ItemBoxContainer *);

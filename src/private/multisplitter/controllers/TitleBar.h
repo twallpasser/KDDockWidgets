@@ -20,13 +20,15 @@
 #include <QIcon>
 
 namespace KDDockWidgets {
-class Frame;
+
 class FloatingWindow;
 class FloatingWindowWidget;
 class TabWidgetWidget;
 }
 
 namespace KDDockWidgets::Controllers {
+
+class Frame;
 
 class DOCKS_EXPORT TitleBar : public Controller, public Draggable
 {
@@ -79,7 +81,7 @@ public:
     bool titleBarIsFocusable() const;
 
     ///@brief getter for m_frame
-    Frame *frame() const;
+    Controllers::Frame *frame() const;
 
     ///@brief getter for m_floatingWindow
     FloatingWindow *floatingWindow() const;
@@ -143,7 +145,7 @@ private:
     QString m_title;
     QIcon m_icon;
 
-    Frame *const m_frame;
+    Controllers::Frame *const m_frame;
     FloatingWindow *const m_floatingWindow;
     const bool m_supportsAutoHide;
     bool m_closeButtonEnabled = true;

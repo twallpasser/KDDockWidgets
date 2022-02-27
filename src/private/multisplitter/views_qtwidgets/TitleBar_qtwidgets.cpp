@@ -193,7 +193,7 @@ void TitleBar_qtwidgets::updateAutoHideButton()
 {
     if (Config::self().flags() & Config::Flag_AutoHideSupport) {
         auto factory = Config::self().frameworkWidgetFactory();
-        if (const Frame *f = m_controller->frame()) {
+        if (const Controllers::Frame *f = m_controller->frame()) {
             if (f->isInMainWindow()) {
                 m_autoHideButton->setIcon(factory->iconForButtonType(TitleBarButtonType::AutoHide, devicePixelRatioF()));
                 m_autoHideButton->setToolTip(tr("Auto-hide"));

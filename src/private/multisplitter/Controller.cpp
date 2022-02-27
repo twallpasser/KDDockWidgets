@@ -67,3 +67,13 @@ int Controller::width() const
 {
     return m_view->width();
 }
+
+QSize Controller::size() const
+{
+    return m_view->size();
+}
+
+QRect Controller::geometry() const
+{
+    return m_view->geometry();
+}

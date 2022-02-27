@@ -21,7 +21,6 @@
 #include "private/DockRegistry_p.h"
 #include "private/MDILayoutWidget_p.h"
 #include "private/DropArea_p.h"
-#include "private/Frame_p.h"
 #include "private/Utils_p.h"
 #include "private/SideBar_p.h"
 #include "private/Logging_p.h"
@@ -31,6 +30,8 @@
 #include "private/LayoutSaver_p.h"
 #include "private/DockWidgetBase_p.h"
 #include "private/multisplitter/Item_p.h"
+
+#include "private/multisplitter/controllers/Frame.h"
 
 // Or we can have a createDockWidget() in the factory
 #ifdef KDDOCKWIDGETS_QTQUICK

@@ -82,6 +82,11 @@ QSize View::size() const
     return geometry().size();
 }
 
+QPoint View::pos() const
+{
+    return geometry().topLeft();
+}
+
 QRect View::rect() const
 {
     return QRect(QPoint(0, 0), size());

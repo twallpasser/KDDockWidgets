@@ -35,9 +35,9 @@ namespace KDDockWidgets {
 
 namespace Controllers {
 class TitleBar;
+class Frame;
 }
 
-class Frame;
 class FloatingWindow;
 class DragController;
 class DockRegistry;

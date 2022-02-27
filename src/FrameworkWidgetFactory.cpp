@@ -12,7 +12,6 @@
 #include "FrameworkWidgetFactory.h"
 #include "Config.h"
 
-#include "private/Frame_p.h"
 #include "private/FloatingWindow_p.h"
 #include "private/indicators/ClassicIndicators_p.h"
 #include "private/indicators/NullIndicators_p.h"
@@ -22,11 +21,11 @@
 #include "private/multisplitter/controllers/Stack.h"
 
 #ifdef KDDOCKWIDGETS_QTWIDGETS
-#include "private/widgets/FrameWidget_p.h"
 #include "private/widgets/SideBarWidget_p.h"
 #include "private/widgets/FloatingWindowWidget_p.h"
 #include "private/indicators/SegmentedIndicators_p.h"
 
+#include "private/multisplitter/views_qtwidgets/Frame_qtwidgets.h"
 #include "private/multisplitter/views_qtwidgets/View_qtwidgets.h"
 #include "private/multisplitter/views_qtwidgets/Separator_qtwidgets.h"
 #include "private/multisplitter/views_qtwidgets/TitleBar_qtwidgets.h"
@@ -57,14 +56,16 @@ FrameworkWidgetFactory::~FrameworkWidgetFactory()
 }
 
 #ifdef KDDOCKWIDGETS_QTWIDGETS
-Frame *DefaultWidgetFactory::createFrame(QWidgetOrQuick *parent, FrameOptions options) const
+View *DefaultWidgetFactory::createFrame(Controllers::Frame *controller, View *parent = nullptr,
+                                        FrameOptions options) const
 {
-    return new FrameWidget(parent, options);
+    Q_UNUSED(options); // TODO
+    return new Views::Frame_qtwidgets(controller, parent->asQWidget());
 }
 
-View *DefaultWidgetFactory::createTitleBar(Controllers::TitleBar *titleBar, Frame *frame) const
+View *DefaultWidgetFactory::createTitleBar(Controllers::TitleBar *titleBar, Controllers::Frame *frame) const
 {
-    return new Views::TitleBar_qtwidgets(titleBar, frame);
+    return new Views::TitleBar_qtwidgets(titleBar, frame->view()->asQWidget());
 }
 
 View *DefaultWidgetFactory::createTitleBar(Controllers::TitleBar *titleBar, FloatingWindow *fw) const
@@ -77,7 +78,7 @@ View *DefaultWidgetFactory::createTabBar(Controllers::TabBar *tabBar, View *pare
     return new Views::TabBar_qtwidgets(tabBar, parent->asQWidget());
 }
 
-View *DefaultWidgetFactory::createTabWidget(Controllers::Stack *controller, Frame *parent) const
+View *DefaultWidgetFactory::createTabWidget(Controllers::Stack *controller, Controllers::Frame *parent) const
 {
     return new Views::Stack_qtwidgets(controller, parent);
 }
@@ -92,7 +93,8 @@ FloatingWindow *DefaultWidgetFactory::createFloatingWindow(MainWindowBase *paren
     return new FloatingWindowWidget(QRect(), parent);
 }
 
-FloatingWindow *DefaultWidgetFactory::createFloatingWindow(Frame *frame, MainWindowBase *parent, QRect suggestedGeometry) const
+FloatingWindow *DefaultWidgetFactory::createFloatingWindow(Controllers::Frame *frame,
+                                                           MainWindowBase *parent, QRect suggestedGeometry) const
 {
     return new FloatingWindowWidget(frame, suggestedGeometry, parent);
 }

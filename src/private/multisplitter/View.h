@@ -78,8 +78,12 @@ public:
     virtual void hide() = 0;
     virtual void update() = 0;
     virtual void raiseAndActivate() = 0;
+    virtual void raise() = 0;
     virtual QPoint mapToGlobal(QPoint) const = 0;
     virtual void setSizePolicy(QSizePolicy) = 0;
+    virtual void closeWindow() = 0;
+    virtual QRect windowGeometry() const = 0;
+    virtual void close() = 0;
 
     // TODO: Check if these two should be in the controller or on view
     virtual void onLayoutRequest()
@@ -96,6 +100,7 @@ public:
         return false;
     }
 
+    QPoint pos() const;
     QSize size() const;
     QRect rect() const;
     int x() const;

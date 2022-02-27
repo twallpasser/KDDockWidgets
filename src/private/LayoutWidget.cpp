@@ -13,12 +13,12 @@
 #include "Config.h"
 #include "DockWidgetBase_p.h"
 #include "FloatingWindow_p.h"
-#include "Frame_p.h"
 #include "FrameworkWidgetFactory.h"
 #include "MainWindowBase.h"
 #include "Position_p.h"
 #include "Utils_p.h"
 
+#include "multisplitter/controllers/Frame.h"
 #include "multisplitter/Item_p.h"
 
 using namespace KDDockWidgets;
@@ -140,9 +140,9 @@ void LayoutWidget::restorePlaceholder(DockWidgetBase *dw, Layouting::Item *item,
     frame->QWidget::setVisible(true);
 }
 
-void LayoutWidget::unrefOldPlaceholders(const Frame::List &framesBeingAdded) const
+void LayoutWidget::unrefOldPlaceholders(const Controllers::Frame::List &framesBeingAdded) const
 {
-    for (Frame *frame : framesBeingAdded) {
+    for (Controllers::Frame *frame : framesBeingAdded) {
         for (DockWidgetBase *dw : frame->dockWidgets()) {
             dw->d->lastPosition()->removePlaceholders(this);
         }
@@ -168,7 +168,7 @@ bool LayoutWidget::containsItem(const Layouting::Item *item) const
     return m_rootItem->contains_recursive(item);
 }
 
-bool LayoutWidget::containsFrame(const Frame *frame) const
+bool LayoutWidget::containsFrame(const Controllers::Frame *frame) const
 {
     return itemForFrame(frame) != nullptr;
 }
@@ -188,27 +188,27 @@ int LayoutWidget::placeholderCount() const
     return count() - visibleCount();
 }
 
-Layouting::Item *LayoutWidget::itemForFrame(const Frame *frame) const
+Layouting::Item *LayoutWidget::itemForFrame(const Controllers::Frame *frame) const
 {
     if (!frame)
         return nullptr;
 
-    return m_rootItem->itemForWidget(frame);
+    return m_rootItem->itemForWidget(frame->view()); // TODO: layout could have just the controller
 }
 
 DockWidgetBase::List LayoutWidget::dockWidgets() const
 {
     DockWidgetBase::List dockWidgets;
-    const Frame::List frames = this->frames();
-    for (Frame *frame : frames)
+    const Controllers::Frame::List frames = this->frames();
+    for (Controllers::Frame *frame : frames)
         dockWidgets << frame->dockWidgets();
 
     return dockWidgets;
 }
 
-Frame::List LayoutWidget::framesFrom(QWidgetOrQuick *frameOrMultiSplitter) const
+Controllers::Frame::List LayoutWidget::framesFrom(QWidgetOrQuick *frameOrMultiSplitter) const
 {
-    if (auto frame = qobject_cast<Frame *>(frameOrMultiSplitter))
+    if (auto frame = qobject_cast<Controllers::Frame *>(frameOrMultiSplitter))
         return { frame };
 
     if (auto msw = qobject_cast<MultiSplitter *>(frameOrMultiSplitter))
@@ -217,15 +217,15 @@ Frame::List LayoutWidget::framesFrom(QWidgetOrQuick *frameOrMultiSplitter) const
     return {};
 }
 
-Frame::List LayoutWidget::frames() const
+Controllers::Frame::List LayoutWidget::frames() const
 {
     const Layouting::Item::List items = m_rootItem->items_recursive();
 
-    Frame::List result;
+    Controllers::Frame::List result;
     result.reserve(items.size());
 
     for (Layouting::Item *item : items) {
-        if (auto f = static_cast<Frame *>(item->guestAsQObject()))
+        if (auto f = static_cast<Controllers::Frame *>(item->guestAsQObject()))
             result.push_back(f);
     }
 

@@ -28,7 +28,7 @@
 
 #ifdef KDDOCKWIDGETS_QTWIDGETS
 #include "private/multisplitter/views_qtwidgets/Stack_qtwidgets.h"
-#include "widgets/FrameWidget_p.h"
+#include "private/multisplitter/views_qtwidgets/Frame_qtwidgets.h"
 #include "MainWindow.h"
 
 #include <QVBoxLayout>
@@ -143,7 +143,7 @@ KDDockWidgets::DockWidgetBase *createDockWidget(const QString &name, QWidgetOrQu
                                                 bool show = true, const QString &affinityName = {});
 KDDockWidgets::DockWidgetBase *createDockWidget(const QString &name, QColor color = Qt::black);
 
-void nestDockWidget(DockWidgetBase *dock, DropArea *dropArea, Frame *relativeTo,
+void nestDockWidget(DockWidgetBase *dock, DropArea *dropArea, Controllers::Frame *relativeTo,
                     KDDockWidgets::Location location);
 
 class MyWidget : public QWidgetOrQuick
@@ -354,8 +354,8 @@ inline WidgetType *draggableFor(WidgetType *w)
         if (auto frame = dock->d->frame())
             draggable = frame->titleBar()->view()->asQWidget();
     } else if (auto fw = qobject_cast<FloatingWindow *>(w)) {
-        Frame *frame = fw->hasSingleFrame() ? static_cast<Frame *>(fw->frames().first())
-                                            : nullptr;
+        Controllers::Frame *frame = fw->hasSingleFrame() ? static_cast<Controllers::Frame *>(fw->frames().first())
+                                                         : nullptr;
 
         if ((KDDockWidgets::Config::self().flags() & KDDockWidgets::Config::Flag_HideTitleBarWhenTabsVisible) && frame && frame->hasTabsVisible()) {
             draggable = frame->tabWidget()->asWidget();

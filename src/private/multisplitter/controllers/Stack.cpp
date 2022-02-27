@@ -11,15 +11,16 @@
 
 #include "Stack.h"
 #include "Config.h"
-#include "private/multisplitter/controllers/TabBar.h"
 #include "private/multisplitter/views_qtwidgets/Stack_qtwidgets.h"
 #include "kddockwidgets/FrameworkWidgetFactory.h"
 #include "private/FloatingWindow_p.h"
-#include "private/Frame_p.h"
 #include "private/Logging_p.h"
 #include "private/Utils_p.h"
 #include "private/WindowBeingDragged_p.h"
 #include "private/DockWidgetBase_p.h"
+
+#include "private/multisplitter/controllers/TabBar.h"
+#include "private/multisplitter/controllers/Frame.h"
 
 #include <QDebug>
 #include <QTabBar> // TODO Remove
@@ -130,7 +131,7 @@ std::unique_ptr<WindowBeingDragged> Stack::makeWindow()
         }
     }
 
-    QRect r = m_frame->QWidget::geometry();
+    QRect r = m_frame->view()->geometry();
 
     const QPoint globalPoint = view()->mapToGlobal(QPoint(0, 0));
 

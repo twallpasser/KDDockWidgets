@@ -12,19 +12,16 @@
 #pragma once
 
 #include "../Controller.h"
-#include "../private/Frame_p.h"
+#include "Frame.h"
 #include "../private/Draggable_p.h"
 #include "kddockwidgets/DockWidgetBase.h"
 
 #include <QPointer>
 
-namespace KDDockWidgets {
-class Frame;
-}
-
 namespace KDDockWidgets::Controllers {
 
 class Stack;
+class Frame;
 
 class DOCKS_EXPORT TabBar : public Controller, public Draggable
 {
@@ -65,7 +62,7 @@ public:
     /// @reimp
     bool isMDI() const override;
 
-    KDDockWidgets::Frame *frame() const;
+    Frame *frame() const;
 
     void moveTabTo(int from, int to);
     QString text(int index) const;

@@ -43,17 +43,17 @@ public:
 
     /// @brief Moves a dock widget @p f to point @p pos
     /// Convenience overload.
-    void moveDockWidget(Frame *f, QPoint pos);
+    void moveDockWidget(Controllers::Frame *f, QPoint pos);
 
     /// @brief Sets the size of dock widget @p dw to @p size
     void resizeDockWidget(DockWidgetBase *dw, QSize size);
 
     /// @brief Sets the size of dock widget @p f to @p size
     /// Convenience overload.
-    void resizeDockWidget(Frame *f, QSize size);
+    void resizeDockWidget(Controllers::Frame *f, QSize size);
 
     /// @brief sets the size and position of the dock widget @p f
-    void setDockWidgetGeometry(Frame *f, QRect);
+    void setDockWidgetGeometry(Controllers::Frame *f, QRect);
 
 private:
     Layouting::ItemFreeContainer *const m_rootItem;

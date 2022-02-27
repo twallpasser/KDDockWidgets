@@ -22,7 +22,7 @@
 #include "kddockwidgets/docks_export.h"
 #include "kddockwidgets/KDDockWidgets.h"
 
-#include "Frame_p.h"
+#include "private/multisplitter/controllers/Frame.h"
 #include "MultiSplitter_p.h"
 #include "DropIndicatorOverlayInterface_p.h"
 
@@ -30,7 +30,10 @@ class TestDocks;
 
 namespace KDDockWidgets {
 
+namespace Controllers {
 class Frame;
+}
+
 class Draggable;
 struct WindowBeingDragged;
 
@@ -48,7 +51,7 @@ public:
     DropLocation hover(WindowBeingDragged *draggedWindow, QPoint globalPos);
     ///@brief Called when a user drops a widget via DND
     bool drop(WindowBeingDragged *droppedWindow, QPoint globalPos);
-    Frame::List frames() const;
+    Controllers::Frame::List frames() const;
 
     Layouting::Item *centralFrame() const;
     DropIndicatorOverlayInterface *dropIndicatorOverlay() const
@@ -77,6 +80,7 @@ public:
 
     /// Returns the helper dock widget for implementing DockWidget::Option_MDINestable.
     DockWidgetBase *mdiDockWidgetWrapper() const;
+
 private:
     Q_DISABLE_COPY(DropArea)
     friend class Frame;
@@ -86,10 +90,10 @@ private:
     friend class FloatingWindow;
 
     template<typename T>
-    bool validateAffinity(T *, Frame *acceptingFrame = nullptr) const;
-    bool drop(WindowBeingDragged *draggedWindow, Frame *acceptingFrame, DropLocation);
-    bool drop(QWidgetOrQuick *droppedwindow, KDDockWidgets::Location location, Frame *relativeTo);
-    Frame *frameContainingPos(QPoint globalPos) const;
+    bool validateAffinity(T *, Controllers::Frame *acceptingFrame = nullptr) const;
+    bool drop(WindowBeingDragged *draggedWindow, Controllers::Frame *acceptingFrame, DropLocation);
+    bool drop(QWidgetOrQuick *droppedwindow, KDDockWidgets::Location location, Controllers::Frame *relativeTo);
+    Controllers::Frame *frameContainingPos(QPoint globalPos) const;
     void updateFloatingActions();
 
     bool m_inDestructor = false;

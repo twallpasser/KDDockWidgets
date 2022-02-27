@@ -16,7 +16,7 @@
 #include "kddockwidgets/QWidgetAdapter.h"
 #include "kddockwidgets/LayoutSaver.h"
 #include "kddockwidgets/Qt5Qt6Compat_p.h"
-#include "Frame_p.h"
+#include "private/multisplitter/controllers/Frame.h"
 #include "Draggable_p.h"
 #include "DropArea_p.h"
 
@@ -29,11 +29,11 @@ namespace KDDockWidgets {
 
 namespace Controllers {
 class TitleBar;
+class Frame;
 }
 
 class MainWindowBase;
 class DropArea;
-class Frame;
 class MultiSplitter;
 class LayoutWidget;
 
@@ -46,7 +46,7 @@ class DOCKS_EXPORT FloatingWindow
     Q_PROPERTY(KDDockWidgets::DropArea *dropArea READ dropArea CONSTANT)
 public:
     explicit FloatingWindow(QRect suggestedGeometry, MainWindowBase *parent = nullptr);
-    explicit FloatingWindow(Frame *frame, QRect suggestedGeometry, MainWindowBase *parent = nullptr);
+    explicit FloatingWindow(Controllers::Frame *frame, QRect suggestedGeometry, MainWindowBase *parent = nullptr);
     ~FloatingWindow() override;
 
     bool deserialize(const LayoutSaver::FloatingWindow &);
@@ -58,7 +58,7 @@ public:
     bool isWindow() const override;
 
     const QVector<DockWidgetBase *> dockWidgets() const;
-    const Frame::List frames() const;
+    const Controllers::Frame::List frames() const;
     DropArea *dropArea() const
     {
         return m_dropArea;
@@ -115,7 +115,7 @@ public:
     bool hasSingleDockWidget() const;
 
     /// @brief If this floating window has only one Frame, it's returned, otherwise nullptr
-    Frame *singleFrame() const;
+    Controllers::Frame *singleFrame() const;
 
     /**
      * @brief Returns whether a deleteLater has already been issued
