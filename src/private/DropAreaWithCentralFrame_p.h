@@ -26,10 +26,9 @@ public:
 
     static Frame *createCentralFrame(MainWindowOptions options);
 
-private:
+public/*private*/://qiugan
     friend class MainWindowBase;
-    friend class Frame;
-    Frame *const m_centralFrame = nullptr;
+    Frame */*const*/ m_centralFrame = nullptr;//qiugan
 };
 
 }

@@ -30,6 +30,7 @@
 #include "private/LayoutWidget_p.h"
 #include "private/Logging_p.h"
 #include "private/Position_p.h"
+#include "private/DropAreaWithCentralFrame_p.h"
 
 #include <qmath.h>
 #include <QDebug>
@@ -295,6 +296,35 @@ bool LayoutSaver::restoreLayout(const QByteArray &data)
         }
     }
 
+	//qiugan Restore central frame
+	bool bFindCentralFrame = false;
+	KDDockWidgets::Frame* cf = nullptr;
+	const QList<KDDockWidgets::Frame*> frames = d->m_dockRegistry->frames();
+	for (KDDockWidgets::Frame* fm : frames)
+	{
+		if (!bFindCentralFrame && fm->isCentralFrame() && d->m_dockRegistry->mainwindows().first()->dropArea()->m_centralFrame == fm)
+		{
+			cf = fm;
+			bFindCentralFrame = true;
+		}
+		else if (fm->isCentralFrame())
+		{
+			d->m_dockRegistry->unregisterFrame(cf);
+			delete cf;
+
+			cf = fm;
+			d->m_dockRegistry->mainwindows().first()->dropArea()->m_centralFrame = cf;
+		}
+	}
+	
+	if(bFindCentralFrame && cf)
+	for (const LayoutSaver::Frame &frame : qAsConst(layout.mainWindows.first().multiSplitterLayout.frames)) {
+		if (frame.options & 1)
+		{
+			cf->setCurrentTabIndex(frame.currentTabIndex);
+			cf->QWidgetAdapter::setGeometry(frame.geometry);
+		}
+	}
     return true;
 }
 
@@ -942,7 +972,26 @@ QVariantMap LayoutSaver::MultiSplitter::toVariantMap() const
 void LayoutSaver::MultiSplitter::fromVariantMap(const QVariantMap &map)
 {
     layout = map.value(QStringLiteral("layout")).toMap();
+	//qiugan remove central frame from layout.children
+	QVariantList chds = layout.value(QStringLiteral("children")).toList(),new_chds;
+	for (const QVariant &chd : chds) {
+		QVariantMap o = chd.toMap();
+// 		if (o.value(QStringLiteral("objectName")).toString() == QStringLiteral("central frame"))
+// 			continue;
+// 		else
+			new_chds.append(chd);
+	}
+	layout[QStringLiteral("children")] = new_chds;
+
     const QVariantMap framesV = map.value(QStringLiteral("frames")).toMap();
+	QVariantMap new_framesV;
+	for (const QVariant &frameV : framesV) {
+		QVariantMap o = frameV.toMap();
+// 		if (o.value(QStringLiteral("objectName")).toString() == QStringLiteral("central frame"))
+// 			continue;
+// 		else
+			new_framesV.insert(o.value(QStringLiteral("id")).toString(),frameV);
+	}
     frames.clear();
     for (const QVariant &frameV : framesV) {
         LayoutSaver::Frame frame;
